@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "cook-serve-delicious-bot"
+version = "0.1.0"
+description = ""
+authors = ["jouramie <jouramie@hotmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+opencv-python = "^4.8.0.76"
+pillow = "^10.0.0"
+frozendict = "^2.3.8"
+pytesseract = "^0.3.10"
+dxcam = "^0.0.5"
+keyboard = "^0.13.5"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+pytest = "^7.4.0"
+pytest-mock = "^3.11.1"
+
+[tool.black]
+line-length = 120
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
