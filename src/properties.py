@@ -1,5 +1,5 @@
 # Sensor
-GAME_WINDOW_TITLE = "Cook, Serve, Delicious!"
+GAME_WINDOW_TITLE = "Cook Serve Delicious"
 GAME_WINDOW_WITHOUT_MARGIN = (0, 32, 769, 519)
 SCREEN_OFFSET: (int, int) = (-1980 + 50, 957)
 

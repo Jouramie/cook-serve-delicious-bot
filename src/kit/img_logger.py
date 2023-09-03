@@ -73,7 +73,7 @@ def submit(image):
     if not properties.SCREENSHOT_LOGGER_ENABLED:
         return
 
-    name = f"{datetime.now().replace().isoformat().replace(':', '')}.tiff"
+    name = f"{datetime.now().replace().isoformat().replace(':', '')}.png"
     logger.info(f"Submit {name} to log buffer.")
     _image = name, image
 
@@ -103,7 +103,7 @@ def publish():
 
 def log_now(image, name=None):
     if name is None:
-        name = f"{datetime.now().replace().isoformat().replace(':', '')}.tiff"
+        name = f"{datetime.now().replace().isoformat().replace(':', '')}.png"
     if isinstance(image, np.ndarray):
         image = PIL.Image.fromarray(image)
     image.save(Path(f"{properties.SCREENSHOT_LOGGER_LOGS_PATH}/{name}"))
