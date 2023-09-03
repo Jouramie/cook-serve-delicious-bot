@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="Black">
+    <option name="enabledOnReformat" value="true" />
+    <option name="enabledOnSave" value="true" />
+    <option name="sdkUUID" value="59dc4522-99c4-4a35-ad08-639a97d0d32d" />
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Poetry (cook-serve-delicious-bot)" project-jdk-type="Python SDK" />
 </project>
