@@ -102,7 +102,10 @@ def publish():
 
 
 def log_now(image, name=None):
-    image = PIL.Image.fromarray(image)
+    if name is None:
+        name = f"{datetime.now().replace().isoformat().replace(':', '')}.tiff"
+    if isinstance(image, np.ndarray):
+        image = PIL.Image.fromarray(image)
     image.save(Path(f"{properties.SCREENSHOT_LOGGER_LOGS_PATH}/{name}"))
 
 
