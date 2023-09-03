@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from datetime import datetime
 
 import numpy as np
 
@@ -51,16 +50,8 @@ class Region:
 
 
 class GameCamera(ABC):
-    def __init__(self, game_name: str):
-        self.game_name = game_name
-        self.region = None
-
-        self._last_frame_timestamp = None
-        self._last_frame = None
-
-    @abstractmethod
-    def calibrate(self):
-        raise NotImplementedError
+    def __init__(self, region: Region | None = None):
+        self.region = region
 
     @abstractmethod
     def get_latest_frame(self) -> np.ndarray:
@@ -68,12 +59,12 @@ class GameCamera(ABC):
 
     @abstractmethod
     def start(self):
-        self.calibrate()
+        raise NotImplementedError
 
     @abstractmethod
     def stop(self):
         raise NotImplementedError
 
     @abstractmethod
-    def capture_now(self) -> tuple[np.ndarray, datetime]:
+    def capture_now(self) -> np.ndarray:
         raise NotImplementedError

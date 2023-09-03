@@ -7,6 +7,11 @@ import numpy as np
 
 from kit._base_sensor_util import Region, GameCamera
 
+WINDOW_MARGIN_LEFT = 1
+WINDOW_MARGIN_TOP = 29
+WINDOW_MARGIN_RIGHT = 1
+WINDOW_MARGIN_BOTTOM = 1
+
 
 def locate_window(app_name: str) -> Region:
     running_apps = AppKit.NSWorkspace.sharedWorkspace().runningApplications()
@@ -22,23 +27,31 @@ def locate_window(app_name: str) -> Region:
             return Region.of_box(w["X"], w["Y"], w["Width"], w["Height"])
 
 
-def create_game_camera(game_name: str) -> GameCamera:
-    return DarwinCamera(game_name)
+def cut_window_margin(region: Region) -> Region:
+    left, top, right, bottom = region.corners
+    return Region.of_corners(
+        left + WINDOW_MARGIN_LEFT, top + WINDOW_MARGIN_TOP, right - WINDOW_MARGIN_RIGHT, bottom - WINDOW_MARGIN_BOTTOM
+    )
+
+
+def create_camera(game: str | Region | None = None) -> GameCamera:
+    if isinstance(game, str):
+        game = cut_window_margin(locate_window(game))
+    return DarwinCamera(game)
 
 
 class DarwinCamera(GameCamera):
-    def __init__(self, game_name: str):
-        super().__init__(game_name)
+    def __init__(self, region: Region | None):
+        super().__init__(region)
         self._thread = Thread(target=self._capture_loop)
         self._running = True
 
         self._last_frame = None
         self._last_frame_timestamp = None
 
-    def calibrate(self):
-        self.region = locate_window(self.game_name)
-
     def get_latest_frame(self) -> np.ndarray:
+        # TODO wait if frame is None
+        # TODO flush current once fetched
         return self._last_frame
 
     def capture_now(self) -> np.ndarray:
@@ -54,4 +67,4 @@ class DarwinCamera(GameCamera):
 
     def _capture_loop(self):
         while self._running:
-            self._last_frame, self._last_frame_timestamp = self.capture_now()
+            self._last_frame = self.capture_now()

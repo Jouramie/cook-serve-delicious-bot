@@ -8,10 +8,10 @@ import numpy as np
 from kit._base_sensor_util import Region, HsvColorBoundary
 
 if sys.platform == "darwin":
-    from kit.darwin_sensor_util import locate_window, create_game_camera
+    from kit.darwin_sensor_util import locate_window, create_camera
 
 assert locate_window
-assert create_game_camera
+assert create_camera
 
 
 def crop(img: np.ndarray, region: Region) -> np.ndarray:
