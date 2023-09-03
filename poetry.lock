@@ -368,6 +368,22 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
+name = "py-applescript"
+version = "1.0.3"
+description = "An easy-to-use Python wrapper for NSAppleScript, allowing Python scripts to communicate with AppleScripts and AppleScriptable applications."
+optional = false
+python-versions = "*"
+files = [
+    {file = "py-applescript-1.0.3.tar.gz", hash = "sha256:fa22c955fc25b3d24e03e66825b36a721897ec0d9b6ce185a4d177e2d1ecfa6b"},
+    {file = "py_applescript-1.0.3-py3-none-any.whl", hash = "sha256:eb21dfc6e845a40be602372a5c3d6317f7ad3c999c2c355a00d1a19bdb1d57c0"},
+]
+
+[package.dependencies]
+pyobjc-core = "*"
+pyobjc-framework-AppleScriptKit = "*"
+pyobjc-framework-AppleScriptObjC = "*"
+
+[[package]]
 name = "pynput"
 version = "1.7.6"
 description = "Monitor and control user input devices"
@@ -401,6 +417,36 @@ files = [
     {file = "pyobjc_core-9.2-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:2d23ee539f2ba5e9f5653d75a13f575c7e36586fc0086792739e69e4c2617eda"},
     {file = "pyobjc_core-9.2-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:b9809cf96678797acb72a758f34932fe8e2602d5ab7abec15c5ac68ddb481720"},
 ]
+
+[[package]]
+name = "pyobjc-framework-applescriptkit"
+version = "9.2"
+description = "Wrappers for the framework AppleScriptKit on macOS"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pyobjc-framework-AppleScriptKit-9.2.tar.gz", hash = "sha256:4215952cc18b810ca314a59f1a0b9ddbe5d9c7f2d4cc6a866cad570ea96b7496"},
+    {file = "pyobjc_framework_AppleScriptKit-9.2-py2.py3-none-any.whl", hash = "sha256:e7be610629371efc96b2daf8b83fee814251ce0845d8cfd4cc458a69bd67e6fb"},
+]
+
+[package.dependencies]
+pyobjc-core = ">=9.2"
+pyobjc-framework-Cocoa = ">=9.2"
+
+[[package]]
+name = "pyobjc-framework-applescriptobjc"
+version = "9.2"
+description = "Wrappers for the framework AppleScriptObjC on macOS"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pyobjc-framework-AppleScriptObjC-9.2.tar.gz", hash = "sha256:f6216bf110072e70938e1efa1a058d48452a9d9251911bee26102bad4091a051"},
+    {file = "pyobjc_framework_AppleScriptObjC-9.2-py2.py3-none-any.whl", hash = "sha256:66c1fa4239c344a1750afd5beaf6550136d777c3073c47303c8ed224e2517282"},
+]
+
+[package.dependencies]
+pyobjc-core = ">=9.2"
+pyobjc-framework-Cocoa = ">=9.2"
 
 [[package]]
 name = "pyobjc-framework-applicationservices"
@@ -558,4 +604,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b9061d37a5d82677af9751770996f89679811315b8c3f581aa7fa0152fe2fe65"
+content-hash = "5fb5d2eceb2b3f9b967dce7d9109b586c0a43b6d498a498a411a2a83cf383e7c"

@@ -4,6 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["jouramie <jouramie@hotmail.com>"]
 readme = "README.md"
+classifiers = [
+    "Operating System :: MacOS"
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -13,6 +16,8 @@ frozendict = "^2.3.8"
 pytesseract = "^0.3.10"
 dxcam = "^0.0.5"
 pynput = "^1.7.6"
+pyobjc-framework-cocoa = {version = ">=9.2", markers = "sys_platform == \"darwin\""}
+py-applescript = "^1.0.3"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"

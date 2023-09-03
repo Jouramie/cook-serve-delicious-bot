@@ -10,5 +10,4 @@ if __name__ == "__main__":
 
     for k in recipe:
         keyboard.tap(k)
-
-    time.sleep(1)
+        time.sleep(0.001)
