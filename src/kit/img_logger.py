@@ -63,9 +63,10 @@ def push_image_to_buffer(name, image):
         _buffer.append((name, image))
 
 
-if _running:
-    _process = threading.Thread(target=log_next_image)
-    _process.start()
+def start():
+    if _running:
+        _process = threading.Thread(target=log_next_image)
+        _process.start()
 
 
 def submit(image):

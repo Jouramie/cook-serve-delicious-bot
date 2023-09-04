@@ -3,11 +3,13 @@ import time
 from pathlib import Path
 
 import properties
+from core import motor
 from kit import img_logger, sensor_util
 
 
 def loop():
-    img_logger.log_now(camera.capture_now())
+    img_logger.submit(camera.capture_now())
+    img_logger.publish()
     time.sleep(0.1)
 
 
@@ -27,17 +29,13 @@ if __name__ == "__main__":
 
         camera = sensor_util.create_camera(properties.GAME_WINDOW_TITLE)
 
-        print("Starting the capture in 3...")
-        time.sleep(1)
-        print("2...")
-        time.sleep(1)
-        print("1...")
-        time.sleep(1)
-        print("Start !")
+        img_logger.start()
+        camera = sensor_util.create_camera(properties.GAME_WINDOW_TITLE)
+        camera.start()
 
+        motor.wait_for_game_to_start()
         while True:
             loop()
     finally:
-        if camera is not None:
-            camera.stop()
+        camera.stop()
         img_logger.finalize()

@@ -62,6 +62,10 @@ class GameCamera(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def flush(self):
+        raise NotImplementedError
+
+    @abstractmethod
     def start(self):
         raise NotImplementedError
 

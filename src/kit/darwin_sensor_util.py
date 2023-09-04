@@ -9,6 +9,7 @@ import Quartz
 import numpy as np
 
 from kit._base_sensor_util import Region, GameCamera
+from kit.profiling import timeit
 
 logger = logging.getLogger(__name__)
 
@@ -56,13 +57,19 @@ class DarwinCamera(GameCamera):
         self._last_frame_timestamp = None
         self._last_frame_lock = threading.Lock()
 
+    @timeit(name="capture", print_each_call=True)
     def get_latest_frame(self) -> np.ndarray:
         while self._last_frame is None:
+            logger.debug("No frame available, waiting.")
             time.sleep(0.01)
 
         with self._last_frame_lock:
             frame, self._last_frame = self._last_frame, None
             return frame
+
+    def flush(self):
+        with self._last_frame_lock:
+            self._last_frame = None
 
     def capture_now(self) -> np.ndarray:
         if self.region is None:
