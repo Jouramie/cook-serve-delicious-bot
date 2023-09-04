@@ -3,7 +3,7 @@ import logging
 import numpy as np
 from pytesseract import pytesseract
 
-from core.model import TaskStatement
+from core.brain import TaskStatement
 from kit import sensor_util
 from kit.profiling import timeit
 

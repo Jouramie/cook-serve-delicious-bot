@@ -2,12 +2,11 @@ import logging
 import time
 from pathlib import Path
 
-from util import img_logger, img_edit
+from util import img_logger
 from util.profiling import timeit
 
 import properties
 from core import sensor, brain, motor
-from core.sensor import NoPlayerFoundException
 from kit import sensor_util
 
 
@@ -27,27 +26,14 @@ def loop():
     """
 
     last_frame = capture()
-    try:
-        position, distance = sensor.detect_player()
-        _detections_without_finding_player = 0
-    except NoPlayerFoundException as e:
-        logger.warning("I don't see the cursor !")
-        sensor.clear()
-        _detections_without_finding_player += 1
-        if _detections_without_finding_player > properties.MAX_PLAYER_LOST:
-            raise e
-        motor.unstuck()
-        sensor.clear()
-        return
-    available_distances = sensor.detect_available_distances()
-    unsafe, direction = brain.choose_direction(position, distance, available_distances)
-    motor.turn(unsafe, direction)
+    waiting_tasks = sensor.find_waiting_tasks(last_frame)
+    task, callback = brain.choose_task_to_execute(waiting_tasks)
+    motor.select_task(task)
 
-    img_logger.edit(img_edit.draw_player_rotation(position, direction, unsafe))
-    img_logger.edit(img_edit.draw_safe_area(distance))
-    img_logger.edit(img_edit.draw_unsafe_area(distance))
-
-    sensor.clear()
+    last_frame = capture()
+    waiting_tasks = sensor.find_waiting_tasks(last_frame)
+    statement = sensor.read_task_statement(last_frame)
+    callback(waiting_tasks, statement)
 
 
 if __name__ == "__main__":
