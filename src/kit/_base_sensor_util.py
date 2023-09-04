@@ -1,7 +1,10 @@
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -51,6 +54,7 @@ class Region:
 
 class GameCamera(ABC):
     def __init__(self, region: Region | None = None):
+        logger.info(f"Instantiating camera to capture region f{region}")
         self.region = region
 
     @abstractmethod

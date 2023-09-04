@@ -1,3 +1,6 @@
+import logging
+import threading
+import time
 from threading import Thread
 
 import AppKit
@@ -6,6 +9,9 @@ import Quartz
 import numpy as np
 
 from kit._base_sensor_util import Region, GameCamera
+
+logger = logging.getLogger(__name__)
+
 
 WINDOW_MARGIN_LEFT = 1
 WINDOW_MARGIN_TOP = 29
@@ -48,11 +54,15 @@ class DarwinCamera(GameCamera):
 
         self._last_frame = None
         self._last_frame_timestamp = None
+        self._last_frame_lock = threading.Lock()
 
     def get_latest_frame(self) -> np.ndarray:
-        # TODO wait if frame is None
-        # TODO flush current once fetched
-        return self._last_frame
+        while self._last_frame is None:
+            time.sleep(0.01)
+
+        with self._last_frame_lock:
+            frame, self._last_frame = self._last_frame, None
+            return frame
 
     def capture_now(self) -> np.ndarray:
         if self.region is None:
@@ -67,4 +77,6 @@ class DarwinCamera(GameCamera):
 
     def _capture_loop(self):
         while self._running:
-            self._last_frame = self.capture_now()
+            frame = self.capture_now()
+            with self._last_frame_lock:
+                self._last_frame = frame
