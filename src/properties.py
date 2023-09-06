@@ -1,7 +1,12 @@
+import sys
+
 # Sensor
-GAME_WINDOW_TITLE = "Cook Serve Delicious"
-GAME_WINDOW_WITHOUT_MARGIN = (0, 32, 769, 519)
-SCREEN_OFFSET: (int, int) = (-1980 + 50, 957)
+if sys.platform == "darwin":
+    GAME_WINDOW_TITLE = "Cook Serve Delicious"
+    GAME_WINDOW_MARGIN = (1, 29, 1, 1)
+elif sys.platform == "win32":
+    GAME_WINDOW_TITLE = "Cook, Serve, Delicious!"
+    GAME_WINDOW_MARGIN = (12, 46, 12, 13)
 
 
 SCREENSHOT_LOGGER_LOGS_PATH = "logs"

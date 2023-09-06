@@ -3,10 +3,9 @@ import threading
 import time
 from threading import Thread
 
-import AppKit
 import PIL.ImageGrab
-import Quartz
 import numpy as np
+from win32 import win32gui
 
 import properties
 from kit._base_sensor_util import Region, GameCamera
@@ -22,26 +21,19 @@ WINDOW_MARGIN_BOTTOM = 1
 
 
 def locate_window(app_name: str) -> Region:
-    running_apps = AppKit.NSWorkspace.sharedWorkspace().runningApplications()
-    target_app = next(a for a in running_apps if a.localizedName() == app_name)
-    target_app.activateWithOptions_(AppKit.NSApplicationActivateIgnoringOtherApps)
+    window_handle = win32gui.FindWindow(None, app_name)
+    win_region = win32gui.GetWindowRect(window_handle)
 
-    windows = Quartz.CGWindowListCopyWindowInfo(
-        Quartz.kCGWindowListExcludeDesktopElements | Quartz.kCGWindowListOptionOnScreenOnly, Quartz.kCGNullWindowID
-    )
-    for win in windows:
-        if app_name in "%s %s" % (win[Quartz.kCGWindowOwnerName], win.get(Quartz.kCGWindowName, "")):
-            w = win["kCGWindowBounds"]
-            return Region.of_box(w["X"], w["Y"], w["Width"], w["Height"])
+    return Region.of_corners(*win_region)
 
 
 def create_camera(game: str | Region | None = None) -> GameCamera:
     if isinstance(game, str):
         game = locate_window(game).cut_window_margin(properties.GAME_WINDOW_MARGIN)
-    return DarwinCamera(game)
+    return Win32Camera(game)
 
 
-class DarwinCamera(GameCamera):
+class Win32Camera(GameCamera):
     def __init__(self, region: Region | None):
         super().__init__(region)
         self._thread = Thread(target=self._capture_loop)

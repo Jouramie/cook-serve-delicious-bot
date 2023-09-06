@@ -9,6 +9,8 @@ from kit._base_sensor_util import Region, HsvColorBoundary
 
 if sys.platform == "darwin":
     from kit.darwin_sensor_util import locate_window, create_camera
+elif sys.platform == "win32":
+    from kit.win32_sensor_util import locate_window, create_camera
 
 assert locate_window
 assert create_camera

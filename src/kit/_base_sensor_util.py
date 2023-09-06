@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -50,6 +52,10 @@ class Region:
     @property
     def corners(self) -> tuple[int, int, int, int]:
         return self.left, self.top, self.right, self.bottom
+
+    def cut_window_margin(self, margins: tuple[int, int, int, int]) -> Region:
+        left, top, right, bottom = margins
+        return Region.of_corners(self.left + left, self.top + top, self.right - right, self.bottom - bottom)
 
 
 class GameCamera(ABC):
