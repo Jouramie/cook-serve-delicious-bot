@@ -1,4 +1,5 @@
 import logging
+import re
 
 import numpy as np
 from pytesseract import pytesseract
@@ -21,10 +22,8 @@ ACTIVE_TASK_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
 ACTIVE_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 85]))
 
 
-def remove_quotes(txt):
-    for q in ['"', "'", "”"]:
-        txt = txt.replace(q, "")
-    return txt
+TITLE_PATTERN = re.compile(r"(\w[\w\s]+)")
+DESCRIPTION_PATTERN = re.compile(r"\w.+")
 
 
 class NoStatementFoundException(Exception):
@@ -53,6 +52,16 @@ def read_task_statement(img: np.ndarray) -> TaskStatement | None:
         return None
 
     statement_split = statement.split("\n")
-    title, description = statement_split[0], statement_split[2]
-    title = remove_quotes(title)
+    title = description = None
+    for txt in statement_split:
+        if title is None:
+            match = TITLE_PATTERN.search(txt)
+            if match is not None:
+                title = match.group()
+                continue
+        else:
+            match = DESCRIPTION_PATTERN.match(txt)
+            if match is not None:
+                description = txt
+                break
     return TaskStatement(title, description)
