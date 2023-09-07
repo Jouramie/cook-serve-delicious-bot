@@ -5,7 +5,7 @@ import numpy as np
 from pytesseract import pytesseract
 
 from core.brain import TaskStatement
-from kit import sensor_util
+from kit import sensor_util, img_logger
 from kit.profiling import timeit
 
 logger = logging.getLogger(__name__)
@@ -19,10 +19,10 @@ WAITING_TASK_REGIONS = [WAITING_TASK_1_REGION, WAITING_TASK_2_REGION, WAITING_TA
 WAITING_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 240]), np.array([5, 5, 255]))
 
 ACTIVE_TASK_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
-ACTIVE_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 85]))
+ACTIVE_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 75]))
 
 
-TITLE_PATTERN = re.compile(r"(\w[\w\s]+)")
+TITLE_PATTERN = re.compile(r"(\w[\w\s()]+)")
 DESCRIPTION_PATTERN = re.compile(r"\w.+")
 
 
@@ -45,7 +45,9 @@ def find_waiting_tasks(img: np.ndarray) -> list[int]:
 @timeit(name="read_task_statement", print_each_call=True)
 def read_task_statement(img: np.ndarray) -> TaskStatement | None:
     cropped = sensor_util.crop(img, ACTIVE_TASK_REGION)
+    img_logger.log_now(cropped, "cropped.png")
     masked = sensor_util.mask(cropped, ACTIVE_TASK_MASK)
+    img_logger.log_now(masked, "marked.png")
     statement: str | None = pytesseract.image_to_string(masked)
     logger.info(f"Extracted `{statement}` from image.")
     if not statement:

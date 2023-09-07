@@ -1,10 +1,12 @@
 import logging
+import time
 
 from pynput.keyboard import Key, Controller, Listener, KeyCode
 
 from core.brain import Instruction, Keyboard
 
 logger = logging.getLogger(__name__)
+logger.level = logging.DEBUG
 
 keyboard_controller = Controller()
 
@@ -26,7 +28,9 @@ def to_pynput(key: str | int) -> Key | KeyCode:
 
 class PynputKeyboard(Keyboard):
     def send(self, key: str):
+        logger.debug(f"Pressing '{key}'.")
         keyboard_controller.tap(to_pynput(key))
+        time.sleep(0.1)
 
     def wait_for(self, key: str):
         pynput_key = to_pynput(key)

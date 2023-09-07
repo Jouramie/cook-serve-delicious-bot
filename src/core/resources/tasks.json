@@ -1,0 +1,133 @@
+{
+  "Cherry Vanilla": {
+    "keys": "v,v,h,enter"
+  },
+  "Vanilla and Chocolate": {
+    "keys": "v,c,enter"
+  },
+  "Chocolate Sprinkles": {
+    "keys": "c,c,p,enter"
+  },
+  "Cheesy Leaves": {
+    "keys": "r,c,enter"
+  },
+  "House Salad": {
+    "keys": "r,c,b,enter"
+  },
+  "Pepper Ranch": {
+    "keys": "r,c,o,enter"
+  },
+  "Tomato Ranch": {
+    "keys": "r,c,m,enter"
+  },
+  "The Manhattan": {
+    "keys": "r,c,b,o,m,g,enter"
+  },
+  "Salad Verde": {
+    "keys": "r,g,enter"
+  },
+  "Cheesy Peppers": {
+    "keys": "c,o,enter"
+  },
+  "Small Cola": {
+    "keys": "down,i,enter"
+  },
+  "Medium Cola": {
+    "keys": "up,down,i,enter"
+  },
+  "Large Cola": {
+    "keys": "up,up,down,i,enter"
+  },
+  "Small Tea": {
+    "keys": "right,down,i,enter"
+  },
+  "Medium Tea": {
+    "keys": "up,right,down,i,enter"
+  },
+  "Large Tea": {
+    "keys": "up,up,right,down,i,enter"
+  },
+  "Small Grape": {
+    "keys": "right,right,down,i,enter"
+  },
+  "Medium Grape": {
+    "keys": "up,right,right,down,i,enter"
+  },
+  "Large Grape": {
+    "keys": "up,up,right,right,down,i,enter"
+  },
+  "Small Water": {
+    "keys": "left,left,down,i,enter"
+  },
+  "Medium Water": {
+    "keys": "up,left,left,down,i,enter"
+  },
+  "Large Water": {
+    "keys": "up,up,left,left,down,i,enter"
+  },
+  "Small Diet": {
+    "keys": "left,down,i,enter"
+  },
+  "Medium Diet": {
+    "keys": "up,left,down,i,enter"
+  },
+  "Large Diet": {
+    "keys": "up,up,left,down,i,enter"
+  },
+  "Small Cola (no ice)": {
+    "keys": "down,enter"
+  },
+  "Medium Cola (no ice)": {
+    "keys": "up,down,enter"
+  },
+  "Large Cola (no ice)": {
+    "keys": "up,up,down,enter"
+  },
+  "Small Tea (no ice)": {
+    "keys": "right,down,enter"
+  },
+  "Medium Tea (no ice)": {
+    "keys": "up,right,down,enter"
+  },
+  "Large Tea (no ice)": {
+    "keys": "up,up,right,down,enter"
+  },
+  "Small Grape (no ice)": {
+    "keys": "right,right,down,enter"
+  },
+  "Medium Grape (no ice)": {
+    "keys": "up,right,right,down,enter"
+  },
+  "Large Grape (no ice)": {
+    "keys": "up,up,right,right,down,enter"
+  },
+  "Small Water (no ice)": {
+    "keys": "left,left,down,enter"
+  },
+  "Medium Water (no ice)": {
+    "keys": "up,left,left,down,enter"
+  },
+  "Large Water (no ice)": {
+    "keys": "up,up,left,left,down,enter"
+  },
+  "Small Diet (no ice)": {
+    "keys": "left,down,enter"
+  },
+  "Medium Diet (no ice)": {
+    "keys": "up,left,down,enter"
+  },
+  "Large Diet (no ice)": {
+    "keys": "up,up,left,down,enter"
+  },
+  "Grey Tail Fish": {
+    "type": "COOKING",
+    "keys": "left,down,right,s,enter",
+    "cooking_time":"PT12S"
+  },
+  "Work Ticket (Clean)": {
+    "keys": "down,s"
+  },
+  "Work Ticket (Rodents)": {
+    "keys": "right,down,c,s"
+  }
+}
