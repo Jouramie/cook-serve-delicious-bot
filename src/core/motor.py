@@ -3,10 +3,9 @@ import time
 
 from pynput.keyboard import Key, Controller, Listener, KeyCode
 
-from core.brain import Instruction, Keyboard
+from core.brain import TaskExecution, Keyboard
 
 logger = logging.getLogger(__name__)
-logger.level = logging.DEBUG
 
 keyboard_controller = Controller()
 
@@ -51,7 +50,7 @@ class PynputKeyboard(Keyboard):
 keyboard = PynputKeyboard()
 
 
-def execute_instruction(instruction: Instruction):
+def execute_task(instruction: TaskExecution):
     instruction(keyboard)
 
 

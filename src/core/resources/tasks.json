@@ -1,9 +1,18 @@
 {
+  "Plain Vanilla": {
+    "keys": "v,v,v,enter"
+  },
   "Cherry Vanilla": {
     "keys": "v,v,h,enter"
   },
   "Vanilla and Chocolate": {
     "keys": "v,c,enter"
+  },
+  "The Yin and Yang": {
+    "keys": "v,c,h,p,enter"
+  },
+  "Plain Chocolate": {
+    "keys": "c,c,c,enter"
   },
   "Chocolate Sprinkles": {
     "keys": "c,c,p,enter"
@@ -13,6 +22,9 @@
   },
   "House Salad": {
     "keys": "r,c,b,enter"
+  },
+  "The Mix": {
+    "keys": "r,c,b,o,enter"
   },
   "Pepper Ranch": {
     "keys": "r,c,o,enter"
@@ -28,6 +40,12 @@
   },
   "Cheesy Peppers": {
     "keys": "c,o,enter"
+  },
+  "The Dry Deluxe": {
+    "keys": "m,g,enter"
+  },
+  "The Dry Greens": {
+    "keys": "g,enter"
   },
   "Small Cola": {
     "keys": "down,i,enter"
@@ -122,7 +140,7 @@
   "Grey Tail Fish": {
     "type": "COOKING",
     "keys": "left,down,right,s,enter",
-    "cooking_time":"PT12S"
+    "cooking_seconds": 8
   },
   "Work Ticket (Clean)": {
     "keys": "down,s"

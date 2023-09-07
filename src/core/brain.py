@@ -1,24 +1,114 @@
+from __future__ import annotations
+
+import enum
 import json
 import logging
-import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from importlib.resources import files
-from typing import Callable, Protocol
+from typing import Any
 
 from core import resources
 
-logger = logging.getLogger(__name__)
+EXPIRATION_DELAY_IN_SECONDS = 1
+CREATION_DELAY_IN_SECONDS = 2
 
-# TODO pickle?
-with files(resources).joinpath("tasks.json").open() as recipes_file:
-    tasks: dict = json.load(recipes_file)
+logger = logging.getLogger(__name__)
+logger.level = logging.DEBUG
+
+active_tasks: list[Task | None] = [None, None, None, None]
 
 
 @dataclass
 class TaskStatement:
     title: str
     description: str
+
+
+class TaskType(enum.Enum):
+    SIMPLE = enum.auto()
+    COOKING = enum.auto()
+    UNKNOWN = enum.auto()
+
+
+@dataclass
+class TaskInstructions:
+    type: TaskType
+    keys: list[str] | None = None
+    cooking_seconds: int | None = None
+
+    @staticmethod
+    def from_dict(d: dict[str, Any]):
+        return TaskInstructions(
+            TaskType[d["type"]] if "type" in d else TaskType.SIMPLE, d["keys"].split(","), d.get("cooking_seconds")
+        )
+
+    @staticmethod
+    def unknown():
+        return TaskInstructions(TaskType.UNKNOWN)
+
+    def get_executions(self, task: Task):
+        if self.type == TaskType.UNKNOWN:
+            return UnknownTaskExecution(task)
+
+        if self.type == TaskType.COOKING:
+            logger.info(
+                f"I know how to '{task.statement.title}'! "
+                f"Just '{str(self.keys)}', then cook for {str(self.cooking_seconds)} seconds."
+            )
+            return CookingTaskExecution(task, self.keys, self.cooking_seconds)
+
+        logger.info(f"I know how to '{task.statement.title}'! Just '{str(self.keys)}'.")
+        return SimpleTaskExecution(task, self.keys)
+
+
+@dataclass
+class Task:
+    index: int
+    created_at: datetime
+    statement: TaskStatement | None = None
+    instructions: TaskInstructions | None = None
+    cooked_at: datetime | None = None
+    expire_at: datetime | None = None
+
+    def get_executions(self, statement: TaskStatement, instructions: TaskInstructions):
+        self.statement = statement
+        self.instructions = instructions
+        return instructions.get_executions(self)
+
+    @property
+    def is_new(self) -> bool:
+        return self.statement is None
+
+    @property
+    def is_cooking(self) -> bool:
+        return not self.is_new and self.instructions.type == TaskType.COOKING and self.cooked_at > datetime.now()
+
+    @property
+    def is_cooked(self) -> bool:
+        return not self.is_new and self.instructions.type == TaskType.COOKING and self.cooked_at <= datetime.now()
+
+    @property
+    def is_expired(self) -> bool:
+        return self.is_completed and self.expire_at <= datetime.now()
+
+    @property
+    def is_completed(self) -> bool:
+        return self.expire_at is not None
+
+    @property
+    def is_ready(self) -> bool:
+        return not self.is_completed and (
+            (self.is_new and self.created_at + timedelta(seconds=CREATION_DELAY_IN_SECONDS) <= datetime.now())
+            or self.is_cooked
+        )
+
+    def complete(self):
+        self.expire_at = datetime.now() + timedelta(seconds=EXPIRATION_DELAY_IN_SECONDS)
+
+    def cook(self):
+        self.cooked_at = datetime.now() + timedelta(seconds=self.instructions.cooking_seconds)
 
 
 class Keyboard(ABC):
@@ -31,47 +121,105 @@ class Keyboard(ABC):
         raise NotImplementedError
 
 
-class Instruction(Protocol):
+class TaskExecution:
     def __call__(self, keyboard: Keyboard):
         raise NotImplementedError
 
 
 @dataclass
-class StepsInstruction:
-    steps: list[str]
+class UnknownTaskExecution(TaskExecution):
+    task: Task
 
-    def __call__(self, keyboard: Keyboard):
-        for s in self.steps:
-            keyboard.send(s)
-
-
-class UnknownTaskInstruction:
     def __call__(self, keyboard: Keyboard):
         keyboard.wait_for("enter")
+        self.task.complete()
 
 
 @dataclass
-class SimpleTaskInstruction:
+class SimpleTaskExecution(TaskExecution):
+    task: Task
     keys: list[str]
 
     def __call__(self, keyboard: Keyboard):
         logger.info(f"Executing '{self.keys}'.")
         for key in self.keys:
             keyboard.send(key)
-        time.sleep(1)
+        self.task.complete()
+
+
+@dataclass
+class CookingTaskExecution(TaskExecution):
+    task: Task
+    keys: list[str]
+    cooking_seconds: int
+
+    def __call__(self, keyboard: Keyboard):
+        logger.info(f"Executing '{self.keys}'.")
+        for key in self.keys:
+            keyboard.send(key)
+        self.task.cook()
+
+
+@dataclass
+class ServeExecution(TaskExecution):
+    task: Task
+
+    def __call__(self, keyboard: Keyboard):
+        logger.info(f"Executing '{str(self.task.index)}'.")
+        keyboard.send(str(self.task.index))
+        self.task.complete()
+
+
+with files(resources).joinpath("tasks.json").open() as recipes_file:
+    TASKS_INSTRUCTIONS: dict[str, TaskInstructions] = {
+        k: TaskInstructions.from_dict(v) for k, v in json.load(recipes_file).items()
+    }
+
+
+@dataclass
+class StatementCallback:
+    task: Task
+
+    def __call__(self, waiting_tasks: list[int], statement: TaskStatement):
+        _synchronize_waiting_tasks(waiting_tasks)
+
+        instructions = TASKS_INSTRUCTIONS.get(statement.title)
+        if instructions is None:
+            logger.warning(f"'{statement.title}' is unknown. How am I supposed to '{statement.description}'??")
+            instructions = TaskInstructions(TaskType.UNKNOWN)
+
+        return self.task.get_executions(statement, instructions)
+
+    @property
+    def index(self):
+        return self.task.index
+
+
+def _synchronize_waiting_tasks(waiting_tasks: list[int]):
+    global active_tasks
+    for i in range(len(active_tasks)):
+        logger.debug(f"Task {i}: {active_tasks[i]}")
+
+        active_task = active_tasks[i]
+        if (i + 1 not in waiting_tasks) or (active_task is not None and active_task.is_expired):
+            active_tasks[i] = None
+
+        if active_task is None and i + 1 in waiting_tasks:
+            active_tasks[i] = Task(i + 1, datetime.now())
 
 
 def choose_task_to_execute(
     waiting_tasks: list[int],
-) -> tuple[int, Callable[[list[int], TaskStatement | None], Instruction]]:
-    return waiting_tasks[0], new_task_callback
+) -> StatementCallback | ServeExecution | None:
+    global active_tasks
 
+    _synchronize_waiting_tasks(waiting_tasks)
 
-def new_task_callback(waiting_tasks: list[int], statement: TaskStatement) -> Instruction:
-    task = tasks.get(statement.title)
-    if task is None:
-        logger.warning(f"'{statement.title}' is unknown. How am I supposed to '{statement.description}'??")
-        return UnknownTaskInstruction()
+    chosen_task = next((t for t in active_tasks if t is not None and t.is_ready), None)
+    if chosen_task is None:
+        return None
 
-    logger.info(f"I know how to '{statement.title}'! Just '{str(task['keys'])}'.")
-    return SimpleTaskInstruction(task["keys"].split(","))
+    if chosen_task.is_cooked:
+        return ServeExecution(chosen_task)
+
+    return StatementCallback(chosen_task)

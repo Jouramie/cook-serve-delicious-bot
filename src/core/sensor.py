@@ -5,7 +5,7 @@ import numpy as np
 from pytesseract import pytesseract
 
 from core.brain import TaskStatement
-from kit import sensor_util, img_logger
+from kit import sensor_util
 from kit.profiling import timeit
 
 logger = logging.getLogger(__name__)
@@ -45,9 +45,9 @@ def find_waiting_tasks(img: np.ndarray) -> list[int]:
 @timeit(name="read_task_statement", print_each_call=True)
 def read_task_statement(img: np.ndarray) -> TaskStatement | None:
     cropped = sensor_util.crop(img, ACTIVE_TASK_REGION)
-    img_logger.log_now(cropped, "cropped.png")
+    # img_logger.log_now(cropped, "cropped.png")
     masked = sensor_util.mask(cropped, ACTIVE_TASK_MASK)
-    img_logger.log_now(masked, "marked.png")
+    # img_logger.log_now(masked, "marked.png")
     statement: str | None = pytesseract.image_to_string(masked)
     logger.info(f"Extracted `{statement}` from image.")
     if not statement:

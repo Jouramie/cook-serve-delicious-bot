@@ -20,7 +20,7 @@ pyobjc-framework-cocoa = {version = ">=9.2", markers = "sys_platform == \"darwin
 pyobjc-framework-quartz = {version = ">=9.2", markers = "sys_platform == \"darwin\""}
 pywin32 = {version = ">=306", markers = "sys_platform == \"win32\""}
 dxcam = {version = ">=0.0.5", markers = "sys_platform == \"win32\""}
-isodate = "^0.6.1"
+freezegun = "^1.2.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"

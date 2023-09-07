@@ -6,7 +6,7 @@ from kit import img_logger
 if __name__ == "__main__":
     try:
         imgs = [
-            cv2.imread(r"logs/2023-09-06T203353.487314.tiff"),
+            cv2.imread(r"logs/2023-09-06T233349.139947.tiff"),
         ]
         for img in imgs:
             print(img.shape)

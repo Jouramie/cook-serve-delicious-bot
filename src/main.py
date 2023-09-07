@@ -3,6 +3,7 @@ from pathlib import Path
 
 import properties
 from core import sensor, brain, motor
+from core.brain import TaskExecution
 from kit import img_logger, sensor_util
 from kit.profiling import timeit
 
@@ -31,9 +32,16 @@ def loop():
         return
 
     logger.info(f"Tasks {waiting_tasks} are waiting.")
-    task, instruction_callback = brain.choose_task_to_execute(waiting_tasks)
-    logger.info(f"Executing on task {task}")
-    motor.select_task(task)
+    task_callback = brain.choose_task_to_execute(waiting_tasks)
+    if task_callback is None:
+        return
+
+    logger.info(f"Executing on task {task_callback.task}")
+
+    if isinstance(task_callback, TaskExecution):
+        motor.execute_task(task_callback)
+        return
+    motor.select_task(task_callback.index)
 
     camera.flush()
     statement = None
@@ -44,8 +52,8 @@ def loop():
         if statement is None:
             logger.info(f"Waiting for statement to appear...")
     logger.info(f"Found statement {statement}")
-    instruction = instruction_callback(waiting_tasks, statement)
-    motor.execute_instruction(instruction)
+    task_execution = task_callback(waiting_tasks, statement)
+    motor.execute_task(task_execution)
 
 
 if __name__ == "__main__":
