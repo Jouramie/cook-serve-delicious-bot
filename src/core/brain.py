@@ -3,6 +3,7 @@ from __future__ import annotations
 import enum
 import json
 import logging
+import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -12,7 +13,7 @@ from typing import Any
 from core import resources
 
 EXPIRATION_DELAY_IN_SECONDS = 1
-CREATION_DELAY_IN_SECONDS = 2
+CREATION_DELAY_IN_SECONDS = 1
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
@@ -37,11 +38,17 @@ class TaskInstructions:
     type: TaskType
     keys: list[str] | None = None
     cooking_seconds: int | None = None
+    input_delay_seconds: float = 0
+    post_task_seconds: float = 0
 
     @staticmethod
     def from_dict(d: dict[str, Any]):
         return TaskInstructions(
-            TaskType[d["type"]] if "type" in d else TaskType.SIMPLE, d["keys"].split(","), d.get("cooking_seconds")
+            TaskType[d.get("type", TaskType.SIMPLE.name)],
+            d["keys"].split(","),
+            d.get("cooking_seconds"),
+            d.get("input_delay_seconds", 0),
+            d.get("post_task_seconds", 0),
         )
 
     @staticmethod
@@ -57,10 +64,10 @@ class TaskInstructions:
                 f"I know how to '{task.statement.title}'! "
                 f"Just '{str(self.keys)}', then cook for {str(self.cooking_seconds)} seconds."
             )
-            return CookingTaskExecution(task, self.keys, self.cooking_seconds)
+            return CookingTaskExecution(task)
 
         logger.info(f"I know how to '{task.statement.title}'! Just '{str(self.keys)}'.")
-        return SimpleTaskExecution(task, self.keys)
+        return SimpleTaskExecution(task)
 
 
 @dataclass
@@ -71,6 +78,7 @@ class Task:
     instructions: TaskInstructions | None = None
     cooked_at: datetime | None = None
     expire_at: datetime | None = None
+    missed_one_check: bool = False
 
     def get_executions(self, statement: TaskStatement, instructions: TaskInstructions):
         self.statement = statement
@@ -104,11 +112,16 @@ class Task:
             or self.is_cooked
         )
 
+    @property
+    def is_just_arrived(self) -> bool:
+        return self.created_at + timedelta(seconds=CREATION_DELAY_IN_SECONDS) > datetime.now()
+
     def complete(self):
         self.expire_at = datetime.now() + timedelta(seconds=EXPIRATION_DELAY_IN_SECONDS)
 
     def cook(self):
         self.cooked_at = datetime.now() + timedelta(seconds=self.instructions.cooking_seconds)
+        logger.info(f"{self.statement.title} will be cooked at {self.cooked_at}.")
 
 
 class Keyboard(ABC):
@@ -138,24 +151,25 @@ class UnknownTaskExecution(TaskExecution):
 @dataclass
 class SimpleTaskExecution(TaskExecution):
     task: Task
-    keys: list[str]
 
     def __call__(self, keyboard: Keyboard):
-        logger.info(f"Executing '{self.keys}'.")
-        for key in self.keys:
+        logger.info(f"Executing '{self.task.instructions.keys}'.")
+        for key in self.task.instructions.keys:
             keyboard.send(key)
+            if self.task.instructions.input_delay_seconds != 0:
+                time.sleep(self.task.instructions.input_delay_seconds)
         self.task.complete()
+        if self.task.instructions.post_task_seconds != 0:
+            time.sleep(self.task.instructions.post_task_seconds)
 
 
 @dataclass
 class CookingTaskExecution(TaskExecution):
     task: Task
-    keys: list[str]
-    cooking_seconds: int
 
     def __call__(self, keyboard: Keyboard):
-        logger.info(f"Executing '{self.keys}'.")
-        for key in self.keys:
+        logger.info(f"Executing '{self.task.instructions.keys}'.")
+        for key in self.task.instructions.keys:
             keyboard.send(key)
         self.task.cook()
 
@@ -197,15 +211,26 @@ class StatementCallback:
 
 def _synchronize_waiting_tasks(waiting_tasks: list[int]):
     global active_tasks
+    logger.info(f"Tasks {waiting_tasks} are waiting.")
     for i in range(len(active_tasks)):
-        logger.debug(f"Task {i}: {active_tasks[i]}")
+        logger.debug(f"Task {i + 1}: {active_tasks[i]}")
 
         active_task = active_tasks[i]
-        if (i + 1 not in waiting_tasks) or (active_task is not None and active_task.is_expired):
-            active_tasks[i] = None
+        if active_task is None:
+            if i + 1 in waiting_tasks:
+                active_tasks[i] = Task(i + 1, datetime.now())
+            continue
 
-        if active_task is None and i + 1 in waiting_tasks:
-            active_tasks[i] = Task(i + 1, datetime.now())
+        if active_task.is_expired:
+            active_tasks[i] = None
+            continue
+
+        if i + 1 not in waiting_tasks and not active_task.is_just_arrived:
+            logger.info(f"Task {i + 1} does not seems to still be waiting...")
+            if active_task.missed_one_check:
+                active_tasks[i] = None
+                continue
+            active_task.missed_one_check = True
 
 
 def choose_task_to_execute(

@@ -17,6 +17,9 @@
   "Chocolate Sprinkles": {
     "keys": "c,c,p,enter"
   },
+  "Kids Delight": {
+    "keys": "r,c,enter"
+  },
   "Cheesy Leaves": {
     "keys": "r,c,enter"
   },
@@ -40,6 +43,9 @@
   },
   "Cheesy Peppers": {
     "keys": "c,o,enter"
+  },
+  "The Big Salad": {
+    "keys": "c,g,enter"
   },
   "The Dry Deluxe": {
     "keys": "m,g,enter"
@@ -143,9 +149,23 @@
     "cooking_seconds": 8
   },
   "Work Ticket (Clean)": {
-    "keys": "down,s"
+    "keys": "down,s",
+    "post_task_seconds": 1
+  },
+  "Work Ticket (Dishes)": {
+    "keys": "left,right,left,right,up,left,right,left,right,up,left,right,left,right,up,left,right,left,right,up,left,right,left,right,up,left,right,left,right,up,s",
+    "post_task_seconds": 1
   },
   "Work Ticket (Rodents)": {
-    "keys": "right,down,c,s"
+    "keys": "right,down,c,s",
+    "post_task_seconds": 1
+  },
+  "Work Ticket (Trash)": {
+    "keys": "up,right,up,right,up,right,up,right,up,right,s",
+    "input_delay_seconds": 0.3,
+    "post_task_seconds": 1
+  },
+  "Check Out My Picture": {
+    "keys": "t,enter"
   }
 }

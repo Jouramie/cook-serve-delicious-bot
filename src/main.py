@@ -3,7 +3,7 @@ from pathlib import Path
 
 import properties
 from core import sensor, brain, motor
-from core.brain import TaskExecution
+from core.brain import TaskExecution, TaskType
 from kit import img_logger, sensor_util
 from kit.profiling import timeit
 
@@ -31,7 +31,6 @@ def loop():
         logger.info(f"Found no waiting tasks.")
         return
 
-    logger.info(f"Tasks {waiting_tasks} are waiting.")
     task_callback = brain.choose_task_to_execute(waiting_tasks)
     if task_callback is None:
         return
@@ -40,20 +39,44 @@ def loop():
 
     if isinstance(task_callback, TaskExecution):
         motor.execute_task(task_callback)
+        camera.flush()
         return
     motor.select_task(task_callback.index)
-
     camera.flush()
-    statement = None
-    while statement is None:
-        last_frame = capture()
-        waiting_tasks = sensor.find_waiting_tasks(last_frame)
-        statement = sensor.read_task_statement(last_frame)
-        if statement is None:
-            logger.info(f"Waiting for statement to appear...")
-    logger.info(f"Found statement {statement}")
-    task_execution = task_callback(waiting_tasks, statement)
+
+    task_execution = None
+    execution_retry = 0
+    while task_execution is None:
+        statement = None
+        statement_retry = 0
+        while statement is None:
+            last_frame = capture()
+            waiting_tasks = sensor.find_waiting_tasks(last_frame)
+            statement = sensor.read_task_statement(last_frame)
+            if statement is None:
+                statement_retry += 1
+                if statement_retry >= 3:
+                    logger.warning(f"No statement after 3 tries, will choose another task.")
+                    return
+                logger.info(f"Waiting for statement to appear...")
+
+        logger.info(f"Found statement {statement}")
+        task_execution = task_callback(waiting_tasks, statement)
+        if task_execution.task.instructions.type == TaskType.UNKNOWN:
+            execution_retry += 1
+            if execution_retry >= 3:
+                logger.warning(
+                    f"Could not find a proper execution for task {statement.title}, but will execute anyway."
+                )
+                break
+
+            logger.warning(
+                f"Could not find a proper execution for task {statement.title}. Will retry reading statement."
+            )
+            task_execution = None
+
     motor.execute_task(task_execution)
+    camera.flush()
 
 
 if __name__ == "__main__":
