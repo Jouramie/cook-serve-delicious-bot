@@ -87,7 +87,7 @@ class TaskInstructions:
 
 @dataclass
 class EquipmentStep:
-    SPECIAL_KEYWORDS: ClassVar[list[str]] = ["(3x)"]
+    SPECIAL_KEYWORDS: ClassVar[list[str]] = ["(2x)", "(3x)"]
 
     type: TaskType
     keys: dict[str, list[str]]
@@ -125,7 +125,13 @@ class EquipmentStep:
             if task_element in self.SPECIAL_KEYWORDS:
                 continue
 
-            n = 3 if next_element == "(3x)" else 1
+            if next_element == "(3x)":
+                n = 3
+            elif next_element == "(2x)":
+                n = 2
+            else:
+                n = 1
+
             keys += [key for key in self.keys[task_element]] * n
 
         if self.serve_at_end:

@@ -60,16 +60,24 @@
       "BLT",
       "The RED",
       "Lonely Patty",
-      "Thumbleweed",
-      "The Triple"
+      "Tumbleweed",
+      "The Triple",
+      "The Double",
+      "The Original",
+      "The Ryan Davis",
+      "The Lite Delight"
     ],
     "steps": [
       {
         "type": "COOKING",
         "cooking_seconds": 8,
-        "step_format": "(One|Three)(?: meat)",
+        "step_format": "(One|Two|Three)(?: meat)",
         "keys": {
           "One": [
+            "m"
+          ],
+          "Two": [
+            "m",
             "m"
           ],
           "Three": [
