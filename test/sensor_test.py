@@ -89,11 +89,23 @@ def test_the_double_2():
 
 def test_medium_cola():
     try:
-        img = cv2.cvtColor(cv2.imread(r"resources/medium_cola.tiff"), cv2.COLOR_BGR2RGB)
+        img = cv2.cvtColor(cv2.imread(r"resources/medium-cola.tiff"), cv2.COLOR_BGR2RGB)
 
         active_task = sensor.read_task_statement(img, log_steps="medium_cola")
         assert active_task.title == "Medium Cola"
         assert active_task.description == "A Medium Cola with Ice, please."
+
+    finally:
+        img_logger.finalize()
+
+
+def test_medium_grape_w_flavor_blast():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/medium-grape-w-flavor-blast.tiff"), cv2.COLOR_BGR2RGB)
+
+        active_task = sensor.read_task_statement(img, log_steps="medium_grape_w_flavor_blast")
+        assert active_task.title == "Medium Grape w/Flavor Blast"
+        assert active_task.description == "A Medium Grape with Ice and Flavor Blast, please."
 
     finally:
         img_logger.finalize()
