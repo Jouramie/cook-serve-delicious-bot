@@ -47,9 +47,15 @@ class TaskType(enum.Enum):
 
 
 @dataclass
+class HoldInput:
+    key: str
+    hold_seconds: float
+
+
+@dataclass
 class TaskInstructions:
     type: TaskType
-    keys: list[str] | None = None
+    keys: list[str | HoldInput] | None = None
     cooking_seconds: int | None = None
     input_delay_seconds: float = 0
     post_task_seconds: float = 0
@@ -57,9 +63,23 @@ class TaskInstructions:
 
     @staticmethod
     def from_dict(d: dict[str, Any]):
+        keys = []
+        for input_ in d["keys"].split(","):
+            split_input = input_.split(":")
+            if len(split_input) == 1:
+                keys.append(input_)
+                continue
+
+            input_mode, *args = split_input
+            if input_mode == "hold":
+                key, hold_seconds = args
+                keys.append(HoldInput(key, float(hold_seconds)))
+            else:
+                raise Exception(f"Unknown input mode '{input_mode}'")
+
         return TaskInstructions(
             TaskType[d.get("type", TaskType.SIMPLE.name)],
-            d["keys"].split(","),
+            keys,
             d.get("cooking_seconds"),
             d.get("input_delay_seconds", 0),
             d.get("post_task_seconds", 0),
@@ -307,11 +327,11 @@ class Task:
 
 class Keyboard(ABC):
     @abstractmethod
-    def send(self, key):
+    def send(self, key: str | HoldInput):
         raise NotImplementedError
 
     @abstractmethod
-    def wait_for(self, key):
+    def wait_for(self, key: str):
         raise NotImplementedError
 
 

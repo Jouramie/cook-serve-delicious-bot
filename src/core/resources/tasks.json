@@ -151,6 +151,9 @@
     "keys": "left,down,right,s,enter",
     "cooking_seconds": 8
   },
+  "The Brewsky": {
+    "keys": "hold:down:1.4,enter"
+  },
   "Work Ticket (Clean)": {
     "keys": "down,s",
     "post_task_seconds": 1
