@@ -70,3 +70,24 @@ def test_the_triple():
         callback([1], new_statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
+
+
+def test_the_hearhstopper():
+    keyboard = MagicMock()
+    statement = TaskStatement("The HEARTSTOPPER", "Two meat patties...")
+    expected_recipe = ["m", "m", "enter"]
+
+    with freeze_time(SOME_TIME):
+        _, callback = brain.choose_task_to_execute([1])
+        callback([1], statement)(keyboard)
+
+    keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
+    keyboard.send.reset_mock()
+
+    new_statement = TaskStatement("The HEARTSTOPPER", "Meat (2x), Bacon (2x), Cheese")
+    expected_recipe = ["m", "m", "b", "b", "c", "enter"]
+    with freeze_time(SOME_TIME + timedelta(seconds=9)):
+        _, callback = brain.choose_task_to_execute([1])
+        callback([1], new_statement)(keyboard)
+
+    keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])

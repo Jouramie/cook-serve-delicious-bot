@@ -17,7 +17,7 @@ from black.linegen import partial
 from core import resources
 
 EXPIRATION_DELAY_IN_SECONDS = 1
-CREATION_DELAY_IN_SECONDS = 1
+CREATION_DELAY_IN_SECONDS = 1.5
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
@@ -168,9 +168,14 @@ class EquipmentStep:
         return [task_element for task_element in match.groups() if task_element is not None]
 
     def _find_task_elements_by_keywords(self, description: str) -> list[str] | None:
-        return sorted(
-            [keyword for keyword in self.step_keywords if keyword in description], key=lambda x: description.index(x)
-        )
+        search_description = description
+        found_keywords: dict[int, str] = {}
+        for keyword in self.step_keywords:
+            while (found_index := search_description.find(keyword)) != -1:
+                found_keywords[found_index] = keyword
+                search_description = search_description.replace(keyword, "_" * len(keyword), 1)
+
+        return [v for k, v in sorted(found_keywords.items(), key=lambda x: x[0])]
 
 
 @dataclass
@@ -379,7 +384,8 @@ def choose_task_to_execute(
 
     _synchronize_waiting_tasks(waiting_tasks)
 
-    chosen_task = next((t for t in active_tasks if t is not None and t.is_ready), None)
+    prioritized_tasks = sorted((t for t in active_tasks if t is not None and t.is_ready), key=lambda x: x.created_at)
+    chosen_task = next(iter(prioritized_tasks), None)
     if chosen_task is None:
         return None, None
 
