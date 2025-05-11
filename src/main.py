@@ -35,7 +35,7 @@ def loop():
     if task_callback is None:
         return
 
-    logger.info(f"Executing on task {task}")
+    logger.info(f"Launching task {task}")
 
     if task_callback.is_executable:
         motor.execute_task(task_callback)

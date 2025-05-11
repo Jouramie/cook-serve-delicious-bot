@@ -282,7 +282,7 @@ class Task:
 
     @define_callback
     def simple_task_execution(self, keyboard: Keyboard) -> None:
-        logger.info(f"Executing '{self.instructions.keys}'.")
+        logger.info(f"Executing {self.instructions.keys}.")
         for key in self.instructions.keys:
             keyboard.send(key)
             if self.instructions.input_delay_seconds != 0:
@@ -293,7 +293,7 @@ class Task:
 
     @define_callback
     def cooking_task_execution(self, keyboard: Keyboard) -> None:
-        logger.info(f"Executing '{self.instructions.keys}'.")
+        logger.info(f"Executing {self.instructions.keys}.")
         for key in self.instructions.keys:
             keyboard.send(key)
         self.cook()
@@ -355,7 +355,7 @@ with files(resources).joinpath("equipments.json").open() as equipments_file:
 
 def _synchronize_waiting_tasks(waiting_tasks: list[int]):
     global active_tasks
-    logger.info(f"Tasks {waiting_tasks} are waiting.")
+    logger.info(f"Synchronizing {waiting_tasks} with waiting tasks.")
     for i in range(len(active_tasks)):
         logger.debug(f"Task {i + 1}: {active_tasks[i]}")
 
