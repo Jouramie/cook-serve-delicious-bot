@@ -118,8 +118,8 @@ class EquipmentStep:
     serve_at_end: bool = True
 
     def __post_init__(self):
-        if self.step_keywords is not None:
-            self.step_keywords += self.SPECIAL_KEYWORDS
+        if self.step_keywords is None:
+            self.step_keywords = list(self.keys.keys()) + self.SPECIAL_KEYWORDS
 
     @staticmethod
     def from_dict(d: dict[str, Any]):

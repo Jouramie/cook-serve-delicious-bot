@@ -1,22 +1,4 @@
 {
-  "Plain Vanilla": {
-    "keys": "v,v,v,enter"
-  },
-  "Cherry Vanilla": {
-    "keys": "v,v,h,enter"
-  },
-  "Vanilla and Chocolate": {
-    "keys": "v,c,enter"
-  },
-  "The Yin and Yang": {
-    "keys": "v,c,h,p,enter"
-  },
-  "Plain Chocolate": {
-    "keys": "c,c,c,enter"
-  },
-  "Chocolate Sprinkles": {
-    "keys": "c,c,p,enter"
-  },
   "Kids Delight": {
     "keys": "r,c,enter"
   },

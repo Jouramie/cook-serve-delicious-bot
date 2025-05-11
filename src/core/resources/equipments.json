@@ -89,13 +89,6 @@
         }
       },
       {
-        "step_keywords": [
-          "Meat",
-          "Lettuce",
-          "Bacon",
-          "Cheese",
-          "Tomatoes"
-        ],
         "keys": {
           "Meat": [
             "m"
@@ -111,6 +104,73 @@
           ],
           "Tomatoes": [
             "t"
+          ]
+        }
+      }
+    ]
+  },
+  "Ice Cream": {
+    "title_keywords": [
+      "Vanilla",
+      "Chocolate",
+      "Yin and Yang",
+      "Mint",
+      "Trio of Delicious"
+    ],
+    "steps": [
+      {
+        "keys": {
+          "One Vanilla": [
+            "v"
+          ],
+          "Two Vanilla": [
+            "v",
+            "v"
+          ],
+          "Three Vanilla": [
+            "v",
+            "v",
+            "v"
+          ],
+          "One Chocolate": [
+            "c"
+          ],
+          "Two Chocolate": [
+            "c",
+            "c"
+          ],
+          "Three Chocolate": [
+            "c",
+            "c",
+            "c"
+          ],
+          "One scoop of Vanilla and Chocolate": [
+            "v",
+            "c"
+          ],
+          "One Mint Chocolate Chip": [
+            "m"
+          ],
+          "Two Mint Chocolate Chips": [
+            "m",
+            "m"
+          ],
+          "Three Mint Chocolate Chips": [
+            "m",
+            "m",
+            "m"
+          ],
+          "Cherry": [
+            "h"
+          ],
+          "Sprinkles": [
+            "p"
+          ],
+          "Whip": [
+            "w"
+          ],
+          "Nuts": [
+            "n"
           ]
         }
       }
