@@ -194,7 +194,7 @@ with files(resources).joinpath("tasks.json").open() as recipes_file:
 class StatementCallback:
     task: Task
 
-    def __call__(self, waiting_tasks: list[int], statement: TaskStatement):
+    def __call__(self, waiting_tasks: list[int], statement: TaskStatement) -> TaskExecution:
         _synchronize_waiting_tasks(waiting_tasks)
 
         instructions = TASKS_INSTRUCTIONS.get(statement.title)
