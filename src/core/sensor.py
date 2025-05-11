@@ -19,7 +19,7 @@ WAITING_TASK_REGIONS = [WAITING_TASK_1_REGION, WAITING_TASK_2_REGION, WAITING_TA
 WAITING_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 240]), np.array([5, 5, 255]))
 
 ACTIVE_TASK_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
-ACTIVE_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 185]))
+ACTIVE_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([60, 90, 115]))
 
 
 TITLE_PATTERN = re.compile(r"(\w[\w\s()/]+)")
@@ -43,13 +43,11 @@ def find_waiting_tasks(img: np.ndarray) -> list[int]:
 
 
 @timeit(name="read_task_statement", print_each_call=True)
-def read_task_statement(img: np.ndarray, log_steps=False) -> TaskStatement | None:
+def read_task_statement(img: np.ndarray, log_steps="_1") -> TaskStatement | None:
     cropped = sensor_util.crop(img, ACTIVE_TASK_REGION)
-    if log_steps:
-        img_logger.log_now(cropped, "cropped.png")
     masked = sensor_util.mask(cropped, ACTIVE_TASK_MASK)
     if log_steps:
-        img_logger.log_now(masked, "marked.png")
+        img_logger.log_now(masked, log_steps + "_masked.png")
     statement: str | None = pytesseract.image_to_string(masked)
     logger.info(f"Extracted `{statement}` from image.")
     if not statement:
