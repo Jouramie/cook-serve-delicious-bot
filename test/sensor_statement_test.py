@@ -117,8 +117,7 @@ def test_the_triple_w_bacon_2_rush_hour_1():
 
         active_task = sensor.read_task_statement(img, log_steps="the_triple_w_bacon_2_rush_hour_1")
         assert active_task.title == "The Triple w/Bacon"
-        assert active_task.description == "Meat (2x), Bacon and Cheese"
-        # assert active_task is None
+        assert active_task.description == "Meat (3x), Bacon and Cheese"
 
     finally:
         img_logger.finalize()
@@ -129,7 +128,8 @@ def test_the_triple_w_bacon_2_rush_hour_2():
         img = cv2.cvtColor(cv2.imread(r"resources/the_triple_w_bacon_2_rush_hour_2.tiff"), cv2.COLOR_BGR2RGB)
 
         active_task = sensor.read_task_statement(img, log_steps="the_triple_w_bacon_2_rush_hour_2")
-        assert active_task is None
+        assert active_task.title == "The Triple w/Bacon"
+        assert active_task.description == "Meat (3x), Bacon and Cheese"
 
     finally:
         img_logger.finalize()
