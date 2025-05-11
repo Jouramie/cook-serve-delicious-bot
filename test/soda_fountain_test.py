@@ -20,7 +20,7 @@ def test_jumbo_diet():
     statement = TaskStatement("Jumbo Diet", "A Jumbo Diet with Ice, please.")
     expected_recipe = ["up", "up", "up", "left", "down", "i", "enter"]
 
-    callback = brain.choose_task_to_execute([1])
+    _, callback = brain.choose_task_to_execute([1])
     callback([1], statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
@@ -31,7 +31,7 @@ def test_jumbo_diet_flavor():
     statement = TaskStatement("Jumbo Diet w/Flavor Blast", "A Jumbo Diet with Ice and Flavor Blast, please.")
     expected_recipe = ["up", "up", "up", "left", "down", "i", "f", "enter"]
 
-    callback = brain.choose_task_to_execute([1])
+    _, callback = brain.choose_task_to_execute([1])
     callback([1], statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])

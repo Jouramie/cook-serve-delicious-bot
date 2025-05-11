@@ -22,7 +22,7 @@ def test_cherry_vanilla():
     statement = TaskStatement("Cherry Vanilla", "Two Vanilla Scoops with a Cherry, please.")
     expected_recipe = ["v", "v", "h", "enter"]
 
-    callback = brain.choose_task_to_execute([1])
+    _, callback = brain.choose_task_to_execute([1])
     callback([1], statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
@@ -33,12 +33,12 @@ def test_the_manhattan():
     statement = TaskStatement("The Manhattan", "Ranch, Cheese, and everything on it.")
     expected_recipe = ["r", "c", "b", "o", "m", "g", "enter"]
 
-    callback = brain.choose_task_to_execute([1])
+    task, callback = brain.choose_task_to_execute([1])
     callback([1], statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
     with freeze_time(datetime.now() + timedelta(seconds=10)):
-        assert callback.task.is_expired
+        assert task.is_expired
 
 
 def test_grey_tail_fish():
@@ -46,11 +46,11 @@ def test_grey_tail_fish():
     statement = TaskStatement("Grey Tail Fish", "Fillet the Fish, thea Season and cook.")
     expected_recipe = ["left", "down", "right", "s", "enter"]
 
-    callback = brain.choose_task_to_execute([1])
+    task, callback = brain.choose_task_to_execute([1])
     callback([1], statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
-    assert callback.task.is_cooking
+    assert task.is_cooking
 
 
 def test_cooked_grey_tail_fish():
@@ -65,9 +65,9 @@ def test_cooked_grey_tail_fish():
     )
     brain.active_tasks[0] = cooked_task
 
-    callback = brain.choose_task_to_execute([1])
+    task, callback = brain.choose_task_to_execute([1])
     callback(keyboard)
 
     keyboard.send.assert_has_calls([mock.call("1")])
     with freeze_time(datetime.now() + timedelta(seconds=instructions.cooking_seconds)):
-        assert callback.task.is_expired
+        assert task.is_expired

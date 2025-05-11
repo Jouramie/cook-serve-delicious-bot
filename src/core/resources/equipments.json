@@ -1,20 +1,110 @@
 {
   "Soda Fountain": {
-    "title_keywords": ["Cola", "Tea", "Grape", "Water", "Diet"],
-    "task_format": "A (\\w+) (\\w+)(?: with )(Ice)?(?:no Ice)?(?: and )?(Flavor Blast)?",
-    "keys": {
-      "Small": [],
-      "Medium": ["up"],
-      "Large": ["up","up"],
-      "Jumbo": ["up","up","up"],
-      "Cola": ["down"],
-      "Tea": ["right","down"],
-      "Grape": ["right","right","down"],
-      "Water": ["left","left","down"],
-      "Diet": ["left","down"],
-      "Ice": ["i"],
-      "Flavor Blast": ["f"],
-      "Serve": ["enter"]
-    }
+    "title_keywords": [
+      "Cola",
+      "Tea",
+      "Grape",
+      "Water",
+      "Diet"
+    ],
+    "steps": [
+      {
+        "step_format": "A (\\w+) (\\w+)(?: with )(Ice)?(?:no Ice)?(?: and )?(Flavor Blast)?",
+        "keys": {
+          "Small": [],
+          "Medium": [
+            "up"
+          ],
+          "Large": [
+            "up",
+            "up"
+          ],
+          "Jumbo": [
+            "up",
+            "up",
+            "up"
+          ],
+          "Cola": [
+            "down"
+          ],
+          "Tea": [
+            "right",
+            "down"
+          ],
+          "Grape": [
+            "right",
+            "right",
+            "down"
+          ],
+          "Water": [
+            "left",
+            "left",
+            "down"
+          ],
+          "Diet": [
+            "left",
+            "down"
+          ],
+          "Ice": [
+            "i"
+          ],
+          "Flavor Blast": [
+            "f"
+          ]
+        }
+      }
+    ]
+  },
+  "Burger": {
+    "title_keywords": [
+      "BLT",
+      "The RED",
+      "Lonely Patty",
+      "Thumbleweed",
+      "The Triple"
+    ],
+    "steps": [
+      {
+        "type": "COOKING",
+        "cooking_seconds": 8,
+        "step_format": "(One|Three)(?: meat)",
+        "keys": {
+          "One": [
+            "m"
+          ],
+          "Three": [
+            "m",
+            "m",
+            "m"
+          ]
+        }
+      },
+      {
+        "step_keywords": [
+          "Meat",
+          "Lettuce",
+          "Bacon",
+          "Cheese",
+          "Tomatoes"
+        ],
+        "keys": {
+          "Meat": [
+            "m"
+          ],
+          "Lettuce": [
+            "l"
+          ],
+          "Bacon": [
+            "b"
+          ],
+          "Cheese": [
+            "c"
+          ],
+          "Tomatoes": [
+            "t"
+          ]
+        }
+      }
+    ]
   }
 }

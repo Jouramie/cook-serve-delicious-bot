@@ -10,7 +10,7 @@ from kit import img_logger, sensor_util
 def loop():
     img_logger.submit(camera.capture_now())
     img_logger.publish()
-    time.sleep(0.1)
+    time.sleep(0.5)
 
 
 if __name__ == "__main__":

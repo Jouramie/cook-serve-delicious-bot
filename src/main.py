@@ -1,9 +1,9 @@
 import logging
 from pathlib import Path
+from time import sleep
 
 import properties
 from core import sensor, brain, motor
-from core.brain import TaskExecution, TaskType
 from kit import img_logger, sensor_util
 from kit.profiling import timeit
 
@@ -31,17 +31,17 @@ def loop():
         logger.info(f"Found no waiting tasks.")
         return
 
-    task_callback = brain.choose_task_to_execute(waiting_tasks)
+    task, task_callback = brain.choose_task_to_execute(waiting_tasks)
     if task_callback is None:
         return
 
-    logger.info(f"Executing on task {task_callback.task}")
+    logger.info(f"Executing on task {task}")
 
-    if isinstance(task_callback, TaskExecution):
+    if task_callback.is_executable:
         motor.execute_task(task_callback)
         camera.flush()
         return
-    motor.select_task(task_callback.index)
+    motor.select_task(task.index)
     camera.flush()
 
     task_execution = None
@@ -62,7 +62,7 @@ def loop():
 
         logger.info(f"Found statement {statement}")
         task_execution = task_callback(waiting_tasks, statement)
-        if task_execution.task.instructions.type == TaskType.UNKNOWN:
+        if task_execution.is_unknown:
             execution_retry += 1
             if execution_retry >= 3:
                 logger.warning(
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         logging.basicConfig(
             level=logging.INFO,
             format="%(asctime)s %(levelname)s %(message)s",
-            handlers=[(logging.FileHandler("logs/bot.log", mode="w"))],
+            handlers=[logging.FileHandler("logs/bot.log", mode="w")],
         )
         logger = logging.getLogger(__name__)
 
@@ -102,3 +102,4 @@ if __name__ == "__main__":
     finally:
         camera.stop()
         img_logger.finalize()
+        sleep(1)

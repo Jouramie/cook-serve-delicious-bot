@@ -6,10 +6,13 @@ import logging
 import re
 import time
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from importlib.resources import files
-from typing import Any, Pattern
+from typing import Any, Pattern, Protocol, runtime_checkable, ClassVar
+
+from black.linegen import partial
 
 from core import resources
 
@@ -20,6 +23,15 @@ logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
 
 active_tasks: list[Task | None] = [None, None, None, None]
+
+
+def define_callback(func: Callable = None, /, *, is_executable: bool = True, is_unknown: bool = False):
+    if not func:
+        return partial(define_callback, is_executable=is_executable)
+
+    setattr(func, "is_executable", is_executable)
+    setattr(func, "is_unknown", is_unknown)
+    return func
 
 
 @dataclass
@@ -41,6 +53,7 @@ class TaskInstructions:
     cooking_seconds: int | None = None
     input_delay_seconds: float = 0
     post_task_seconds: float = 0
+    has_next_step: bool = False
 
     @staticmethod
     def from_dict(d: dict[str, Any]):
@@ -58,44 +71,123 @@ class TaskInstructions:
 
     def get_executions(self, task: Task):
         if self.type == TaskType.UNKNOWN:
-            return UnknownTaskExecution(task)
+            return task.unknown_task_execution
 
         if self.type == TaskType.COOKING:
             logger.info(
                 f"I know how to '{task.statement.title}'! "
-                f"Just '{str(self.keys)}', then cook for {str(self.cooking_seconds)} seconds."
+                f"Just {str(self.keys)}, then cook for {str(self.cooking_seconds)} seconds."
             )
-            return CookingTaskExecution(task)
+            task.has_next_step = self.has_next_step
+            return task.cooking_task_execution
 
-        logger.info(f"I know how to '{task.statement.title}'! Just '{str(self.keys)}'.")
-        return SimpleTaskExecution(task)
+        logger.info(f"I know how to '{task.statement.title}'! Just {str(self.keys)}.")
+        return task.simple_task_execution
+
+
+@dataclass
+class EquipmentStep:
+    SPECIAL_KEYWORDS: ClassVar[list[str]] = ["(3x)"]
+
+    type: TaskType
+    keys: dict[str, list[str]]
+    step_format: Pattern[str] | None = None
+    step_keywords: list[str] | None = None
+    cooking_seconds: int | None = None
+    serve_at_end: bool = True
+
+    def __post_init__(self):
+        if self.step_keywords is not None:
+            self.step_keywords += self.SPECIAL_KEYWORDS
+
+    @staticmethod
+    def from_dict(d: dict[str, Any]):
+        return EquipmentStep(
+            TaskType[d.get("type", TaskType.SIMPLE.name)],
+            d["keys"],
+            re.compile(d["step_format"]) if "step_format" in d else None,
+            d["step_keywords"] if "step_keywords" in d else None,
+            d["cooking_seconds"] if "cooking_seconds" in d else None,
+        )
+
+    def find_instructions(self, description: str) -> TaskInstructions | None:
+        if self.step_format is not None:
+            task_elements = self._find_task_elements_by_format(description)
+        else:
+            task_elements = self._find_task_elements_by_keywords(description)
+
+        if task_elements is None:
+            return None
+
+        logger.info(f"Found {task_elements} elements.")
+        keys = []
+        for task_element, next_element in zip(task_elements, task_elements[1:] + [None]):
+            if task_element in self.SPECIAL_KEYWORDS:
+                continue
+
+            n = 3 if next_element == "(3x)" else 1
+            keys += [key for key in self.keys[task_element]] * n
+
+        if self.serve_at_end:
+            keys.append("enter")
+
+        return TaskInstructions(self.type, keys, cooking_seconds=self.cooking_seconds)
+
+    def _find_task_elements_by_format(self, description: str) -> list[str] | None:
+        match = self.step_format.match(description)
+        if match is None or not any(match.groups()):
+            return None
+
+        logger.info(f"Found {match.groups()}.")
+        return [task_element for task_element in match.groups() if task_element is not None]
+
+    def _find_task_elements_by_keywords(self, description: str) -> list[str] | None:
+        return sorted(
+            [keyword for keyword in self.step_keywords if keyword in description], key=lambda x: description.index(x)
+        )
 
 
 @dataclass
 class Equipment:
     name: str
     title_keywords: list[str]
-    task_format: Pattern[str]
-    keys: dict[str, list[str]]
+    steps: list[EquipmentStep]
 
     @staticmethod
     def from_dict(name: str, d: dict[str, Any]):
-        return Equipment(name, d["title_keywords"], re.compile(d["task_format"]), d["keys"])
+        return Equipment(name, d["title_keywords"], [EquipmentStep.from_dict(step) for step in d["steps"]])
 
     def match_title(self, title: str) -> bool:
         return any(keyword in title for keyword in self.title_keywords)
 
     def find_instructions(self, description: str) -> TaskInstructions | None:
-        match = self.task_format.match(description)
-        if match is None:
-            return None
+        for i, step in enumerate(self.steps):
+            instructions = step.find_instructions(description)
+            if instructions is None:
+                logger.info(f"Skipping '{step.type.name}' step as description did not match.")
+                continue
 
-        logger.info(f"Found {match.groups()}.")
-        return TaskInstructions(
-            TaskType.SIMPLE,
-            [key for task_element in match.groups() if task_element is not None for key in self.keys[task_element]]
-            + self.keys["Serve"],
-        )
+            if i != len(self.steps) - 1:
+                instructions.has_next_step = True
+
+            return instructions
+
+
+@runtime_checkable
+class TaskExecutionCallback(Protocol):
+    is_unknown: ClassVar[bool]
+    is_executable: ClassVar[bool] = True
+
+    def __call__(self, keyboard: Keyboard) -> None:
+        raise NotImplementedError
+
+
+@runtime_checkable
+class ReadStatementCallback(Protocol):
+    is_executable: ClassVar[bool] = False
+
+    def __call__(self, waiting_tasks: list[int], statement: TaskStatement) -> TaskExecutionCallback:
+        raise NotImplementedError
 
 
 @dataclass
@@ -107,6 +199,7 @@ class Task:
     cooked_at: datetime | None = None
     expire_at: datetime | None = None
     missed_one_check: bool = False
+    has_next_step: bool = False
 
     def get_executions(self, statement: TaskStatement, instructions: TaskInstructions):
         self.statement = statement
@@ -151,6 +244,60 @@ class Task:
         self.cooked_at = datetime.now() + timedelta(seconds=self.instructions.cooking_seconds)
         logger.info(f"{self.statement.title} will be cooked at {self.cooked_at}.")
 
+    @define_callback(is_unknown=True)
+    def unknown_task_execution(self, keyboard: Keyboard) -> None:
+        keyboard.wait_for("enter")
+        self.complete()
+
+    @define_callback
+    def simple_task_execution(self, keyboard: Keyboard) -> None:
+        logger.info(f"Executing '{self.instructions.keys}'.")
+        for key in self.instructions.keys:
+            keyboard.send(key)
+            if self.instructions.input_delay_seconds != 0:
+                time.sleep(self.instructions.input_delay_seconds)
+        self.complete()
+        if self.instructions.post_task_seconds != 0:
+            time.sleep(self.instructions.post_task_seconds)
+
+    @define_callback
+    def cooking_task_execution(self, keyboard: Keyboard) -> None:
+        logger.info(f"Executing '{self.instructions.keys}'.")
+        for key in self.instructions.keys:
+            keyboard.send(key)
+        self.cook()
+
+    @define_callback
+    def serve_execution(self, keyboard: Keyboard) -> None:
+        logger.info(f"Executing '{str(self.index)}'.")
+        keyboard.send(str(self.index))
+        self.complete()
+
+    @define_callback(is_executable=False)
+    def read_statement_callback(self, waiting_tasks: list[int], statement: TaskStatement) -> TaskExecutionCallback:
+        _synchronize_waiting_tasks(waiting_tasks)
+
+        instructions = TASKS_INSTRUCTIONS.get(statement.title)
+        if instructions is not None:
+            return self.get_executions(statement, instructions)
+
+        logger.info(
+            f"'{statement.title}' is not in predefined tasks. Trying to interpret statement '{statement.description}'."
+        )
+        for equipment in EQUIPMENTS.values():
+            if not equipment.match_title(statement.title):
+                continue
+
+            logger.info(f"'{statement.title}' is a '{equipment.name}' task.")
+            instructions = equipment.find_instructions(statement.description)
+            if instructions is None:
+                logger.warning(f"'Could not understand instructions for {statement.title}.")
+                break
+            return self.get_executions(statement, instructions)
+
+        logger.warning(f"'{statement.title}' is unknown. How am I supposed to '{statement.description}'??")
+        return self.get_executions(statement, TaskInstructions.unknown())
+
 
 class Keyboard(ABC):
     @abstractmethod
@@ -162,56 +309,6 @@ class Keyboard(ABC):
         raise NotImplementedError
 
 
-class TaskExecution:
-    def __call__(self, keyboard: Keyboard):
-        raise NotImplementedError
-
-
-@dataclass
-class UnknownTaskExecution(TaskExecution):
-    task: Task
-
-    def __call__(self, keyboard: Keyboard):
-        keyboard.wait_for("enter")
-        self.task.complete()
-
-
-@dataclass
-class SimpleTaskExecution(TaskExecution):
-    task: Task
-
-    def __call__(self, keyboard: Keyboard):
-        logger.info(f"Executing '{self.task.instructions.keys}'.")
-        for key in self.task.instructions.keys:
-            keyboard.send(key)
-            if self.task.instructions.input_delay_seconds != 0:
-                time.sleep(self.task.instructions.input_delay_seconds)
-        self.task.complete()
-        if self.task.instructions.post_task_seconds != 0:
-            time.sleep(self.task.instructions.post_task_seconds)
-
-
-@dataclass
-class CookingTaskExecution(TaskExecution):
-    task: Task
-
-    def __call__(self, keyboard: Keyboard):
-        logger.info(f"Executing '{self.task.instructions.keys}'.")
-        for key in self.task.instructions.keys:
-            keyboard.send(key)
-        self.task.cook()
-
-
-@dataclass
-class ServeExecution(TaskExecution):
-    task: Task
-
-    def __call__(self, keyboard: Keyboard):
-        logger.info(f"Executing '{str(self.task.index)}'.")
-        keyboard.send(str(self.task.index))
-        self.task.complete()
-
-
 with files(resources).joinpath("tasks.json").open() as recipes_file:
     TASKS_INSTRUCTIONS: dict[str, TaskInstructions] = {
         k: TaskInstructions.from_dict(v) for k, v in json.load(recipes_file).items()
@@ -219,33 +316,6 @@ with files(resources).joinpath("tasks.json").open() as recipes_file:
 
 with files(resources).joinpath("equipments.json").open() as equipments_file:
     EQUIPMENTS: dict[str, Equipment] = {k: Equipment.from_dict(k, v) for k, v in json.load(equipments_file).items()}
-
-
-@dataclass
-class StatementCallback:
-    task: Task
-
-    def __call__(self, waiting_tasks: list[int], statement: TaskStatement) -> TaskExecution:
-        _synchronize_waiting_tasks(waiting_tasks)
-
-        instructions = TASKS_INSTRUCTIONS.get(statement.title)
-        if instructions is not None:
-            return self.task.get_executions(statement, instructions)
-
-        logger.info(f"'{statement.title}' is unknown. Trying to interpret the task from '{statement.description}'.")
-        for equipment in EQUIPMENTS.values():
-            if not equipment.match_title(statement.title):
-                continue
-
-            logger.info(f"'{statement.title}' is a '{equipment.name}' task.")
-            instructions = equipment.find_instructions(statement.description)
-            if instructions is None:
-                logger.warning(f"'Could not understand instructions for {statement.title}.")
-                break
-            return self.task.get_executions(statement, instructions)
-
-        logger.warning(f"'{statement.title}' is unknown. How am I supposed to '{statement.description}'??")
-        return self.task.get_executions(statement, TaskInstructions.unknown())
 
     @property
     def index(self):
@@ -278,16 +348,16 @@ def _synchronize_waiting_tasks(waiting_tasks: list[int]):
 
 def choose_task_to_execute(
     waiting_tasks: list[int],
-) -> StatementCallback | ServeExecution | None:
+) -> tuple[Task | None, ReadStatementCallback | TaskExecutionCallback | None]:
     global active_tasks
 
     _synchronize_waiting_tasks(waiting_tasks)
 
     chosen_task = next((t for t in active_tasks if t is not None and t.is_ready), None)
     if chosen_task is None:
-        return None
+        return None, None
 
-    if chosen_task.is_cooked:
-        return ServeExecution(chosen_task)
+    if chosen_task.is_cooked and not chosen_task.has_next_step:
+        return chosen_task, chosen_task.serve_execution
 
-    return StatementCallback(chosen_task)
+    return chosen_task, chosen_task.read_statement_callback

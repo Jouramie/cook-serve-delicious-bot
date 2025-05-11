@@ -3,7 +3,7 @@ import time
 
 from pynput.keyboard import Key, Controller, Listener, KeyCode
 
-from core.brain import TaskExecution, Keyboard
+from core.brain import TaskExecutionCallback, Keyboard
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ class PynputKeyboard(Keyboard):
 keyboard = PynputKeyboard()
 
 
-def execute_task(instruction: TaskExecution):
+def execute_task(instruction: TaskExecutionCallback):
     instruction(keyboard)
 
 
