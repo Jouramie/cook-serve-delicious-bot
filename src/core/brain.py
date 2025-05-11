@@ -58,8 +58,7 @@ class TaskInstructions:
     keys: list[str | HoldInput] | None = None
     cooking_seconds: int | None = None
     input_delay_seconds: float = 0
-    # FIXME this should not be needed, instead we should discard screenshot made before the task activation input
-    post_task_seconds: float = 0.2
+    post_task_seconds: float = 0
     has_next_step: bool = False
 
     @staticmethod

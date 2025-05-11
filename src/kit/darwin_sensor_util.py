@@ -1,6 +1,7 @@
 import logging
 import threading
 import time
+from datetime import datetime
 from threading import Thread
 
 import AppKit
@@ -48,7 +49,7 @@ class DarwinCamera(GameCamera):
         self._running = True
 
         self._last_frame = None
-        self._last_frame_timestamp = None
+        self._last_flush = datetime.now()
         self._last_frame_lock = threading.Lock()
 
     @timeit(name="capture", print_each_call=True)
@@ -62,13 +63,18 @@ class DarwinCamera(GameCamera):
             return frame
 
     def flush(self):
+        self._last_flush = datetime.now()
         with self._last_frame_lock:
             self._last_frame = None
 
     def capture_now(self) -> np.ndarray:
+        return self.capture_with_time()[1]
+
+    def capture_with_time(self) -> tuple[datetime, np.ndarray]:
+        capture_time = datetime.now()
         if self.region is None:
-            return np.asarray(PIL.ImageGrab.grab())
-        return np.asarray(PIL.ImageGrab.grab(self.region.corners))
+            return capture_time, np.asarray(PIL.ImageGrab.grab())
+        return capture_time, np.asarray(PIL.ImageGrab.grab(self.region.corners))
 
     def start(self):
         self._thread.start()
@@ -78,6 +84,10 @@ class DarwinCamera(GameCamera):
 
     def _capture_loop(self):
         while self._running:
-            frame = self.capture_now()
+            capture_time, frame = self.capture_with_time()
+            if self._last_flush > capture_time:
+                logger.debug(f"Frame captured too late, discarding.")
+                continue
+
             with self._last_frame_lock:
                 self._last_frame = frame
