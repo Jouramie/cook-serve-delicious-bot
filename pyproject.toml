@@ -10,9 +10,9 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-opencv-python = "^4.8.0.76"
-pillow = "^10.0.0"
+python = "^3.12"
+opencv-python = "4.11.0.86"
+pillow = "11.2.1"
 frozendict = "^2.3.8"
 pytesseract = "^0.3.10"
 pynput = "^1.7.6"
@@ -23,7 +23,7 @@ dxcam = {version = ">=0.0.5", markers = "sys_platform == \"win32\""}
 freezegun = "^1.2.2"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.7.0"
+black = "^25.1.0"
 pytest = "^7.4.0"
 pytest-mock = "^3.11.1"
 
