@@ -40,6 +40,18 @@
     "keys": "left,down,right,s,enter",
     "cooking_seconds": 8
   },
+  "Chicken Noodle Soup": {
+    "type": "COOKING",
+    "keys": "k,w,u,space,y,down,down,down,enter",
+    "input_delay_seconds": 0.1,
+    "cooking_seconds": 10.5
+  },
+  "Soup du Jour": {
+    "type": "COOKING",
+    "keys": "w,u,s,space,t,down,down,down,a,down,down,down,y,down,down,down,enter",
+    "input_delay_seconds": 0.1,
+    "cooking_seconds": 10.5
+  },
   "The Brewsky": {
     "keys": "hold:down:1.4,enter"
   },

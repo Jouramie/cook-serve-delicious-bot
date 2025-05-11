@@ -296,6 +296,8 @@ class Task:
         logger.info(f"Executing {self.instructions.keys}.")
         for key in self.instructions.keys:
             keyboard.send(key)
+            if self.instructions.input_delay_seconds != 0:
+                time.sleep(self.instructions.input_delay_seconds)
         self.cook()
 
     @define_callback
