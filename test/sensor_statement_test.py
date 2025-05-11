@@ -37,6 +37,17 @@ def test_il():
         img_logger.finalize()
 
 
+def test_sc_oat_be():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/ghost_tasks/sc_oat_be.tiff"), cv2.COLOR_BGR2RGB)
+
+        active_task = sensor.read_task_statement(img, log_steps="sc_oat_be")
+        assert active_task is None
+
+    finally:
+        img_logger.finalize()
+
+
 def test_the_ryan_davis_2():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/burger/the_ryan_davis_2.tiff"), cv2.COLOR_BGR2RGB)
@@ -178,6 +189,18 @@ def test_nutty_vanilla():
         active_task = sensor.read_task_statement(img, log_steps="nutty_vanilla")
         assert active_task.title == "Nutty Vanilla"
         assert active_task.description == "Two Vanilla Scoops with Nuts"
+
+    finally:
+        img_logger.finalize()
+
+
+def test_cherry_vanilla():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/ice_cream/cherry_vanilla.tiff"), cv2.COLOR_BGR2RGB)
+
+        active_task = sensor.read_task_statement(img, log_steps="cherry_vanilla")
+        assert active_task.title == "Cherry Vanilla"
+        assert active_task.description == "Two Vanilla Scoops with a Cherry, please."
 
     finally:
         img_logger.finalize()
