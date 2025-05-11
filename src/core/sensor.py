@@ -19,7 +19,7 @@ WAITING_TASK_REGIONS = [WAITING_TASK_1_REGION, WAITING_TASK_2_REGION, WAITING_TA
 WAITING_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 240]), np.array([5, 5, 255]))
 
 ACTIVE_TASK_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
-ACTIVE_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 75]))
+ACTIVE_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 90]))
 
 
 TITLE_PATTERN = re.compile(r"(\w[\w\s()/]+)")

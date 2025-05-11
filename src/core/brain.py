@@ -3,12 +3,13 @@ from __future__ import annotations
 import enum
 import json
 import logging
+import re
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from importlib.resources import files
-from typing import Any
+from typing import Any, Pattern
 
 from core import resources
 
@@ -68,6 +69,33 @@ class TaskInstructions:
 
         logger.info(f"I know how to '{task.statement.title}'! Just '{str(self.keys)}'.")
         return SimpleTaskExecution(task)
+
+
+@dataclass
+class Equipment:
+    name: str
+    title_keywords: list[str]
+    task_format: Pattern[str]
+    keys: dict[str, list[str]]
+
+    @staticmethod
+    def from_dict(name: str, d: dict[str, Any]):
+        return Equipment(name, d["title_keywords"], re.compile(d["task_format"]), d["keys"])
+
+    def match_title(self, title: str) -> bool:
+        return any(keyword in title for keyword in self.title_keywords)
+
+    def find_instructions(self, description: str) -> TaskInstructions | None:
+        match = self.task_format.match(description)
+        if match is None:
+            return None
+
+        logger.info(f"Found {match.groups()}.")
+        return TaskInstructions(
+            TaskType.SIMPLE,
+            [key for task_element in match.groups() if task_element is not None for key in self.keys[task_element]]
+            + self.keys["Serve"],
+        )
 
 
 @dataclass
@@ -189,6 +217,9 @@ with files(resources).joinpath("tasks.json").open() as recipes_file:
         k: TaskInstructions.from_dict(v) for k, v in json.load(recipes_file).items()
     }
 
+with files(resources).joinpath("equipments.json").open() as equipments_file:
+    EQUIPMENTS: dict[str, Equipment] = {k: Equipment.from_dict(k, v) for k, v in json.load(equipments_file).items()}
+
 
 @dataclass
 class StatementCallback:
@@ -198,11 +229,23 @@ class StatementCallback:
         _synchronize_waiting_tasks(waiting_tasks)
 
         instructions = TASKS_INSTRUCTIONS.get(statement.title)
-        if instructions is None:
-            logger.warning(f"'{statement.title}' is unknown. How am I supposed to '{statement.description}'??")
-            instructions = TaskInstructions(TaskType.UNKNOWN)
+        if instructions is not None:
+            return self.task.get_executions(statement, instructions)
 
-        return self.task.get_executions(statement, instructions)
+        logger.info(f"'{statement.title}' is unknown. Trying to interpret the task from '{statement.description}'.")
+        for equipment in EQUIPMENTS.values():
+            if not equipment.match_title(statement.title):
+                continue
+
+            logger.info(f"'{statement.title}' is a '{equipment.name}' task.")
+            instructions = equipment.find_instructions(statement.description)
+            if instructions is None:
+                logger.warning(f"'Could not understand instructions for {statement.title}.")
+                break
+            return self.task.get_executions(statement, instructions)
+
+        logger.warning(f"'{statement.title}' is unknown. How am I supposed to '{statement.description}'??")
+        return self.task.get_executions(statement, TaskInstructions.unknown())
 
     @property
     def index(self):

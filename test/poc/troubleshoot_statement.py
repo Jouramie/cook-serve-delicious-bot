@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     try:
         imgs = [
-            cv2.imread(r"logs/2025-05-10T152110.037598.tiff"),
+            cv2.imread(r"logs/2025-05-10T223416.388250.tiff"),
         ]
         for img in imgs:
             logger.info(f"Image shape if {img.shape}")

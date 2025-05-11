@@ -146,9 +146,6 @@
   "Large Diet (no ice)": {
     "keys": "up,up,left,down,enter"
   },
-  "Jumbo Diet w/Flavor Blast": {
-    "keys": "up,up,up,left,down,i,f,enter"
-  },
   "Grey Tail Fish": {
     "type": "COOKING",
     "keys": "left,down,right,s,enter",

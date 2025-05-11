@@ -1,0 +1,20 @@
+{
+  "Soda Fountain": {
+    "title_keywords": ["Cola", "Tea", "Grape", "Water", "Diet"],
+    "task_format": "A (\\w+) (\\w+)(?: with )(Ice)?(?:no Ice)?(?: and )?(Flavor Blast)?",
+    "keys": {
+      "Small": [],
+      "Medium": ["up"],
+      "Large": ["up","up"],
+      "Jumbo": ["up","up","up"],
+      "Cola": ["down"],
+      "Tea": ["right","down"],
+      "Grape": ["right","right","down"],
+      "Water": ["left","left","down"],
+      "Diet": ["left","down"],
+      "Ice": ["i"],
+      "Flavor Blast": ["f"],
+      "Serve": ["enter"]
+    }
+  }
+}

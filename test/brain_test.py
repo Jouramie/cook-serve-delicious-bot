@@ -8,6 +8,8 @@ from freezegun import freeze_time
 from core import brain
 from core.brain import TaskStatement, Task
 
+brain.CREATION_DELAY_IN_SECONDS = 0
+
 
 @pytest.fixture(autouse=True)
 def reset_brain_after_tests():
