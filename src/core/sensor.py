@@ -19,7 +19,7 @@ WAITING_TASK_REGIONS = [WAITING_TASK_1_REGION, WAITING_TASK_2_REGION, WAITING_TA
 WAITING_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 240]), np.array([5, 5, 255]))
 
 ACTIVE_TASK_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
-ACTIVE_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([60, 90, 115]))
+ACTIVE_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([90, 90, 110]))
 
 
 TITLE_PATTERN = re.compile(r"(\w[\w\s()/]+)")
@@ -43,7 +43,7 @@ def find_waiting_tasks(img: np.ndarray) -> list[int]:
 
 
 @timeit(name="read_task_statement", print_each_call=True)
-def read_task_statement(img: np.ndarray, log_steps="_1") -> TaskStatement | None:
+def read_task_statement(img: np.ndarray, log_steps="") -> TaskStatement | None:
     cropped = sensor_util.crop(img, ACTIVE_TASK_REGION)
     masked = sensor_util.mask(cropped, ACTIVE_TASK_MASK)
     if log_steps:
@@ -66,4 +66,8 @@ def read_task_statement(img: np.ndarray, log_steps="_1") -> TaskStatement | None
             if match is not None:
                 description = txt
                 break
+
+    if title is None or description is None:
+        return None
+
     return TaskStatement(title, description)

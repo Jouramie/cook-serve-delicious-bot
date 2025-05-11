@@ -6,9 +6,9 @@ from kit import img_logger
 
 def test_ee_8():
     try:
-        img = cv2.imread(r"resources/ghost_tasks/ee_8.tiff")
+        img = cv2.cvtColor(cv2.imread(r"resources/ghost_tasks/ee_8.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img)
+        active_task = sensor.read_task_statement(img, log_steps="ee_8")
         assert active_task is None
 
     finally:
@@ -17,7 +17,7 @@ def test_ee_8():
 
 def test_ree():
     try:
-        img = cv2.imread(r"resources/ghost_tasks/ree.tiff")
+        img = cv2.cvtColor(cv2.imread(r"resources/ghost_tasks/ree.tiff"), cv2.COLOR_BGR2RGB)
 
         active_task = sensor.read_task_statement(img, log_steps="ree")
         assert active_task is None
@@ -28,7 +28,7 @@ def test_ree():
 
 def test_il():
     try:
-        img = cv2.imread(r"resources/ghost_tasks/il.tiff")
+        img = cv2.cvtColor(cv2.imread(r"resources/ghost_tasks/il.tiff"), cv2.COLOR_BGR2RGB)
 
         active_task = sensor.read_task_statement(img, log_steps="il")
         assert active_task is None
@@ -39,7 +39,7 @@ def test_il():
 
 def test_the_ryan_davis_2():
     try:
-        img = cv2.imread(r"resources/burger/the_ryan_davis_2.tiff")
+        img = cv2.cvtColor(cv2.imread(r"resources/burger/the_ryan_davis_2.tiff"), cv2.COLOR_BGR2RGB)
 
         active_task = sensor.read_task_statement(img, log_steps="the_ryan_davis_2")
         assert active_task.title == "The Ryan Davis"
@@ -51,7 +51,7 @@ def test_the_ryan_davis_2():
 
 def test_the_triple_w_bacon_1():
     try:
-        img = cv2.imread(r"resources/burger/the_triple_w_bacon_1.tiff")
+        img = cv2.cvtColor(cv2.imread(r"resources/burger/the_triple_w_bacon_1.tiff"), cv2.COLOR_BGR2RGB)
 
         sensor.find_waiting_tasks(img)
 
@@ -65,7 +65,7 @@ def test_the_triple_w_bacon_1():
 
 def test_the_triple_2():
     try:
-        img = cv2.imread(r"resources/burger/the_triple_2.tiff")
+        img = cv2.cvtColor(cv2.imread(r"resources/burger/the_triple_2.tiff"), cv2.COLOR_BGR2RGB)
 
         active_task = sensor.read_task_statement(img)
         assert active_task.title == "The Triple"
@@ -77,7 +77,7 @@ def test_the_triple_2():
 
 def test_the_double_2():
     try:
-        img = cv2.imread(r"resources/burger/the_double_2.tiff")
+        img = cv2.cvtColor(cv2.imread(r"resources/burger/the_double_2.tiff"), cv2.COLOR_BGR2RGB)
 
         active_task = sensor.read_task_statement(img, log_steps="the_double_2")
         assert active_task.title == "The Double"
@@ -89,7 +89,7 @@ def test_the_double_2():
 
 def test_medium_cola():
     try:
-        img = cv2.imread(r"resources/medium_cola.tiff")
+        img = cv2.cvtColor(cv2.imread(r"resources/medium_cola.tiff"), cv2.COLOR_BGR2RGB)
 
         active_task = sensor.read_task_statement(img, log_steps="medium_cola")
         assert active_task.title == "Medium Cola"
