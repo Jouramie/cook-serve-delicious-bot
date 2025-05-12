@@ -8,7 +8,7 @@ def test_ee_8():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/ghost_tasks/ee_8.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="ee_8")
+        active_task = sensor.read_task_statement(img)
         assert active_task is None
 
     finally:
@@ -19,7 +19,7 @@ def test_ree():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/ghost_tasks/ree.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="ree")
+        active_task = sensor.read_task_statement(img)
         assert active_task is None
 
     finally:
@@ -30,7 +30,7 @@ def test_il():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/ghost_tasks/il.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="il")
+        active_task = sensor.read_task_statement(img)
         assert active_task is None
 
     finally:
@@ -41,7 +41,7 @@ def test_sc_oat_be():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/ghost_tasks/sc_oat_be.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="sc_oat_be")
+        active_task = sensor.read_task_statement(img)
         assert active_task is None
 
     finally:
@@ -52,7 +52,7 @@ def test_the_ryan_davis_2():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/burger/the_ryan_davis_2.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="the_ryan_davis_2")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "The Ryan Davis"
         assert active_task.description == "Meat, Bacon, Cheese (2x) and Tomatoes"
 
@@ -66,7 +66,7 @@ def test_the_triple_w_bacon_1():
 
         sensor.find_waiting_tasks(img)
 
-        active_task = sensor.read_task_statement(img, log_steps="the_triple_w_bacon_1")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "The Triple w/Bacon"
         assert active_task.description == "Three meat patties..."
 
@@ -90,7 +90,7 @@ def test_the_double_2():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/burger/the_double_2.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="the_double_2")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "The Double"
         assert active_task.description == "Meat (2x), Lettuce, Bacon, Cheese and Tomatoes"
 
@@ -102,7 +102,7 @@ def test_medium_cola():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/medium-cola.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="medium_cola")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "Medium Cola"
         assert active_task.description == "A Medium Cola with Ice, please."
 
@@ -114,7 +114,7 @@ def test_medium_grape_w_flavor_blast():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/medium-grape-w-flavor-blast.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="medium_grape_w_flavor_blast")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "Medium Grape w/Flavor Blast"
         assert active_task.description == "A Medium Grape with Ice and Flavor Blast, please."
 
@@ -126,7 +126,7 @@ def test_the_triple_w_bacon_2_rush_hour_1():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/the_triple_w_bacon_2_rush_hour_1.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="the_triple_w_bacon_2_rush_hour_1")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "The Triple w/Bacon"
         assert active_task.description == "Meat (3x), Bacon and Cheese"
 
@@ -138,7 +138,7 @@ def test_the_triple_w_bacon_2_rush_hour_2():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/the_triple_w_bacon_2_rush_hour_2.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="the_triple_w_bacon_2_rush_hour_2")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "The Triple w/Bacon"
         assert active_task.description == "Meat (3x), Bacon and Cheese"
 
@@ -150,7 +150,7 @@ def test_nutty_chocolate():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/ice_cream/nutty_chocolate.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="nutty_chocolate")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "Nutty Chocolate"
         assert active_task.description == "Two Chocolate Scoops and Nuts"
 
@@ -162,7 +162,7 @@ def test_the_yin_and_yang():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/ice_cream/the_yin_and_yang.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="the_yin_and_yang")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "The Yin and Yang"
         assert active_task.description == "One Vanilla, One Chocolate, Cherry and Sprinkles"
 
@@ -174,7 +174,7 @@ def test_trio_of_delicious():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/ice_cream/trio_of_delicious.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="trio_of_delicious")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "Trio of Delicious"
         assert active_task.description == "One Vanilla, One Chocolate and One Mint Chocolate Chip, please."
 
@@ -186,7 +186,7 @@ def test_nutty_vanilla():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/ice_cream/nutty_vanilla.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="nutty_vanilla")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "Nutty Vanilla"
         assert active_task.description == "Two Vanilla Scoops with Nuts"
 
@@ -198,9 +198,24 @@ def test_cherry_vanilla():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/ice_cream/cherry_vanilla.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img, log_steps="cherry_vanilla")
+        active_task = sensor.read_task_statement(img)
         assert active_task.title == "Cherry Vanilla"
         assert active_task.description == "Two Vanilla Scoops with a Cherry, please."
+
+    finally:
+        img_logger.finalize()
+
+
+def test_red_deluxe_pasta():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/red_deluxe_pasta.tiff"), cv2.COLOR_BGR2RGB)
+
+        active_task = sensor.read_task_statement(img, log_steps="red_deluxe_pasta")
+        assert active_task.title == "Red Deluxe Pasta"
+        assert (
+            active_task.description
+            == "Red Sauce, Meatballs, Chicken, Bacon, Red Peppers, Mushrooms, Spinach and Onions"
+        )
 
     finally:
         img_logger.finalize()

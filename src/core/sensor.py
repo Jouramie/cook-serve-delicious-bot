@@ -93,8 +93,12 @@ def read_task_statement(img: np.ndarray, log_steps="") -> TaskStatement | None:
         else:
             match = DESCRIPTION_PATTERN.match(txt)
             if match is not None:
-                description = txt
-                break
+                if description is None:
+                    description = txt
+                    continue
+
+                description += " " + txt
+                continue
 
     if title is None or description is None:
         return None
