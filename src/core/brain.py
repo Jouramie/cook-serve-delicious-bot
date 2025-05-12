@@ -17,7 +17,7 @@ from black.linegen import partial
 from core import resources
 
 EXPIRATION_DELAY_IN_SECONDS = 1
-CREATION_DELAY_IN_SECONDS = 1.5
+CREATION_DELAY_IN_SECONDS = 0.5
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
@@ -136,7 +136,7 @@ class EquipmentStep:
         else:
             task_elements = self._find_task_elements_by_keywords(description)
 
-        if task_elements is None:
+        if not task_elements:
             return None
 
         logger.info(f"Found {task_elements} elements.")

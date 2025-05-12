@@ -8,6 +8,7 @@ from freezegun import freeze_time
 from core import brain
 from core.brain import TaskStatement, Task
 
+SOME_TIME = datetime.now()
 brain.CREATION_DELAY_IN_SECONDS = 0
 
 
@@ -71,3 +72,24 @@ def test_cooked_grey_tail_fish():
     keyboard.send.assert_has_calls([mock.call("1")])
     with freeze_time(datetime.now() + timedelta(seconds=instructions.cooking_seconds)):
         assert task.is_expired
+
+
+def test_hot_bacon_pasta():
+    keyboard = MagicMock()
+    statement = TaskStatement("Hot Bacon Pasta", "Boil Raw Pasta...")
+    expected_recipe = ["r", "enter"]
+
+    with freeze_time(SOME_TIME):
+        _, callback = brain.choose_task_to_execute([1])
+        callback([1], statement)(keyboard)
+
+    keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
+    keyboard.send.reset_mock()
+
+    new_statement = TaskStatement("Hot Bacon Pasta", "Red Sauce, Bacon and Red Peppers")
+    expected_recipe = ["r", "b", "p", "enter"]
+    with freeze_time(SOME_TIME + timedelta(seconds=9)):
+        _, callback = brain.choose_task_to_execute([1])
+        callback([1], new_statement)(keyboard)
+
+    keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])

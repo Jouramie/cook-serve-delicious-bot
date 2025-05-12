@@ -175,5 +175,53 @@
         }
       }
     ]
+  },
+  "Pasta": {
+    "title_keywords": [
+      "Spaghetti",
+      "Pasta"
+    ],
+    "steps": [
+      {
+        "type": "COOKING",
+        "cooking_seconds": 10.5,
+        "keys": {
+          "Boil Raw Pasta": [
+            "r"
+          ]
+        }
+      },
+      {
+        "keys": {
+          "Cheese Sauce": [
+            "c"
+          ],
+          "Red Sauce": [
+            "r"
+          ],
+          "Meatballs": [
+            "m"
+          ],
+          "Chicken": [
+            "k"
+          ],
+          "Bacon": [
+            "b"
+          ],
+          "Red Peppers": [
+            "p"
+          ],
+          "Mushrooms": [
+            "u"
+          ],
+          "Spinach": [
+            "s"
+          ],
+          "Onions": [
+            "o"
+          ]
+        }
+      }
+    ]
   }
 }
