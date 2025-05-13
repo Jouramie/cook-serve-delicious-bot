@@ -1,3 +1,5 @@
+import logging
+import sys
 from datetime import datetime, timedelta
 from unittest import mock
 from unittest.mock import MagicMock
@@ -7,6 +9,9 @@ from freezegun import freeze_time
 
 from core import brain
 from core.brain import TaskStatement, Task
+
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+logging.getLogger().setLevel(logging.INFO)
 
 SOME_TIME = datetime.now()
 brain.CREATION_DELAY_IN_SECONDS = 0
@@ -88,7 +93,7 @@ def test_hot_bacon_pasta():
 
     new_statement = TaskStatement("Hot Bacon Pasta", "Red Sauce, Bacon and Red Peppers")
     expected_recipe = ["r", "b", "p", "enter"]
-    with freeze_time(SOME_TIME + timedelta(seconds=9)):
+    with freeze_time(SOME_TIME + timedelta(seconds=11)):
         _, callback = brain.choose_task_to_execute([1])
         callback([1], new_statement)(keyboard)
 

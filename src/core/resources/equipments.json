@@ -9,46 +9,46 @@
     ],
     "steps": [
       {
-        "step_format": "A (\\w+) (\\w+)(?: with )(Ice)?(?:no Ice)?(?: and )?(Flavor Blast)?",
+        "step_format": "a (\\w+) (\\w+)(?: with )(ice)?(?:no ice)?(?: and )?(flavor blast)?",
         "keys": {
-          "Small": [],
-          "Medium": [
+          "small": [],
+          "medium": [
             "up"
           ],
-          "Large": [
+          "large": [
             "up",
             "up"
           ],
-          "Jumbo": [
+          "jumbo": [
             "up",
             "up",
             "up"
           ],
-          "Cola": [
+          "cola": [
             "down"
           ],
-          "Tea": [
+          "tea": [
             "right",
             "down"
           ],
-          "Grape": [
+          "grape": [
             "right",
             "right",
             "down"
           ],
-          "Water": [
+          "water": [
             "left",
             "left",
             "down"
           ],
-          "Diet": [
+          "diet": [
             "left",
             "down"
           ],
-          "Ice": [
+          "ice": [
             "i"
           ],
-          "Flavor Blast": [
+          "flavor blast": [
             "f"
           ]
         }
@@ -72,16 +72,16 @@
       {
         "type": "COOKING",
         "cooking_seconds": 8,
-        "step_format": "(One|Two|Three)(?: meat)",
+        "step_format": "(one|two|three)(?: meat)",
         "keys": {
-          "One": [
+          "one": [
             "m"
           ],
-          "Two": [
+          "two": [
             "m",
             "m"
           ],
-          "Three": [
+          "three": [
             "m",
             "m",
             "m"
@@ -90,19 +90,19 @@
       },
       {
         "keys": {
-          "Meat": [
+          "meat": [
             "m"
           ],
-          "Lettuce": [
+          "lettuce": [
             "l"
           ],
-          "Bacon": [
+          "bacon": [
             "b"
           ],
-          "Cheese": [
+          "cheese": [
             "c"
           ],
-          "Tomatoes": [
+          "tomatoes": [
             "t"
           ]
         }
@@ -120,56 +120,56 @@
     "steps": [
       {
         "keys": {
-          "One Vanilla": [
+          "one vanilla": [
             "v"
           ],
-          "Two Vanilla": [
-            "v",
-            "v"
-          ],
-          "Three Vanilla": [
-            "v",
+          "two vanilla": [
             "v",
             "v"
           ],
-          "One Chocolate": [
+          "three vanilla": [
+            "v",
+            "v",
+            "v"
+          ],
+          "one chocolate": [
             "c"
           ],
-          "Two Chocolate": [
+          "two chocolate": [
             "c",
             "c"
           ],
-          "Three Chocolate": [
+          "three chocolate": [
             "c",
             "c",
             "c"
           ],
-          "One scoop of Vanilla and Chocolate": [
+          "one scoop of vanilla and chocolate": [
             "v",
             "c"
           ],
-          "One Mint Chocolate Chip": [
+          "one mint chocolate chip": [
             "m"
           ],
-          "Two Mint Chocolate Chips": [
+          "two mint chocolate chips": [
             "m",
             "m"
           ],
-          "Three Mint Chocolate Chips": [
+          "three mint chocolate chips": [
             "m",
             "m",
             "m"
           ],
-          "Cherry": [
+          "cherry": [
             "h"
           ],
-          "Sprinkles": [
+          "sprinkles": [
             "p"
           ],
-          "Whip": [
+          "whip": [
             "w"
           ],
-          "Nuts": [
+          "nuts": [
             "n"
           ]
         }
@@ -186,38 +186,38 @@
         "type": "COOKING",
         "cooking_seconds": 10.6,
         "keys": {
-          "Boil Raw Pasta": [
+          "boil raw pasta": [
             "r"
           ]
         }
       },
       {
         "keys": {
-          "Cheese Sauce": [
+          "cheese sauce": [
             "c"
           ],
-          "Red Sauce": [
+          "red sauce": [
             "r"
           ],
-          "Meatballs": [
+          "meatballs": [
             "m"
           ],
-          "Chicken": [
+          "chicken": [
             "k"
           ],
-          "Bacon": [
+          "bacon": [
             "b"
           ],
-          "Red Peppers": [
+          "red peppers": [
             "p"
           ],
-          "Mushrooms": [
+          "mushrooms": [
             "u"
           ],
-          "Spinach": [
+          "spinach": [
             "s"
           ],
-          "Onions": [
+          "onions": [
             "o"
           ]
         }

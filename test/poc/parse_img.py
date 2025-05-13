@@ -1,7 +1,7 @@
 import cv2
 
 from core import sensor
-from kit import img_logger
+from kit_test import img_logger
 
 if __name__ == "__main__":
     try:

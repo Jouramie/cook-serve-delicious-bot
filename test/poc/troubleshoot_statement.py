@@ -6,7 +6,7 @@ import cv2
 
 from core import sensor
 from core.brain import Task
-from kit import img_logger
+from kit_test import img_logger
 
 logging.basicConfig(
     level=logging.INFO,

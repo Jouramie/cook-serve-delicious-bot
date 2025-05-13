@@ -9,12 +9,14 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from functools import cached_property
 from importlib.resources import files
 from typing import Any, Pattern, Protocol, runtime_checkable, ClassVar
 
 from black.linegen import partial
 
 from core import resources
+from kit.text import autocorrect, create_dictionary_from_text
 
 EXPIRATION_DELAY_IN_SECONDS = 1
 CREATION_DELAY_IN_SECONDS = 0.5
@@ -130,7 +132,13 @@ class EquipmentStep:
             d["cooking_seconds"] if "cooking_seconds" in d else None,
         )
 
+    @cached_property
+    def autocorrect_dictionary(self) -> set[str]:
+        return create_dictionary_from_text(self.keys.keys()) | set(self.SPECIAL_KEYWORDS)
+
     def find_instructions(self, description: str) -> TaskInstructions | None:
+        description = autocorrect(description, self.autocorrect_dictionary)
+
         if self.step_format is not None:
             task_elements = self._find_task_elements_by_format(description)
         else:

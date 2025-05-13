@@ -6,9 +6,9 @@ if sys.platform == "darwin":
     import Quartz
     import AppKit
 
-from kit import img_logger
-from kit.profiling import timeit
-from kit.sensor_util import Region
+from kit_test import img_logger
+from kit_test.profiling import timeit
+from kit_test.sensor_util import Region
 
 
 EXPECTED_WINDOW_NAME = "Cook Serve Delicious"
