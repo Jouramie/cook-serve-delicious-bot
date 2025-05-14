@@ -1,3 +1,4 @@
+import ctypes
 import logging
 import threading
 import time
@@ -22,6 +23,7 @@ WINDOW_MARGIN_BOTTOM = 1
 
 
 def locate_window(app_name: str) -> Region:
+    ctypes.windll.user32.SetProcessDPIAware()
     window_handle = win32gui.FindWindow(None, app_name)
     win32gui.SetForegroundWindow(window_handle)
     win_region = win32gui.GetWindowRect(window_handle)
