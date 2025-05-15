@@ -223,5 +223,47 @@
         }
       }
     ]
+  },
+  "Salad": {
+    "title_keywords": [
+      "The Mix",
+      "Kids Delight",
+      "The Manhattan",
+      "Cheesy",
+      "Salad",
+      "Ranch",
+      "The Dry",
+      "Thousand"
+    ],
+    "steps": [
+      {
+        "keys": {
+          "ranch": [
+            "r"
+          ],
+          "bacon": [
+            "b"
+          ],
+          "onions": [
+            "o"
+          ],
+          "mushrooms": [
+            "m"
+          ],
+          "greens": [
+            "g"
+          ],
+          "thousand island": [
+            "t"
+          ],
+          "cheese": [
+            "c"
+          ],
+          "everything": [
+            "b", "o", "m", "g"
+          ]
+        }
+      }
+    ]
   }
 }

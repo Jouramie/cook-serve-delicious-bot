@@ -1,40 +1,4 @@
 {
-  "Kids Delight": {
-    "keys": "r,c,enter"
-  },
-  "Cheesy Leaves": {
-    "keys": "r,c,enter"
-  },
-  "House Salad": {
-    "keys": "r,c,b,enter"
-  },
-  "The Mix": {
-    "keys": "r,c,b,o,enter"
-  },
-  "Pepper Ranch": {
-    "keys": "r,c,o,enter"
-  },
-  "Tomato Ranch": {
-    "keys": "r,c,m,enter"
-  },
-  "The Manhattan": {
-    "keys": "r,c,b,o,m,g,enter"
-  },
-  "Salad Verde": {
-    "keys": "r,g,enter"
-  },
-  "Cheesy Peppers": {
-    "keys": "c,o,enter"
-  },
-  "The Big Salad": {
-    "keys": "c,g,enter"
-  },
-  "The Dry Deluxe": {
-    "keys": "m,g,enter"
-  },
-  "The Dry Greens": {
-    "keys": "g,enter"
-  },
   "Grey Tail Fish": {
     "type": "COOKING",
     "keys": "left,down,right,s,enter",
