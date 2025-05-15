@@ -27,7 +27,7 @@ HOUR_REGION = sensor_util.Region.of_corners(1180, 3, 1278, 40)
 HOUR_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 220]), np.array([255, 255, 255]))
 RUSH_HOURS = {"100", "101", "102", "103", "104", "105"}
 
-TITLE_PATTERN = re.compile(r"(\w[\w\s()/]+)")
+TITLE_PATTERN = re.compile(r"(\w[\w\s()/\-]+)")
 DESCRIPTION_PATTERN = re.compile(r"\w.+")
 
 
