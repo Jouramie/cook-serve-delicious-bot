@@ -63,8 +63,8 @@ class DarwinCamera(GameCamera):
             return frame
 
     def flush(self):
-        self._last_flush = datetime.now()
         with self._last_frame_lock:
+            self._last_flush = datetime.now()
             self._last_frame = None
 
     def capture_now(self) -> np.ndarray:
@@ -85,9 +85,9 @@ class DarwinCamera(GameCamera):
     def _capture_loop(self):
         while self._running:
             capture_time, frame = self.capture_with_time()
-            if self._last_flush > capture_time:
-                logger.debug(f"Frame captured too late, discarding.")
-                continue
 
             with self._last_frame_lock:
+                if self._last_flush > capture_time:
+                    logger.debug(f"Frame captured too late, discarding.")
+                    continue
                 self._last_frame = frame

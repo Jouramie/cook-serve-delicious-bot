@@ -29,7 +29,7 @@ active_tasks: list[Task | None] = [None, None, None, None]
 
 def define_callback(func: Callable = None, /, *, is_executable: bool = True, is_unknown: bool = False):
     if not func:
-        return partial(define_callback, is_executable=is_executable)
+        return partial(define_callback, is_executable=is_executable, is_unknown=is_unknown)
 
     setattr(func, "is_executable", is_executable)
     setattr(func, "is_unknown", is_unknown)
@@ -214,7 +214,7 @@ class Equipment:
 
 @runtime_checkable
 class TaskExecutionCallback(Protocol):
-    is_unknown: ClassVar[bool]
+    is_unknown: ClassVar[bool] = False
     is_executable: ClassVar[bool] = True
 
     def __call__(self, keyboard: Keyboard) -> None:

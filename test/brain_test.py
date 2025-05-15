@@ -98,3 +98,14 @@ def test_hot_bacon_pasta():
         callback([1], new_statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
+
+
+def test_unknown_statement():
+    keyboard = MagicMock()
+    statement = TaskStatement("asdf", "good luck finding what to do here")
+
+    with freeze_time(SOME_TIME):
+        _, callback = brain.choose_task_to_execute([1])
+        execution_callback = callback([1], statement)
+
+    assert execution_callback.is_unknown
