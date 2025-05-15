@@ -179,7 +179,9 @@
   "Pasta": {
     "title_keywords": [
       "Spaghetti",
-      "Pasta"
+      "Pasta",
+      "Carbonara",
+      "Alfredo"
     ],
     "steps": [
       {
@@ -198,6 +200,9 @@
           ],
           "red sauce": [
             "r"
+          ],
+          "white sauce": [
+            "w"
           ],
           "meatballs": [
             "m"
@@ -219,6 +224,9 @@
           ],
           "onions": [
             "o"
+          ],
+          "spices": [
+            "i"
           ]
         }
       }
