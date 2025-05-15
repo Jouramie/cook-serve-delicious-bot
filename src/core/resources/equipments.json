@@ -66,7 +66,13 @@
       "The Original",
       "The Ryan Davis",
       "The Lite Delight",
-      "The HEARTSTOPPER"
+      "The HEARTSTOPPER",
+      "The Trio",
+      "The Veggie",
+      "The Pickler",
+      "The P-D",
+      "The Stacked",
+      "The Greens"
     ],
     "steps": [
       {
@@ -104,6 +110,9 @@
           ],
           "tomatoes": [
             "t"
+          ],
+          "pickles": [
+            "p"
           ]
         }
       }
