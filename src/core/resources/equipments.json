@@ -374,7 +374,8 @@
       "The Mix",
       "Kids Delight",
       "The Manhattan",
-      "Cheesy",
+      "Leaves",
+      "Peppers",
       "Salad",
       "Ranch",
       "The Dry",
@@ -406,6 +407,44 @@
           ],
           "everything": [
             "b", "o", "m", "g"
+          ]
+        }
+      }
+    ]
+  },
+  "Pizza": {
+    "title_keywords": [
+      "Pizza",
+      "Cheesy Bread"
+    ],
+    "steps": [
+      {
+        "type": "COOKING",
+        "cooking_seconds": 8,
+        "keys": {
+          "tomato sauce": [
+            "t"
+          ],
+          "cheese": [
+            "c"
+          ],
+          "pepperoni": [
+            "p"
+          ],
+          "sausage": [
+            "m"
+          ],
+          "bacon": [
+            "b"
+          ],
+          "mushrooms": [
+            "u"
+          ],
+          "olives": [
+            "v"
+          ],
+          "onions": [
+            "n"
           ]
         }
       }
