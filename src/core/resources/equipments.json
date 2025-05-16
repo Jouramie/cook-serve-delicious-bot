@@ -1,4 +1,132 @@
 {
+  "Robbery": {
+    "title_keywords": [
+      "Robbery"
+    ],
+    "steps": [
+      {
+        "keys": {
+          "sexy eyes hair and lips": [
+            "y",
+            "y",
+            "y",
+            "h",
+            "h",
+            "l",
+            "l",
+            "l"
+          ],
+          "bald": [
+            "h"
+          ],
+          "sexy hair": [
+            "h",
+            "h"
+          ],
+          "spiked hair": [
+            "h",
+            "h",
+            "h"
+          ],
+          "poofy hair": [
+            "h",
+            "h",
+            "h",
+            "h"
+          ],
+          "normal eyes": [
+            "y"
+          ],
+          "crazy eyes": [
+            "y",
+            "y"
+          ],
+          "sexy eyes": [
+            "y",
+            "y",
+            "y"
+          ],
+          "beady eyes": [
+            "y",
+            "y",
+            "y",
+            "y"
+          ],
+          "normal ears/nose": [
+            "e",
+            "n",
+            "n"
+          ],
+          "normal ears": [
+            "e"
+          ],
+          "round ears": [
+            "e",
+            "e"
+          ],
+          "long ears": [
+            "e",
+            "e",
+            "e"
+          ],
+          "tiny ears": [
+            "e",
+            "e",
+            "e",
+            "e"
+          ],
+          "crooked nose": [
+            "n"
+          ],
+          "normal nose": [
+            "n",
+            "n"
+          ],
+          "fancy nose": [
+            "n",
+            "n",
+            "n"
+          ],
+          "long lips": [
+            "l"
+          ],
+          "small lips": [
+            "l",
+            "l"
+          ],
+          "sexy lips": [
+            "l",
+            "l",
+            "l"
+          ],
+          "beard/mustache": [
+            "f",
+            "f",
+            "f",
+            "f"
+          ],
+          "beard and mustache": [
+            "f",
+            "f",
+            "f",
+            "f"
+          ],
+          "mustache": [
+            "f"
+          ],
+          "beard": [
+            "f",
+            "f"
+          ],
+          "fuzz": [
+            "f",
+            "f",
+            "f"
+          ]
+        }
+      }
+    ]
+  },
   "Soda Fountain": {
     "title_keywords": [
       "Cola",

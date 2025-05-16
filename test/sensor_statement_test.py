@@ -219,3 +219,18 @@ def test_red_deluxe_pasta():
 
     finally:
         img_logger.finalize()
+
+
+def test_robbery():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/robbery.tiff"), cv2.COLOR_BGR2RGB)
+
+        active_task = sensor.read_task_statement(img, log_steps="robbery")
+        assert active_task.title == "Robbery (Witness Criminal Description)"
+        assert (
+            "He looked crazy! Crazy eyes, but bald and normal ears/nose, long lips and a beard."
+            in active_task.description
+        )
+
+    finally:
+        img_logger.finalize()

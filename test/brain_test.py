@@ -109,3 +109,18 @@ def test_unknown_statement():
         execution_callback = callback([1], statement)
 
     assert execution_callback.is_unknown
+
+
+def test_robbery():
+    keyboard = MagicMock()
+    statement = TaskStatement(
+        "Robbery (Witness Criminal Description)",
+        "He looked crazy! Crazy eyes, but bald and normal ears/nose, long lips and a beard. Gah!",
+    )
+    expected_recipe = ["y", "y", "h", "e", "n", "n", "l", "f", "f", "enter"]
+
+    with freeze_time(SOME_TIME):
+        _, callback = brain.choose_task_to_execute([1])
+        callback([1], statement)(keyboard)
+
+    keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
