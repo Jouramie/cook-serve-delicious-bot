@@ -35,3 +35,14 @@ def test_the_triple_w_bacon_2_rush_hour_2():
 
     finally:
         img_logger.finalize()
+
+
+def test_6_tasks():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/6-tasks.tiff"), cv2.COLOR_BGR2RGB)
+
+        tasks = sensor.find_waiting_tasks(img, log_steps="6_tasks")
+        assert tasks == [1, 3]
+
+    finally:
+        img_logger.finalize()

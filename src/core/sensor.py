@@ -15,7 +15,16 @@ WAITING_TASK_1_REGION = sensor_util.Region.of_corners(0, 75, 50, 125)
 WAITING_TASK_2_REGION = sensor_util.Region.of_corners(0, 135, 50, 185)
 WAITING_TASK_3_REGION = sensor_util.Region.of_corners(0, 195, 50, 245)
 WAITING_TASK_4_REGION = sensor_util.Region.of_corners(0, 255, 50, 305)
-WAITING_TASK_REGIONS = [WAITING_TASK_1_REGION, WAITING_TASK_2_REGION, WAITING_TASK_3_REGION, WAITING_TASK_4_REGION]
+WAITING_TASK_5_REGION = sensor_util.Region.of_corners(0, 315, 50, 365)
+WAITING_TASK_6_REGION = sensor_util.Region.of_corners(0, 375, 50, 425)
+WAITING_TASK_REGIONS = [
+    WAITING_TASK_1_REGION,
+    WAITING_TASK_2_REGION,
+    WAITING_TASK_3_REGION,
+    WAITING_TASK_4_REGION,
+    WAITING_TASK_5_REGION,
+    WAITING_TASK_6_REGION,
+]
 WAITING_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 240]), np.array([5, 5, 255]))
 WAITING_TASK_BLINK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 50]), np.array([5, 5, 51]))
 
@@ -40,6 +49,8 @@ def find_waiting_tasks(img: np.ndarray, log_steps="") -> list[int]:
     tasks = []
     for i, region in enumerate(WAITING_TASK_REGIONS):
         cropped_task = sensor_util.crop(img, region)
+        if log_steps:
+            img_logger.log_now(cropped_task, f"{log_steps}_{i}_cropped.tiff")
         masked_active = sensor_util.mask(cropped_task, WAITING_TASK_MASK)
         masked_blink = sensor_util.mask(cropped_task, WAITING_TASK_BLINK_MASK)
         masked = np.add(masked_active, masked_blink)
