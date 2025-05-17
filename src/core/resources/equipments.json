@@ -323,7 +323,7 @@
     "steps": [
       {
         "type": "COOKING",
-        "cooking_seconds": 10.6,
+        "cooking_seconds": 10.65,
         "keys": {
           "boil raw pasta": [
             "r"

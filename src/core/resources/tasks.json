@@ -13,25 +13,25 @@
     "type": "COOKING",
     "keys": "k,w,u,y,down,down,down,enter",
     "input_delay_seconds": 0.1,
-    "cooking_seconds": 10.6
+    "cooking_seconds": 10.65
   },
   "Soup du Jour": {
     "type": "COOKING",
     "keys": "w,u,s,t,down,down,down,a,down,down,down,y,down,down,down,enter",
     "input_delay_seconds": 0.1,
-    "cooking_seconds": 10.6
+    "cooking_seconds": 10.65
   },
   "Vegetable Soup": {
     "type": "COOKING",
     "keys": "t,down,down,down,a,down,down,down,y,down,down,down,l,down,down,down,d,enter",
     "input_delay_seconds": 0.1,
-    "cooking_seconds": 10.6
+    "cooking_seconds": 10.65
   },
   "Baristobo Soup": {
     "type": "COOKING",
     "keys": "k,w,s,p,a,down,down,down,l,down,down,down,enter",
     "input_delay_seconds": 0.1,
-    "cooking_seconds": 10.6
+    "cooking_seconds": 10.65
   },
   "Edible Chicken Breast": {
     "type": "COOKING",
