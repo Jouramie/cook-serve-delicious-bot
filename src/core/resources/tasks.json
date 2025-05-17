@@ -15,6 +15,10 @@
     "keys": "hold:down:2.8,p,enter",
     "input_delay_seconds": 0.1
   },
+  "Greasy Fried Chicken": {
+    "keys": "hold:down:3.2,p,enter",
+    "input_delay_seconds": 0.1
+  },
   "Grey Tail Fish": {
     "type": "COOKING",
     "keys": "left,down,right,s,enter",
