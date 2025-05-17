@@ -59,20 +59,20 @@
   },
   "Work Ticket (Clean)": {
     "keys": "down,s",
-    "post_task_seconds": 1
+    "post_task_seconds": 0.5
   },
   "Work Ticket (Dishes)": {
     "keys": "left,right,left,right,up,left,right,left,right,up,left,right,left,right,up",
-    "post_task_seconds": 1
+    "post_task_seconds": 0.5
   },
   "Work Ticket (Rodents)": {
     "keys": "right,down,c,s",
-    "post_task_seconds": 1
+    "post_task_seconds": 0.5
   },
   "Work Ticket (Trash)": {
-    "keys": "up,right,up,right,up,right,up,right,up,right,s",
+    "keys": "up,right,up,right,s",
     "input_delay_seconds": 0.3,
-    "post_task_seconds": 1
+    "post_task_seconds": 0.5
   },
   "Check Out My Picture": {
     "keys": "t,enter"
