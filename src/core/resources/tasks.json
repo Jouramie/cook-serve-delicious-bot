@@ -33,6 +33,11 @@
     "input_delay_seconds": 0.1,
     "cooking_seconds": 10.6
   },
+  "Edible Chicken Breast": {
+    "type": "COOKING",
+    "keys": "t,t,t,t,t,t,s,enter",
+    "cooking_seconds": 15
+  },
   "The Brewsky": {
     "keys": "hold:down:1.4,enter"
   },
