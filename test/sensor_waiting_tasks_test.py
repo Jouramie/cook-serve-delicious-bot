@@ -14,7 +14,7 @@ def test_medium_grape_w_flavor_blast():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/medium-grape-w-flavor-blast.tiff"), cv2.COLOR_BGR2RGB)
 
-        tasks = sensor.find_waiting_tasks(img, "medium_grape_w_flavor_blast")
+        tasks = sensor.find_waiting_tasks(img)
         assert tasks == [2, 3, 4]
 
     finally:
@@ -47,7 +47,7 @@ def test_task_2_blink_rush_1():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/task-2-blink-rush-1.tiff"), cv2.COLOR_BGR2RGB)
 
-        tasks = sensor.find_waiting_tasks(img, log_steps="task_2_blink_rush_1")
+        tasks = sensor.find_waiting_tasks(img)
         assert tasks == [1, 2]
 
     finally:
@@ -58,7 +58,7 @@ def test_task_2_blink_rush_2():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/task-2-blink-rush-2.tiff"), cv2.COLOR_BGR2RGB)
 
-        tasks = sensor.find_waiting_tasks(img, log_steps="task_2_blink_rush_2")
+        tasks = sensor.find_waiting_tasks(img)
         assert tasks == [1, 2]
 
     finally:
