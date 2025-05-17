@@ -7,6 +7,14 @@
     "keys": "hold:down:2.5,p,enter",
     "input_delay_seconds": 0.1
   },
+  "Fast Fries": {
+    "keys": "hold:down:2.8,p,a,enter",
+    "input_delay_seconds": 0.1
+  },
+  "Lite Fast Fries": {
+    "keys": "hold:down:2.8,p,enter",
+    "input_delay_seconds": 0.1
+  },
   "Grey Tail Fish": {
     "type": "COOKING",
     "keys": "left,down,right,s,enter",
