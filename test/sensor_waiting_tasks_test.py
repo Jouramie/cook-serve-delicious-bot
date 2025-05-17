@@ -1,7 +1,13 @@
+import logging
+import sys
+
 import cv2
 
 from core import sensor
 from kit import img_logger
+
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+logging.getLogger().setLevel(logging.INFO)
 
 
 def test_medium_grape_w_flavor_blast():

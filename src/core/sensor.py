@@ -51,6 +51,9 @@ def find_waiting_tasks(img: np.ndarray, log_steps="") -> list[int]:
     waiting_task_background_color = img[WAITING_TASK_1_REGION.top, WAITING_TASK_1_REGION.left, 0]
     actual_waiting_task_background_darkness = np.array([255], dtype=np.uint8) - waiting_task_background_color
     rush_overlay_ratio = actual_waiting_task_background_darkness / EXPECTED_WAITING_TASK_BACKGROUND_DARKNESS
+    rush_overlay_strength = 1 - rush_overlay_ratio
+    if rush_overlay_strength:
+        logger.info(f"Rush hour detected. Overlay strength: {rush_overlay_strength}")
 
     for i, region in enumerate(WAITING_TASK_REGIONS):
         cropped_task = sensor_util.crop(img, region)
@@ -58,7 +61,7 @@ def find_waiting_tasks(img: np.ndarray, log_steps="") -> list[int]:
             logger.debug(f"Task {i} is not present.")
             continue
 
-        if np.any(rush_overlay_ratio):
+        if rush_overlay_strength:
             cropped_task = (255 - (255 - cropped_task) / rush_overlay_ratio).astype(np.uint8)
 
         if log_steps:
