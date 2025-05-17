@@ -46,7 +46,7 @@
     "post_task_seconds": 1
   },
   "Work Ticket (Dishes)": {
-    "keys": "left,right,left,right,up,left,right,left,right,up,left,right,left,right,up,left,right,left,right,up,left,right,left,right,up,left,right,left,right,up,s",
+    "keys": "left,right,left,right,up,left,right,left,right,up,left,right,left,right,up",
     "post_task_seconds": 1
   },
   "Work Ticket (Rodents)": {
