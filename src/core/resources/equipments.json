@@ -375,6 +375,8 @@
       "Kids Delight",
       "The Manhattan",
       "Leaves",
+      "Vinaigrette",
+      "Oil",
       "Peppers",
       "Salad",
       "Ranch",
@@ -386,6 +388,9 @@
         "keys": {
           "ranch": [
             "r"
+          ],
+          "vinaigrette": [
+            "v"
           ],
           "bacon": [
             "b"
