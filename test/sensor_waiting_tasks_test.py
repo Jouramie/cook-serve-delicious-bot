@@ -65,12 +65,12 @@ def test_task_2_blink_rush_2():
         img_logger.finalize()
 
 
-def test_6_tasks():
+def test_5_tasks():
     try:
-        img = cv2.cvtColor(cv2.imread(r"resources/6-tasks.tiff"), cv2.COLOR_BGR2RGB)
+        img = cv2.cvtColor(cv2.imread(r"resources/5-tasks.tiff"), cv2.COLOR_BGR2RGB)
 
         tasks = sensor.find_waiting_tasks(img)
-        assert tasks == [1, 3]
+        assert tasks == [1, 3, 5]
 
     finally:
         img_logger.finalize()
