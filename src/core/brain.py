@@ -367,7 +367,8 @@ def _synchronize_waiting_tasks(waiting_tasks: list[int]):
     global active_tasks
     logger.info(f"Synchronizing {waiting_tasks} with waiting tasks.")
     for i in range(len(active_tasks)):
-        logger.debug(f"Task {i + 1}: {active_tasks[i]}")
+        if active_tasks[i] is not None or i in waiting_tasks:
+            logger.debug(f"Task {i + 1}: {active_tasks[i]}")
 
         active_task = active_tasks[i]
         if active_task is None:
