@@ -103,6 +103,12 @@ def read_task_statement(img: np.ndarray, log_steps="") -> TaskStatement | None:
     if log_steps:
         img_logger.log_now(masked, log_steps + "_masked.png")
 
+    # Statement mask finds white text on a black background, so if there is too much white, we assume
+    # that there is no task statement.
+    if np.sum(masked) > 255 * 20000:
+        logger.warning("No task statement found.")
+        return None
+
     statement: str | None = pytesseract.image_to_string(masked, lang="eng")
     logger.info(f"Extracted `{statement}` from image.")
     if not statement:

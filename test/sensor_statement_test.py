@@ -8,7 +8,7 @@ def test_ee_8():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/ghost_tasks/ee_8.tiff"), cv2.COLOR_BGR2RGB)
 
-        active_task = sensor.read_task_statement(img)
+        active_task = sensor.read_task_statement(img, log_steps="ee_8")
         assert active_task is None
 
     finally:
