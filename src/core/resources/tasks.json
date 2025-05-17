@@ -1,4 +1,12 @@
 {
+  "Delicious Sopapillas": {
+    "keys": "hold:down:2.5,p,s,enter",
+    "input_delay_seconds": 0.1
+  },
+  "Delicious Lite Sopapillas": {
+    "keys": "hold:down:2.5,p,enter",
+    "input_delay_seconds": 0.1
+  },
   "Grey Tail Fish": {
     "type": "COOKING",
     "keys": "left,down,right,s,enter",
