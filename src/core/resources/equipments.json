@@ -243,7 +243,12 @@
       "The Pickler",
       "The P-D",
       "The Stacked",
-      "The Greens"
+      "The Greens",
+      "The Super Sour",
+      "The Aroma",
+      "The Extra Veggies",
+      "The POWER",
+      "BLOT"
     ],
     "steps": [
       {
@@ -284,6 +289,9 @@
           ],
           "pickles": [
             "p"
+          ],
+          "onions": [
+            "o"
           ]
         }
       }
