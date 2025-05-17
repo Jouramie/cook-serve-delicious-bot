@@ -147,6 +147,7 @@
   "Pretzel": {
     "title_keywords": [
       "Twist",
+      "Twister",
       "Curves",
       "Knot",
       "Pretzel"
@@ -154,6 +155,7 @@
     "steps": [
       {
         "keys": {
+          "nothing": [],
           "salt": [
             "s"
           ],
