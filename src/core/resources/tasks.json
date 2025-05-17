@@ -1,4 +1,13 @@
 {
+  "The Red Dog": {
+    "keys": "k,enter"
+  },
+  "The Yellow Dog": {
+    "keys": "m,enter"
+  },
+  "The Classic Corn Dog": {
+    "keys": "k,m,enter"
+  },
   "Delicious Sopapillas": {
     "keys": "hold:down:2.5,p,s,enter",
     "input_delay_seconds": 0.1
@@ -18,6 +27,11 @@
   "Greasy Fried Chicken": {
     "keys": "hold:down:3.2,p,enter",
     "input_delay_seconds": 0.1
+},
+  "Classic Italian Lasagna": {
+    "type": "COOKING",
+    "keys": "p,s,c,r,p,s,c,r,p,s,c,r,enter",
+    "cooking_seconds": 8
   },
   "Grey Tail Fish": {
     "type": "COOKING",
