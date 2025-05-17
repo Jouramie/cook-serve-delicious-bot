@@ -54,6 +54,11 @@
     "keys": "t,t,t,t,t,t,s,enter",
     "cooking_seconds": 15
   },
+  "Plump Chicken Breast": {
+    "type": "COOKING",
+    "keys": "t,t,t,t,t,t,s,enter",
+    "cooking_seconds": 15
+  },
   "The Brewsky": {
     "keys": "hold:down:1.4,enter"
   },
