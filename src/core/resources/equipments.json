@@ -468,7 +468,8 @@
   "Pizza": {
     "title_keywords": [
       "Pizza",
-      "Cheesy Bread"
+      "Cheesy Bread",
+      "Sweet Veggie P."
     ],
     "steps": [
       {
@@ -493,6 +494,9 @@
           "anchovies": [
             "a"
           ],
+          "ham": [
+            "h"
+          ],
           "mushrooms": [
             "u"
           ],
@@ -501,6 +505,9 @@
           ],
           "onions": [
             "n"
+          ],
+          "pineapple": [
+            "i"
           ]
         }
       }
