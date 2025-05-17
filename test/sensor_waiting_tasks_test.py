@@ -37,11 +37,33 @@ def test_the_triple_w_bacon_2_rush_hour_2():
         img_logger.finalize()
 
 
+def test_task_2_blink_rush_1():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/task-2-blink-rush-1.tiff"), cv2.COLOR_BGR2RGB)
+
+        tasks = sensor.find_waiting_tasks(img, log_steps="task_2_blink_rush_1")
+        assert tasks == [1, 2]
+
+    finally:
+        img_logger.finalize()
+
+
+def test_task_2_blink_rush_2():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/task-2-blink-rush-2.tiff"), cv2.COLOR_BGR2RGB)
+
+        tasks = sensor.find_waiting_tasks(img, log_steps="task_2_blink_rush_2")
+        assert tasks == [1, 2]
+
+    finally:
+        img_logger.finalize()
+
+
 def test_6_tasks():
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/6-tasks.tiff"), cv2.COLOR_BGR2RGB)
 
-        tasks = sensor.find_waiting_tasks(img, log_steps="6_tasks")
+        tasks = sensor.find_waiting_tasks(img)
         assert tasks == [1, 3]
 
     finally:

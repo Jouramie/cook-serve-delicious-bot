@@ -10,7 +10,6 @@ from kit.profiling import timeit
 
 logger = logging.getLogger(__name__)
 
-WAITING_TASKS_REGION = sensor_util.Region.of_corners(0, 75, 50, 305)
 WAITING_TASK_1_REGION = sensor_util.Region.of_corners(0, 75, 50, 125)
 WAITING_TASK_2_REGION = sensor_util.Region.of_corners(0, 135, 50, 185)
 WAITING_TASK_3_REGION = sensor_util.Region.of_corners(0, 195, 50, 245)
@@ -25,8 +24,9 @@ WAITING_TASK_REGIONS = [
     WAITING_TASK_5_REGION,
     WAITING_TASK_6_REGION,
 ]
-WAITING_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 240]), np.array([5, 5, 255]))
-WAITING_TASK_BLINK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 50]), np.array([5, 5, 51]))
+WAITING_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 250]), np.array([5, 5, 255]))
+WAITING_TASK_BLINK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 49]), np.array([5, 5, 51]))
+EXPECTED_WAITING_TASK_BACKGROUND_DARKNESS = np.array([255], dtype=np.uint8) - np.array([28], dtype=np.uint8)
 
 ACTIVE_TASK_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
 ACTIVE_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 171]))
@@ -47,8 +47,20 @@ class NoStatementFoundException(Exception):
 @timeit(name="find_waiting_tasks", print_each_call=True)
 def find_waiting_tasks(img: np.ndarray, log_steps="") -> list[int]:
     tasks = []
+
+    waiting_task_background_color = img[WAITING_TASK_1_REGION.top, WAITING_TASK_1_REGION.left, 0]
+    actual_waiting_task_background_darkness = np.array([255], dtype=np.uint8) - waiting_task_background_color
+    rush_overlay_ratio = actual_waiting_task_background_darkness / EXPECTED_WAITING_TASK_BACKGROUND_DARKNESS
+
     for i, region in enumerate(WAITING_TASK_REGIONS):
         cropped_task = sensor_util.crop(img, region)
+        if np.any(cropped_task[0, 0] != cropped_task[0, 0].flat[0]):
+            logger.debug(f"Task {i} is not present.")
+            continue
+
+        if np.any(rush_overlay_ratio):
+            cropped_task = (255 - (255 - cropped_task) / rush_overlay_ratio).astype(np.uint8)
+
         if log_steps:
             img_logger.log_now(cropped_task, f"{log_steps}_{i}_cropped.tiff")
         masked_active = sensor_util.mask(cropped_task, WAITING_TASK_MASK)
@@ -56,7 +68,7 @@ def find_waiting_tasks(img: np.ndarray, log_steps="") -> list[int]:
         masked = np.add(masked_active, masked_blink)
         if log_steps:
             img_logger.log_now(masked, f"{log_steps}_{i}_masked.tiff")
-        if np.sum(masked) > 255 * 50:
+        if np.sum(masked) > 255 * 100:
             tasks.append(1 + i)
     return tasks
 
