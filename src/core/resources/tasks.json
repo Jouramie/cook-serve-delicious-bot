@@ -1,13 +1,4 @@
 {
-  "The Red Dog": {
-    "keys": "k,enter"
-  },
-  "The Yellow Dog": {
-    "keys": "m,enter"
-  },
-  "The Classic Corn Dog": {
-    "keys": "k,m,enter"
-  },
   "Delicious Sopapillas": {
     "keys": "hold:down:2.5,p,s,enter",
     "input_delay_seconds": 0.1

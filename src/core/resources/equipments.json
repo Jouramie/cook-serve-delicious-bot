@@ -127,6 +127,46 @@
       }
     ]
   },
+  "Corn Dog": {
+    "title_keywords": [
+      "Dog"
+    ],
+    "steps": [
+      {
+        "keys": {
+          "ketchup": [
+            "k"
+          ],
+          "mustard": [
+            "m"
+          ]
+        }
+      }
+    ]
+  },
+  "Pretzel": {
+    "title_keywords": [
+      "Twist",
+      "Curves",
+      "Knot",
+      "Pretzel"
+    ],
+    "steps": [
+      {
+        "keys": {
+          "salt": [
+            "s"
+          ],
+          "butter": [
+            "b"
+          ],
+          "cinnamon": [
+            "c"
+          ]
+        }
+      }
+    ]
+  },
   "Soda Fountain": {
     "title_keywords": [
       "Cola",
