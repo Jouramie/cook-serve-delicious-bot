@@ -226,6 +226,55 @@
       }
     ]
   },
+  "Nachos": {
+    "title_keywords": [
+      "Nachos",
+      "Guac",
+      "Jalanacho",
+      "Bowl of Chips",
+      "Scoops of Plenty"
+    ],
+    "steps": [
+      {
+        "type": "COOKING",
+        "cooking_seconds": 8,
+        "step_format": "^(ground meat)$",
+        "keys": {
+          "ground meat": [
+            "g"
+          ]
+        }
+      },
+      {
+        "keys": {
+          "ground meat": [
+            "g"
+          ],
+          "queso": [
+            "q"
+          ],
+          "sour cream": [
+            "c"
+          ],
+          "guacamole": [
+            "u"
+          ],
+          "olives": [
+            "v"
+          ],
+          "jalapenos": [
+            "j"
+          ],
+          "tomatoes": [
+            "t"
+          ],
+          "onions": [
+            "o"
+          ]
+        }
+      }
+    ]
+  },
   "Burger": {
     "title_keywords": [
       "BLT",
