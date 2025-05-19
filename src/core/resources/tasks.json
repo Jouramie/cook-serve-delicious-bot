@@ -41,7 +41,7 @@
   },
   "Chicken Noodle Soup": {
     "type": "COOKING",
-    "keys": "k,w,u,y,down,down,down,enter",
+    "keys": "k,w,u,enter",
     "input_delay_seconds": 0.1,
     "cooking_seconds": 10.65
   },
@@ -60,6 +60,18 @@
   "Baristobo Soup": {
     "type": "COOKING",
     "keys": "k,w,s,p,a,down,down,down,l,down,down,down,enter",
+    "input_delay_seconds": 0.1,
+    "cooking_seconds": 10.65
+  },
+  "Creamy Potato": {
+    "type": "COOKING",
+    "keys": "s,p,b,c,enter",
+    "input_delay_seconds": 0.1,
+    "cooking_seconds": 10.65
+  },
+  "Louisiana Delight": {
+    "type": "COOKING",
+    "keys": "k,m,i,u,s,b,y,down,down,down,enter",
     "input_delay_seconds": 0.1,
     "cooking_seconds": 10.65
   },
