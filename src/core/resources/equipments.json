@@ -573,5 +573,33 @@
         }
       }
     ]
+  },
+  "Steak": {
+    "title_keywords": [
+      "Steak"
+    ],
+    "steps": [
+      {
+        "type": "COOKING",
+        "cooking_seconds": 17.5,
+        "keys": {
+          "seasoned three times": [
+            "s", "s", "s"
+          ],
+          "one juice": [
+            "j"
+          ],
+          "once seasoned": [
+            "s"
+          ],
+          "twice juicy": [
+            "j", "j"
+          ],
+          "one serving of citrus": [
+            "c"
+          ]
+        }
+      }
+    ]
   }
 }
