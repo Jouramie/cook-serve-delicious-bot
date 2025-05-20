@@ -24,7 +24,7 @@ CREATION_DELAY_IN_SECONDS = 0.5
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
 
-active_tasks: list[Task | None] = [None, None, None, None, None, None]
+active_tasks: list[Task | None] = [None, None, None, None, None, None, None, None]
 
 
 def define_callback(func: Callable = None, /, *, is_executable: bool = True, is_unknown: bool = False):

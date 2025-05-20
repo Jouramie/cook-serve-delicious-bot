@@ -16,6 +16,8 @@ WAITING_TASK_3_REGION = sensor_util.Region.of_corners(0, 195, 50, 245)
 WAITING_TASK_4_REGION = sensor_util.Region.of_corners(0, 255, 50, 305)
 WAITING_TASK_5_REGION = sensor_util.Region.of_corners(0, 315, 50, 365)
 WAITING_TASK_6_REGION = sensor_util.Region.of_corners(0, 375, 50, 425)
+WAITING_TASK_7_REGION = sensor_util.Region.of_corners(0, 435, 50, 485)
+WAITING_TASK_8_REGION = sensor_util.Region.of_corners(0, 495, 50, 545)
 WAITING_TASK_REGIONS = [
     WAITING_TASK_1_REGION,
     WAITING_TASK_2_REGION,
@@ -23,6 +25,8 @@ WAITING_TASK_REGIONS = [
     WAITING_TASK_4_REGION,
     WAITING_TASK_5_REGION,
     WAITING_TASK_6_REGION,
+    WAITING_TASK_7_REGION,
+    WAITING_TASK_8_REGION,
 ]
 WAITING_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 250]), np.array([5, 5, 255]))
 WAITING_TASK_BLINK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 49]), np.array([5, 5, 51]))
