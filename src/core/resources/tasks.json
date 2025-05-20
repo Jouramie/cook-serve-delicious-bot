@@ -41,7 +41,7 @@
   },
   "Chicken Noodle Soup": {
     "type": "COOKING",
-    "keys": "k,w,u,enter",
+    "keys": "k,w,u,y,down,down,down,enter",
     "input_delay_seconds": 0.1,
     "cooking_seconds": 10.65
   },
@@ -89,6 +89,26 @@
     "type": "COOKING",
     "keys": "t,t,t,t,t,t,s,enter",
     "cooking_seconds": 15
+  },
+  "Classic Steak": {
+    "type": "COOKING",
+    "keys": "s,s,s,j,enter",
+    "cooking_seconds": 17.5
+  },
+  "Citrus Steak": {
+    "type": "COOKING",
+    "keys": "s,j,j,c,enter",
+    "cooking_seconds": 17.5
+  },
+  "Spicy Steak": {
+    "type": "COOKING",
+    "keys": "s,p,p,p,p,j,j,enter",
+    "cooking_seconds": 17.5
+  },
+  "The Dry Spicy Steak": {
+    "type": "COOKING",
+    "keys": "s,p,p,enter",
+    "cooking_seconds": 17.5
   },
   "The Brewsky": {
     "keys": "hold:down:1.4,enter"
