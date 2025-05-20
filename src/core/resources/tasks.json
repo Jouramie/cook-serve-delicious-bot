@@ -110,6 +110,16 @@
     "keys": "s,p,p,enter",
     "cooking_seconds": 17.5
   },
+  "Baconesque": {
+    "type": "COOKING",
+    "keys": "s,j,j,b,b,enter",
+    "cooking_seconds": 17.5
+  },
+  "Spicy Baconesque": {
+    "type": "COOKING",
+    "keys": "s,j,p,p,b,b,enter",
+    "cooking_seconds": 17.5
+  },
   "The Brewsky": {
     "keys": "hold:down:1.4,enter"
   },
