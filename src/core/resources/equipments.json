@@ -87,6 +87,11 @@
             "n",
             "n"
           ],
+          "fancy lookin nose": [
+            "n",
+            "n",
+            "n"
+          ],
           "long lips": [
             "l"
           ],
@@ -353,7 +358,11 @@
       "Chocolate",
       "Yin and Yang",
       "Mint",
-      "Trio of Delicious"
+      "Trio of Delicious",
+      "Butter Pecan",
+      "Buttery Nuts",
+      "Birthday Surprise",
+      "The Fiesta Bowl"
     ],
     "steps": [
       {
@@ -398,6 +407,38 @@
             "m",
             "m"
           ],
+          "one butter pecan": [
+            "b"
+          ],
+          "two butter pecan": [
+            "b",
+            "b"
+          ],
+          "three butter pecan": [
+            "b",
+            "b",
+            "b"
+          ],
+          "all toppings except for nuts and strawberry sauce": [
+            "h",
+            "p",
+            "w",
+            "o"
+          ],
+          "all toppings except for nuts and chocolate sauce": [
+            "h",
+            "p",
+            "w",
+            "s"
+          ],
+          "all toppings": [
+            "h",
+            "p",
+            "w",
+            "n",
+            "o",
+            "s"
+          ],
           "cherry": [
             "h"
           ],
@@ -409,6 +450,12 @@
           ],
           "nuts": [
             "n"
+          ],
+          "chocolate sauce": [
+            "o"
+          ],
+          "strawberry sauce": [
+            "s"
           ]
         }
       }
