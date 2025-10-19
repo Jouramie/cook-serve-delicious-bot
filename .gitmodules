@@ -1,0 +1,3 @@
+[submodule "libs/botkit"]
+	path = libs/botkit
+	url = git@github.com:Jouramie/botkit.git
