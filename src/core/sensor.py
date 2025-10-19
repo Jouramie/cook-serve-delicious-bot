@@ -5,8 +5,8 @@ import numpy as np
 from pytesseract import pytesseract
 
 from core.brain import TaskStatement
-from kit import sensor_util, img_logger
-from kit.profiling import timeit
+from botkit import sensor_util, img_logger
+from botkit.profiling import timeit
 
 logger = logging.getLogger(__name__)
 

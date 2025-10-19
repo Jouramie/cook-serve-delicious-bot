@@ -4,8 +4,8 @@ from time import sleep
 
 import properties
 from core import sensor, brain, motor
-from kit import img_logger, sensor_util
-from kit.profiling import timeit
+from botkit import img_logger, sensor_util
+from botkit.profiling import timeit
 
 
 def capture():

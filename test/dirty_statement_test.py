@@ -6,8 +6,8 @@ from unittest.mock import MagicMock
 import cv2
 import pytest
 
+from botkit import img_logger
 from core import brain, sensor
-from kit import img_logger
 
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 logging.getLogger().setLevel(logging.INFO)

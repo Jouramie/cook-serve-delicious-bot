@@ -3,8 +3,8 @@ import sys
 
 import cv2
 
+from botkit import img_logger
 from core import sensor
-from kit import img_logger
 
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 logging.getLogger().setLevel(logging.INFO)

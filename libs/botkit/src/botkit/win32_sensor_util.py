@@ -10,8 +10,8 @@ import numpy as np
 from win32 import win32gui
 
 import properties
-from kit._base_sensor_util import Region, GameCamera
-from kit.profiling import timeit
+from botkit._base_sensor_util import Region, GameCamera
+from botkit.profiling import timeit
 
 logger = logging.getLogger(__name__)
 

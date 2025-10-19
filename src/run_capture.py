@@ -4,7 +4,7 @@ from pathlib import Path
 
 import properties
 from core import motor
-from kit import img_logger, sensor_util
+from botkit import img_logger, sensor_util
 
 
 def loop():

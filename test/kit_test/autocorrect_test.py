@@ -1,5 +1,5 @@
+from botkit.text import autocorrect
 from core import brain
-from kit.text import autocorrect
 
 
 def test_tombo_jumbo():

@@ -16,7 +16,7 @@ from typing import Any, Pattern, Protocol, runtime_checkable, ClassVar
 from black.linegen import partial
 
 from core import resources
-from kit.text import autocorrect, create_dictionary_from_text
+from botkit.text import autocorrect, create_dictionary_from_text
 
 EXPIRATION_DELAY_IN_SECONDS = 1
 CREATION_DELAY_IN_SECONDS = 0.5

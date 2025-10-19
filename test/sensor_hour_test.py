@@ -1,7 +1,7 @@
 import cv2
 
+from botkit import img_logger
 from core import sensor
-from kit import img_logger
 
 
 def test_ee_8():
