@@ -9,14 +9,12 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from functools import cached_property
+from functools import cached_property, partial
 from importlib.resources import files
 from typing import Any, Pattern, Protocol, runtime_checkable, ClassVar
 
-from black.linegen import partial
-
-from core import resources
 from botkit.text import autocorrect, create_dictionary_from_text
+from core import resources
 
 EXPIRATION_DELAY_IN_SECONDS = 1
 CREATION_DELAY_IN_SECONDS = 0.5

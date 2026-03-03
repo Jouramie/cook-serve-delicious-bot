@@ -25,15 +25,17 @@ def test_jumbo_cola_extra_onions():
 
     try:
         img = cv2.cvtColor(cv2.imread(r"resources/jumbo_cola_extra_onions.tiff"), cv2.COLOR_BGR2RGB)
+        frame = sensor.Frame(img)
 
-        statement = sensor.read_task_statement(img)
-        assert statement.title == "Jumbo Cola"
+        sensor.read_task_statement(frame)
+
+        assert frame.current_statement.title == "Jumbo Cola"
     finally:
         img_logger.finalize()
 
     keyboard = MagicMock()
 
-    execution_callback = statement_callback([4], statement)
+    execution_callback = statement_callback([4], frame.current_statement)
     execution_callback(keyboard)
 
     expected_recipe = ["up", "up", "up", "down", "i", "enter"]

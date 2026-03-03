@@ -620,5 +620,41 @@
         }
       }
     ]
+  },
+  "Potato": {
+    "title_keywords": [
+      "Potato"
+    ],
+    "steps": [
+      {
+        "keys": {
+          "cheese": [
+            "c"
+          ],
+          "sour cream": [
+            "s"
+          ],
+          "butter": [
+            "y"
+          ],
+          "chives": [
+            "h"
+          ],
+          "bacon": [
+            "b"
+          ],
+          "onions": [
+            "o"
+          ],
+          "olives": [
+            "v"
+          ],
+          "spices": [
+            "p"
+          ],
+          "nothing": []
+        }
+      }
+    ]
   }
 }

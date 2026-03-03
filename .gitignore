@@ -290,3 +290,4 @@ pyrightconfig.json
 
 
 **/logs/
+.idea/copilot*

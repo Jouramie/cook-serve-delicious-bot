@@ -3,9 +3,9 @@ from pathlib import Path
 from time import sleep
 
 import properties
-from core import sensor, brain, motor
 from botkit import img_logger, sensor_util
 from botkit.profiling import timeit
+from core import sensor, brain, motor
 
 
 def capture():
@@ -25,13 +25,13 @@ def loop():
         -
     """
 
-    last_frame = capture()
-    waiting_tasks = sensor.find_waiting_tasks(last_frame)
-    if not waiting_tasks:
+    last_frame = sensor.Frame(capture())
+    sensor.find_waiting_tasks(last_frame)
+    if not last_frame.has_found_tasks:
         logger.info(f"Found no waiting tasks.")
         return
 
-    task, task_callback = brain.choose_task_to_execute(waiting_tasks)
+    task, task_callback = brain.choose_task_to_execute(last_frame.ready_tasks_list)
     if task_callback is None:
         return
 
@@ -41,37 +41,39 @@ def loop():
         motor.execute_task(task_callback)
         camera.flush()
         return
+
     motor.select_task(task.index)
     camera.flush()
 
     task_execution = None
     execution_retry = 0
     while task_execution is None:
-        statement = None
+
         statement_retry = 0
-        while statement is None:
-            last_frame = capture()
-            waiting_tasks = sensor.find_waiting_tasks(last_frame)
-            statement = sensor.read_task_statement(last_frame)
-            if statement is None:
+        while last_frame.current_statement is None:
+            last_frame = sensor.Frame(capture())
+            sensor.find_waiting_tasks(last_frame)
+            sensor.read_task_statement(last_frame)
+
+            if last_frame.current_statement is None:
                 statement_retry += 1
                 if statement_retry >= 3:
                     logger.warning(f"No statement after 3 tries, will choose another task.")
                     return
                 logger.info(f"Waiting for statement to appear...")
 
-        logger.info(f"Found statement {statement}")
-        task_execution = task_callback(waiting_tasks, statement)
+        logger.info(f"Found statement {last_frame.current_statement}")
+        task_execution = task_callback(last_frame.ready_tasks_list, last_frame.current_statement)
         if task_execution.is_unknown:
             execution_retry += 1
             if execution_retry >= 3:
                 logger.warning(
-                    f"Could not find a proper execution for task {statement.title}, but will execute anyway."
+                    f"Could not find a proper execution for task {last_frame.current_statement_title}, but will execute anyway."
                 )
                 break
 
             logger.warning(
-                f"Could not find a proper execution for task {statement.title}. Will retry reading statement."
+                f"Could not find a proper execution for task {last_frame.current_statement_title}. Will retry reading statement."
             )
             task_execution = None
 
