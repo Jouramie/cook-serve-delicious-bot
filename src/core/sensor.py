@@ -3,6 +3,7 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
+import cv2
 import numpy as np
 from numpy import float64
 from pytesseract import pytesseract
@@ -146,7 +147,19 @@ def find_task_status(frame: Frame, i: int, log_steps="") -> str:
     if log_steps:
         img_logger.log_now(masked, f"{log_steps}_{i}_status_masked.tiff")
 
-    if np.sum(masked) > 255 * 220:
+    circles = cv2.HoughCircles(
+        masked, cv2.HOUGH_GRADIENT, dp=1, minDist=10, param1=10, param2=10, minRadius=8, maxRadius=11
+    )
+
+    if circles is not None:
+        circles = np.uint16(np.around(circles))
+        j = circles[0, :][0]
+
+        if log_steps:
+            cv2.circle(cropped_status, (j[0], j[1]), j[2], (0, 255, 0), 1)
+            cv2.circle(cropped_status, (j[0], j[1]), 2, (0, 0, 255), 1)
+            img_logger.log_now(cropped_status, f"{log_steps}_{i}_circle_{j}.tiff")
+
         return "waiting"
 
     return "ready"
