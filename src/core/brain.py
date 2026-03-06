@@ -34,6 +34,17 @@ def define_callback(func: Callable = None, /, *, is_executable: bool = True, is_
     return func
 
 
+class TaskStatus(enum.Enum):
+    WAITING = enum.auto()
+    READY = enum.auto()
+
+
+@dataclass
+class VisibleTask:
+    task_number: int
+    status: TaskStatus
+
+
 @dataclass
 class TaskStatement:
     title: str
@@ -223,7 +234,7 @@ class TaskExecutionCallback(Protocol):
 class ReadStatementCallback(Protocol):
     is_executable: ClassVar[bool] = False
 
-    def __call__(self, waiting_tasks: list[int], statement: TaskStatement) -> TaskExecutionCallback:
+    def __call__(self, waiting_tasks: list[VisibleTask | None], statement: TaskStatement) -> TaskExecutionCallback:
         raise NotImplementedError
 
 
@@ -231,6 +242,8 @@ class ReadStatementCallback(Protocol):
 class Task:
     index: int
     created_at: datetime
+    visible_status: TaskStatus
+
     statement: TaskStatement | None = None
     instructions: TaskInstructions | None = None
     cooked_at: datetime | None = None
@@ -265,9 +278,13 @@ class Task:
 
     @property
     def is_ready(self) -> bool:
-        return not self.is_completed and (
-            (self.is_new and self.created_at + timedelta(seconds=CREATION_DELAY_IN_SECONDS) <= datetime.now())
-            or self.is_cooked
+        return (
+            not self.is_completed
+            and self.visible_status == TaskStatus.READY
+            and (
+                (self.is_new and self.created_at + timedelta(seconds=CREATION_DELAY_IN_SECONDS) <= datetime.now())
+                or self.is_cooked
+            )
         )
 
     @property
@@ -313,8 +330,10 @@ class Task:
         self.complete()
 
     @define_callback(is_executable=False)
-    def read_statement_callback(self, waiting_tasks: list[int], statement: TaskStatement) -> TaskExecutionCallback:
-        _synchronize_waiting_tasks(waiting_tasks)
+    def read_statement_callback(
+        self, visible_tasks: list[VisibleTask | None], statement: TaskStatement
+    ) -> TaskExecutionCallback:
+        _synchronize_tasks(visible_tasks)
 
         instructions = TASKS_INSTRUCTIONS.get(statement.title)
         if instructions is not None:
@@ -361,37 +380,41 @@ with files(resources).joinpath("equipments.json").open() as equipments_file:
         return self.task.index
 
 
-def _synchronize_waiting_tasks(waiting_tasks: list[int]):
+def _synchronize_tasks(visible_tasks: list[VisibleTask | None]) -> None:
     global active_tasks
-    logger.info(f"Synchronizing {waiting_tasks} with waiting tasks.")
-    for i in range(len(active_tasks)):
-        if active_tasks[i] is not None or i + 1 in waiting_tasks:
-            logger.debug(f"Task {i + 1}: {active_tasks[i]}")
+    logger.info(f"Synchronizing {visible_tasks} with waiting tasks.")
+    for i, visible_task in enumerate(visible_tasks):
+        if active_tasks[i] is not None or visible_task is not None:
+            logger.debug(f"Existing task {i+1}: {active_tasks[i]}")
 
         active_task = active_tasks[i]
         if active_task is None:
-            if i + 1 in waiting_tasks:
-                active_tasks[i] = Task(i + 1, datetime.now())
+            if visible_task is not None:
+                active_tasks[i] = Task(i + 1, datetime.now(), visible_task.status)
             continue
 
         if active_task.is_expired:
             active_tasks[i] = None
             continue
 
-        if i + 1 not in waiting_tasks and not active_task.is_just_arrived:
+        if visible_task is None and not active_task.is_just_arrived:
             logger.info(f"Task {i + 1} does not seems to still be waiting...")
             if active_task.missed_one_check:
                 active_tasks[i] = None
                 continue
             active_task.missed_one_check = True
 
+        if visible_task is not None and active_task.visible_status != visible_task.status:
+            logger.info(f"Task {i + 1} status changed from {active_task.visible_status} to {visible_task.status}.")
+            active_task.visible_status = visible_task.status
+
 
 def choose_task_to_execute(
-    waiting_tasks: list[int],
+    tasks: list[VisibleTask | None],
 ) -> tuple[Task | None, ReadStatementCallback | TaskExecutionCallback | None]:
     global active_tasks
 
-    _synchronize_waiting_tasks(waiting_tasks)
+    _synchronize_tasks(tasks)
 
     prioritized_tasks = sorted((t for t in active_tasks if t is not None and t.is_ready), key=lambda x: x.created_at)
     chosen_task = next(iter(prioritized_tasks), None)

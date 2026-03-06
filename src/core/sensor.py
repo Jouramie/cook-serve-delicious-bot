@@ -1,7 +1,6 @@
 import logging
 import re
 from dataclasses import dataclass
-from typing import Any
 
 import cv2
 import numpy as np
@@ -10,7 +9,7 @@ from pytesseract import pytesseract
 
 from botkit import sensor_util, img_logger
 from botkit.profiling import timeit
-from core.brain import TaskStatement
+from core.brain import TaskStatement, VisibleTask, TaskStatus
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +70,7 @@ class NoStatementFoundException(Exception):
 class Frame:
     img: np.ndarray
 
-    tasks: dict[int, dict[str, Any]] | None = None
+    tasks: list[VisibleTask | None] | None = None
     current_statement: TaskStatement | None = None
 
     _rush_overlay_ratio: float64 | None = None
@@ -109,60 +108,58 @@ class Frame:
             logger.info(f"Rush hour detected. Overlay strength: {1 - self._rush_overlay_ratio}")
 
 
-@timeit(name="find_waiting_tasks", print_each_call=True)
-def find_waiting_tasks(frame: Frame, log_steps="") -> None:
-    frame.tasks = {}
+@timeit(name="analyse_waiting_tasks", print_each_call=True)
+def analyse_waiting_tasks(frame: Frame, log_steps="") -> None:
+    frame.tasks = [None, None, None, None, None, None, None, None]
 
     for i, region in enumerate(WAITING_TASK_REGIONS):
+        task_number = i + 1
         cropped_task = sensor_util.crop(frame.img, region)
         if np.any(cropped_task[0, 0] != cropped_task[0, 0].flat[0]):
-            logger.debug(f"Task {i} is not present.")
+            logger.debug(f"Task {task_number} is not present.")
             continue
 
         cropped_task = frame.fix_rush_overlay_greyscale(cropped_task)
         if log_steps:
-            img_logger.log_now(cropped_task, f"{log_steps}_{i}_cropped.tiff")
+            img_logger.log_now(cropped_task, f"{log_steps}_{task_number}_cropped.tiff")
 
         masked_active = sensor_util.mask(cropped_task, WAITING_TASK_MASK)
         masked_blink = sensor_util.mask(cropped_task, WAITING_TASK_BLINK_MASK)
         masked = np.add(masked_active, masked_blink)
         if log_steps:
-            img_logger.log_now(masked, f"{log_steps}_{i}_masked.tiff")
+            img_logger.log_now(masked, f"{log_steps}_{task_number}_masked.tiff")
         if not (np.sum(masked) > 255 * 100):
             continue
 
-        frame.tasks[i + 1] = {
-            "status": find_task_status(frame, i, log_steps=log_steps),
-        }
+        frame.tasks[i] = VisibleTask(task_number, find_task_status(frame, i, log_steps=log_steps))
 
 
-def find_task_status(frame: Frame, i: int, log_steps="") -> str:
+def find_task_status(frame: Frame, i: int, log_steps="") -> TaskStatus:
     cropped_status = sensor_util.crop(frame.img, STATUS_TASK_REGIONS[i])
     cropped_status = frame.fix_rush_overlay_greyscale(cropped_status)
 
     if log_steps:
-        img_logger.log_now(cropped_status, f"{log_steps}_{i}_status_cropped.tiff")
+        img_logger.log_now(cropped_status, f"{log_steps}_{i+1}_status_cropped.tiff")
 
     masked = sensor_util.mask(cropped_status, STATUS_TASK_MASK)
     if log_steps:
-        img_logger.log_now(masked, f"{log_steps}_{i}_status_masked.tiff")
+        img_logger.log_now(masked, f"{log_steps}_{i+1}_status_masked.tiff")
 
     circles = cv2.HoughCircles(
         masked, cv2.HOUGH_GRADIENT, dp=1, minDist=10, param1=10, param2=10, minRadius=8, maxRadius=11
     )
 
-    if circles is not None:
+    if circles is None:
+        return TaskStatus.READY
+
+    if log_steps:
         circles = np.uint16(np.around(circles))
         j = circles[0, :][0]
+        cv2.circle(cropped_status, (j[0], j[1]), j[2], (0, 255, 0), 1)
+        cv2.circle(cropped_status, (j[0], j[1]), 2, (0, 0, 255), 1)
+        img_logger.log_now(cropped_status, f"{log_steps}_{i}_circle_{j}.tiff")
 
-        if log_steps:
-            cv2.circle(cropped_status, (j[0], j[1]), j[2], (0, 255, 0), 1)
-            cv2.circle(cropped_status, (j[0], j[1]), 2, (0, 0, 255), 1)
-            img_logger.log_now(cropped_status, f"{log_steps}_{i}_circle_{j}.tiff")
-
-        return "waiting"
-
-    return "ready"
+    return TaskStatus.WAITING
 
 
 @timeit(name="read_task_statement", print_each_call=True)

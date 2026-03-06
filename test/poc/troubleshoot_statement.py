@@ -25,7 +25,7 @@ if __name__ == "__main__":
         ]
         for img in imgs:
             logger.info(f"Image shape if {img.shape}")
-            waiting_tasks = sensor.find_waiting_tasks(img)
+            waiting_tasks = sensor.analyse_waiting_tasks(img)
             logger.info(f"{waiting_tasks} are waiting")
             task = Task(waiting_tasks[0], datetime.now())
             callback = task.read_statement_callback

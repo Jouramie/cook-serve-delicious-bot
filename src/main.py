@@ -26,12 +26,12 @@ def loop():
     """
 
     last_frame = sensor.Frame(capture())
-    sensor.find_waiting_tasks(last_frame)
+    sensor.analyse_waiting_tasks(last_frame)
     if not last_frame.has_found_tasks:
         logger.info(f"Found no waiting tasks.")
         return
 
-    task, task_callback = brain.choose_task_to_execute(last_frame.ready_tasks_list)
+    task, task_callback = brain.choose_task_to_execute(last_frame.tasks)
     if task_callback is None:
         return
 
@@ -52,7 +52,7 @@ def loop():
         statement_retry = 0
         while last_frame.current_statement is None:
             last_frame = sensor.Frame(capture())
-            sensor.find_waiting_tasks(last_frame)
+            sensor.analyse_waiting_tasks(last_frame)
             sensor.read_task_statement(last_frame)
 
             if last_frame.current_statement is None:

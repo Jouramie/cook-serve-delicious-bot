@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from core import brain
-from core.brain import TaskStatement
+from core.brain import TaskStatement, VisibleTask, TaskStatus
 
 brain.CREATION_DELAY_IN_SECONDS = 0
 
@@ -19,9 +19,10 @@ def test_jumbo_diet():
     keyboard = MagicMock()
     statement = TaskStatement("Jumbo Diet", "A Jumbo Diet with Ice, please.")
     expected_recipe = ["up", "up", "up", "left", "down", "i", "enter"]
+    visible_tasks = [VisibleTask(1, TaskStatus.READY)]
 
-    _, callback = brain.choose_task_to_execute([1])
-    callback([1], statement)(keyboard)
+    _, callback = brain.choose_task_to_execute(visible_tasks)
+    callback(visible_tasks, statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
 
@@ -30,8 +31,9 @@ def test_jumbo_diet_flavor():
     keyboard = MagicMock()
     statement = TaskStatement("Jumbo Diet w/Flavor Blast", "A Jumbo Diet with Ice and Flavor Blast, please.")
     expected_recipe = ["up", "up", "up", "left", "down", "i", "f", "enter"]
+    visible_tasks = [VisibleTask(1, TaskStatus.READY)]
 
-    _, callback = brain.choose_task_to_execute([1])
-    callback([1], statement)(keyboard)
+    _, callback = brain.choose_task_to_execute(visible_tasks)
+    callback(visible_tasks, statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])

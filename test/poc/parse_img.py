@@ -10,7 +10,7 @@ if __name__ == "__main__":
         ]
         for img in imgs:
             print(img.shape)
-            waiting_tasks = sensor.find_waiting_tasks(img)
+            waiting_tasks = sensor.analyse_waiting_tasks(img)
             print(f"{waiting_tasks} are waiting")
 
             active_task = sensor.read_task_statement(img)

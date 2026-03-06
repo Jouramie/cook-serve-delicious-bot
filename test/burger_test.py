@@ -8,7 +8,7 @@ import pytest
 from freezegun import freeze_time
 
 from core import brain
-from core.brain import TaskStatement
+from core.brain import TaskStatement, VisibleTask, TaskStatus
 
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 logging.getLogger().setLevel(logging.INFO)
@@ -28,9 +28,10 @@ def test_blt():
     keyboard = MagicMock()
     statement = TaskStatement("BLT", "Bacon, Lettuce and Tomatoes")
     expected_recipe = ["b", "l", "t", "enter"]
+    visible_tasks = [VisibleTask(1, TaskStatus.READY)]
 
-    _, callback = brain.choose_task_to_execute([1])
-    callback([1], statement)(keyboard)
+    _, callback = brain.choose_task_to_execute(visible_tasks)
+    callback(visible_tasks, statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
 
@@ -39,10 +40,11 @@ def test_the_red():
     keyboard = MagicMock()
     statement = TaskStatement("The RED", "One meat patty...")
     expected_recipe = ["m", "enter"]
+    visible_tasks = [VisibleTask(1, TaskStatus.READY)]
 
     with freeze_time(SOME_TIME):
-        _, callback = brain.choose_task_to_execute([1])
-        callback([1], statement)(keyboard)
+        _, callback = brain.choose_task_to_execute(visible_tasks)
+        callback(visible_tasks, statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
     keyboard.send.reset_mock()
@@ -50,8 +52,8 @@ def test_the_red():
     new_statement = TaskStatement("The RED", "Meat and Tomatoes only, please.")
     expected_recipe = ["m", "t", "enter"]
     with freeze_time(SOME_TIME + timedelta(seconds=9)):
-        _, callback = brain.choose_task_to_execute([1])
-        callback([1], new_statement)(keyboard)
+        _, callback = brain.choose_task_to_execute(visible_tasks)
+        callback(visible_tasks, new_statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
 
@@ -60,10 +62,11 @@ def test_the_triple():
     keyboard = MagicMock()
     statement = TaskStatement("The Triple", "Three meat patties...")
     expected_recipe = ["m", "m", "m", "enter"]
+    visible_tasks = [VisibleTask(1, TaskStatus.READY)]
 
     with freeze_time(SOME_TIME):
-        _, callback = brain.choose_task_to_execute([1])
-        callback([1], statement)(keyboard)
+        _, callback = brain.choose_task_to_execute(visible_tasks)
+        callback(visible_tasks, statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
     keyboard.send.reset_mock()
@@ -71,8 +74,8 @@ def test_the_triple():
     new_statement = TaskStatement("The Triple", "Meat (3x) and Cheese")
     expected_recipe = ["m", "m", "m", "c", "enter"]
     with freeze_time(SOME_TIME + timedelta(seconds=9)):
-        _, callback = brain.choose_task_to_execute([1])
-        callback([1], new_statement)(keyboard)
+        _, callback = brain.choose_task_to_execute(visible_tasks)
+        callback(visible_tasks, new_statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
 
@@ -81,10 +84,11 @@ def test_the_hearhstopper():
     keyboard = MagicMock()
     statement = TaskStatement("The HEARTSTOPPER", "Two meat patties...")
     expected_recipe = ["m", "m", "enter"]
+    visible_tasks = [VisibleTask(1, TaskStatus.READY)]
 
     with freeze_time(SOME_TIME):
-        _, callback = brain.choose_task_to_execute([1])
-        callback([1], statement)(keyboard)
+        _, callback = brain.choose_task_to_execute(visible_tasks)
+        callback(visible_tasks, statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
     keyboard.send.reset_mock()
@@ -92,7 +96,7 @@ def test_the_hearhstopper():
     new_statement = TaskStatement("The HEARTSTOPPER", "Meat (2x), Bacon (2x), Cheese")
     expected_recipe = ["m", "m", "b", "b", "c", "enter"]
     with freeze_time(SOME_TIME + timedelta(seconds=9)):
-        _, callback = brain.choose_task_to_execute([1])
-        callback([1], new_statement)(keyboard)
+        _, callback = brain.choose_task_to_execute(visible_tasks)
+        callback(visible_tasks, new_statement)(keyboard)
 
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
