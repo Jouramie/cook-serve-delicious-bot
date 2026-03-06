@@ -90,6 +90,11 @@
     "keys": "t,t,t,t,t,t,s,enter",
     "cooking_seconds": 15
   },
+  "Rich Chicken Breast": {
+    "type": "COOKING",
+    "keys": "t,t,t,t,t,t,s,enter",
+    "cooking_seconds": 15
+  },
   "Classic Steak": {
     "type": "COOKING",
     "keys": "s,s,s,j,enter",

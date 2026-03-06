@@ -251,3 +251,25 @@ def test_task_1_waiting():
 
     finally:
         img_logger.finalize()
+
+
+def test_task_1_waiting2():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/task-1-waiting2.tiff"), cv2.COLOR_BGR2RGB)
+        frame = sensor.Frame(img)
+
+        sensor.analyse_waiting_tasks(frame, log_steps="task-1-waiting2")
+
+        assert frame.tasks == [
+            VisibleTask(1, TaskStatus.WAITING),
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        ]
+
+    finally:
+        img_logger.finalize()
