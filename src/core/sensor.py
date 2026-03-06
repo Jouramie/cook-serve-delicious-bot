@@ -58,7 +58,7 @@ STATUS_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 25]), np.array([
 CURRENT_STATEMENT_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
 CURRENT_STATEMENT_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 171]))
 
-TITLE_PATTERN = re.compile(r"(\w[\w\s()/\-.]+)")
+TITLE_PATTERN = re.compile(r"(\w[\w\s()/\-.&]+)")
 DESCRIPTION_PATTERN = re.compile(r"\w.+")
 
 
@@ -74,12 +74,6 @@ class Frame:
     current_statement: TaskStatement | None = None
 
     _rush_overlay_ratio: float64 | None = None
-
-    @property
-    def ready_tasks_list(self) -> list[int]:
-        if self.tasks is None:
-            return []
-        return [task_id for task_id, task_info in self.tasks.items() if task_info["status"] == "ready"]
 
     @property
     def has_found_tasks(self) -> bool:

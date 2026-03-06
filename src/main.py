@@ -63,7 +63,7 @@ def loop():
                 logger.info(f"Waiting for statement to appear...")
 
         logger.info(f"Found statement {last_frame.current_statement}")
-        task_execution = task_callback(last_frame.ready_tasks_list, last_frame.current_statement)
+        task_execution = task_callback(last_frame.tasks, last_frame.current_statement)
         if task_execution.is_unknown:
             execution_retry += 1
             if execution_retry >= 3:
