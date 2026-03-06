@@ -16,8 +16,8 @@ from typing import Any, Pattern, Protocol, runtime_checkable, ClassVar
 from botkit.text import autocorrect, create_dictionary_from_text
 from core import resources
 
-EXPIRATION_DELAY_IN_SECONDS = 1
-CREATION_DELAY_IN_SECONDS = 0.7
+EXPIRATION_DELAY_IN_SECONDS = 1.2
+CREATION_DELAY_IN_SECONDS = 0.5
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
