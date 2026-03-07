@@ -1,107 +1,39 @@
-import logging
+import argparse
+import sys
+import traceback
 from pathlib import Path
-from time import sleep
 
-import properties
-from botkit import img_logger, sensor_util
-from botkit.profiling import timeit
-from core import sensor, brain, motor
-
-
-def capture():
-    frame = camera.get_latest_frame()
-    img_logger.submit(frame)
-    img_logger.publish()
-    return frame
-
-
-@timeit(name="loop", print_each_call=True)
-def loop():
-    """
-    1. Find and store new active tasks
-        - Store timestamps on when it was detected
-    2. Execute tasks
-        - Read title, find known task in dictionary
-        -
-    """
-
-    last_frame = sensor.Frame(capture())
-    sensor.analyse_waiting_tasks(last_frame)
-    if not last_frame.has_found_tasks:
-        logger.info(f"Found no waiting tasks.")
-        return
-
-    task, task_callback = brain.choose_task_to_execute(last_frame.tasks)
-    if task_callback is None:
-        return
-
-    logger.info(f"Launching task {task}")
-
-    if task_callback.is_executable:
-        motor.execute_task(task_callback)
-        camera.flush()
-        return
-
-    motor.select_task(task.index)
-    camera.flush()
-
-    task_execution = None
-    execution_retry = 0
-    while task_execution is None:
-
-        statement_retry = 0
-        while last_frame.current_statement is None:
-            last_frame = sensor.Frame(capture())
-            sensor.analyse_waiting_tasks(last_frame)
-            sensor.read_task_statement(last_frame)
-
-            if last_frame.current_statement is None:
-                statement_retry += 1
-                if statement_retry >= 3:
-                    logger.warning(f"No statement after 3 tries, will choose another task.")
-                    return
-                logger.info(f"Waiting for statement to appear...")
-
-        logger.info(f"Found statement {last_frame.current_statement}")
-        task_execution = task_callback(last_frame.tasks, last_frame.current_statement)
-        if task_execution.is_unknown:
-            execution_retry += 1
-            if execution_retry >= 3:
-                logger.warning(
-                    f"Could not find a proper execution for task {last_frame.current_statement_title}, but will execute anyway."
-                )
-                break
-
-            logger.warning(
-                f"Could not find a proper execution for task {last_frame.current_statement_title}. Will retry reading statement."
-            )
-            task_execution = None
-
-    motor.execute_task(task_execution)
-    camera.flush()
-
+import use_cases
+from botkit.sensor_util import CannotLocateGameException
 
 if __name__ == "__main__":
+    logs_folder = Path("logs")
+    if not logs_folder.exists():
+        logs_folder.mkdir()
+
+    parser = argparse.ArgumentParser(
+        prog="Cook, Serve, Delicious!",
+        description="Bunch of utilities to play Cook, Serve, Delicious!, namely autoplay",
+    )
+
+    choice = parser.add_mutually_exclusive_group()
+    choice.add_argument("--autoplay", action="store_true", help="Whether to autoplay the game;")
+    choice.add_argument("--capture", action="store_true", help="to capture a game session;")
+    choice.add_argument("--optimize-menu", action="store_true", help="or to optimize the menu.")
+
+    args = parser.parse_args()
+
     try:
-        logs_folder = Path("logs")
-        if not logs_folder.exists():
-            logs_folder.mkdir()
-
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s %(levelname)s %(message)s",
-            handlers=[logging.FileHandler("logs/bot.log", mode="w")],
-        )
-        logger = logging.getLogger(__name__)
-
-        img_logger.start()
-        camera = sensor_util.create_camera(properties.GAME_WINDOW_TITLE)
-        camera.start()
-
-        motor.wait_for_game_to_start()
-        while True:
-            loop()
-    finally:
-        camera.stop()
-        img_logger.finalize()
-        sleep(1)
+        if args.autoplay:
+            use_cases.run_bot()
+        elif args.capture:
+            use_cases.run_capture()
+        elif args.optimize_menu:
+            use_cases.optimize_menu()
+        else:
+            parser.print_help()
+            exit(0)
+    except CannotLocateGameException as e:
+        traceback.print_exc()
+        print("\nMaybe you should open the game first?", file=sys.stderr)
+        exit(1)
