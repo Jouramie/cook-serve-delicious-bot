@@ -1,0 +1,546 @@
+{
+  "Sopapillas": {
+    "prices_per_star": [
+      5
+    ],
+    "boosters": [
+      "Catering",
+      "Rainy Companion",
+      "Late Night Chow",
+      "Simply Food",
+      "Green Tech",
+      "Afternoon Delight"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Unappreciated",
+      "Fatty McFats"
+    ]
+  },
+  "Corn Dog": {
+    "prices_per_star": [
+      4
+    ],
+    "boosters": [
+      "Catering",
+      "Simply Food",
+      "Afternoon Delight"
+    ],
+    "detractors": [
+      "Munchies",
+      "Menu Rot",
+      "Unappreciated",
+      "Peasant Food",
+      "Fatty McFats",
+      "Morning Aroma"
+    ]
+  },
+  "Pretzel": {
+    "prices_per_star": [
+      4
+    ],
+    "boosters": [
+      "Catering",
+      "Simply Food",
+      "Afternoon Delight"
+    ],
+    "detractors": [
+      "Munchies",
+      "Menu Rot",
+      "Unappreciated",
+      "Peasant Food",
+      "Fatty McFats",
+      "Morning Aroma"
+    ]
+  },
+  "Cold Beer": {
+    "prices_per_star": [
+      5,
+      8
+    ],
+    "boosters": [
+      "Staple Food",
+      "Catering",
+      "Late Night Chow",
+      "Simply Food",
+      "Green Tech"
+    ],
+    "detractors": [
+      "Work Liquor"
+    ]
+  },
+  "Fried Chicken": {
+    "prices_per_star": [
+      5,
+      8
+    ],
+    "boosters": [
+      "Catering",
+      "Late Night Chow",
+      "Simply Food",
+      "To Go!",
+      "Green Tech",
+      "Afternoon Delight"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Unappreciated",
+      "Fatty McFats"
+    ]
+  },
+  "Soda Fountain": {
+    "prices_per_star": [
+      5,
+      8
+    ],
+    "boosters": [
+      "Staple Food",
+      "Catering",
+      "To Go!"
+    ],
+    "detractors": [
+      "Unappreciated",
+      "Fatty McFats",
+      "Trashy Food"
+    ]
+  },
+  "French Fries": {
+    "prices_per_star": [
+      5,
+      8,
+      10
+    ],
+    "boosters": [
+      "Catering",
+      "Late Night Chow",
+      "Simply Food",
+      "Green Tech"
+    ],
+    "detractors": [
+      "Munchies",
+      "Menu Rot",
+      "Unappreciated",
+      "Fatty McFats",
+      "Morning Aroma"
+    ]
+  },
+  "Salad": {
+    "prices_per_star": [
+      8,
+      10,
+      12
+    ],
+    "boosters": [
+      "Staple Food",
+      "Health Nuts",
+      "To Go!",
+      "Afternoon Delight"
+    ],
+    "detractors": [
+      "Trashy Food",
+      "Plate Spinner"
+    ]
+  },
+  "Ice Cream": {
+    "prices_per_star": [
+      4,
+      6,
+      8
+    ],
+    "boosters": [
+      "Staple Food",
+      "Catering",
+      "Rainy Companion"
+    ],
+    "detractors": [
+      "Munchies",
+      "Unappreciated",
+      "Fatty McFats",
+      "Plate Spinner"
+    ]
+  },
+  "Baked Potato": {
+    "prices_per_star": [
+      6,
+      8,
+      10,
+      12
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "Rainy Companion"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Slow Cooker",
+      "Fatty McFats",
+      "Trashy Food"
+    ]
+  },
+  "Nachos": {
+    "prices_per_star": [
+      4,
+      6,
+      8,
+      12
+    ],
+    "boosters": [
+      "Catering",
+      "Late Night Chow",
+      "VIP Allure",
+      "Afternoon Delight"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Fatty McFats",
+      "Morning Aroma",
+      "Plate Spinner",
+      "Ah Rats"
+    ]
+  },
+  "Lasagna": {
+    "prices_per_star": [
+      8,
+      12,
+      15,
+      20
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "Catering",
+      "The Competition"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Slow Cooker",
+      "Complex Bits",
+      "Fatty McFats",
+      "Trashy Food",
+      "Plate Spinner"
+    ]
+  },
+  "Fresh Fish": {
+    "prices_per_star": [
+      6,
+      12,
+      15,
+      20
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "Rainy Companion",
+      "Health Nuts",
+      "VIP Allure"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Morning Aroma",
+      "Trashy Food",
+      "Ah Rats"
+    ]
+  },
+  "Chicken Breast": {
+    "prices_per_star": [
+      6,
+      10,
+      15,
+      20
+    ],
+    "boosters": [
+      "Health Nuts",
+      "Simply Food",
+      "To Go!",
+      "VIP Allure"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Plate Spinner"
+    ]
+  },
+  "Pasta": {
+    "prices_per_star": [
+      8,
+      12,
+      14,
+      16
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "The Competition",
+      "To Go!",
+      "VIP Allure"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Trashy Food",
+      "Plate Spinner"
+    ]
+  },
+  "Wine": {
+    "prices_per_star": [
+      8,
+      15,
+      25,
+      40,
+      60
+    ],
+    "boosters": [
+      "Staple Food",
+      "Rainy Companion",
+      "Health Nuts",
+      "Simply Food",
+      "Green Tech"
+    ],
+    "detractors": [
+      "Work Liquor"
+    ]
+  },
+  "Pizza": {
+    "prices_per_star": [
+      6,
+      8,
+      12,
+      15,
+      25
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "Catering",
+      "Late Night Chow",
+      "The Competition",
+      "To Go!",
+      "VIP Allure"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Fatty McFats",
+      "Ah Rats"
+    ]
+  },
+  "Burger": {
+    "prices_per_star": [
+      5,
+      8,
+      12,
+      18,
+      25
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "Catering",
+      "The Competition",
+      "To Go!",
+      "VIP Allure"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Fatty McFats",
+      "Trashy Food",
+      "Ah Rats"
+    ]
+  },
+  "Steak": {
+    "prices_per_star": [
+      10,
+      15,
+      20,
+      30,
+      40
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "Health Nuts",
+      "The Competition",
+      "VIP Allure"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Slow Cooker",
+      "Plate Spinner"
+    ]
+  },
+  "Soups": {
+    "prices_per_star": [
+      8,
+      15,
+      20,
+      30,
+      40
+    ],
+    "boosters": [
+      "Staple Food",
+      "The Big Tipper",
+      "Rainy Companion",
+      "Health Nuts",
+      "VIP Allure"
+    ],
+    "detractors": [
+      "Slow Cooker",
+      "Complex Bits",
+      "Trashy Food",
+      "Plate Spinner"
+    ]
+  },
+  "Coffee": {
+    "prices_per_star": [
+      3,
+      6
+    ],
+    "boosters": [
+      "Staple Food",
+      "Rainy Companion",
+      "To Go!",
+      "Breakfast"
+    ],
+    "detractors": [
+      "Munchies"
+    ]
+  },
+  "Hash Browns": {
+    "prices_per_star": [
+      4,
+      6
+    ],
+    "boosters": [
+      "Green Tech",
+      "Breakfast"
+    ],
+    "detractors": [
+      "Munchies",
+      "Menu Rot",
+      "Unappreciated",
+      "Fatty McFats",
+      "Fast Cooker"
+    ]
+  },
+  "Breakfast Sandwich": {
+    "prices_per_star": [
+      4,
+      8,
+      12
+    ],
+    "boosters": [
+      "Simply Food",
+      "To Go!",
+      "Breakfast"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Unappreciated",
+      "Fatty McFats",
+      "Tasty Food"
+    ]
+  },
+  "Pancakes": {
+    "prices_per_star": [
+      4,
+      8,
+      12
+    ],
+    "boosters": [
+      "Late Night Chow",
+      "Breakfast"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Fatty McFats",
+      "Plate Spinner"
+    ]
+  },
+  "Fried Rice": {
+    "prices_per_star": [
+      6,
+      8,
+      12,
+      15
+    ],
+    "boosters": [
+      "Late Night Chow",
+      "To Go!",
+      "Afternoon Delight"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Unappreciated",
+      "Fatty McFats",
+      "Plate Spinner",
+      "Fast Cooker"
+    ]
+  },
+  "Lobster": {
+    "prices_per_star": [
+      10,
+      15,
+      20,
+      30,
+      40
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "Health Nuts",
+      "Rich Dish"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Slow Cooker",
+      "Plate Spinner",
+      "Perfection"
+    ]
+  },
+  "Banana Foster": {
+    "prices_per_star": [
+      8,
+      12,
+      18,
+      25
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "Rainy Companion",
+      "Afternoon Delight",
+      "Rich Dish"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Fatty McFats",
+      "Fast Cooker"
+    ]
+  },
+  "Shish Kabob": {
+    "prices_per_star": [
+      8,
+      12,
+      18,
+      25
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "Rainy Companion",
+      "Afternoon Delight",
+      "Rich Dish"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Complex Bits",
+      "Morning Aroma"
+    ]
+  },
+  "Stacked Enchiladas": {
+    "prices_per_star": [
+      6,
+      10,
+      12
+    ],
+    "boosters": [
+      "Late Night Chow",
+      "To Go!"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Fatty McFats",
+      "Tasty Food",
+      "Plate Spinner",
+      "Ah Rats"
+    ]
+  }
+}
