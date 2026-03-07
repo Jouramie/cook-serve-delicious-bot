@@ -1,5 +1,7 @@
+import json
 import logging
 import time
+from importlib.resources import files
 
 import numpy as np
 
@@ -7,7 +9,8 @@ import properties
 from botkit import img_logger, sensor_util
 from botkit.profiling import timeit
 from botkit.sensor_util import create_camera
-from core import motor, sensor, brain
+from core import motor, sensor, brain, resources, menu
+from core.menu import MenuItem, Booster, Detractor
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +42,7 @@ def run_capture() -> None:
         img_logger.finalize()
 
 
-def run_bot():
+def run_bot() -> None:
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
@@ -134,6 +137,26 @@ def run_bot():
         time.sleep(1)
 
 
-def optimize_menu():
+def optimize_menu() -> None:
+    menu_items: list[MenuItem] = []
 
-    return None
+    with files(resources).joinpath("foods.json").open() as foods_file:
+        for k, v in json.load(foods_file).items():
+            menu_items.append(
+                MenuItem(
+                    k,
+                    v["prices_per_star"],
+                    {Booster(b) for b in v["boosters"]},
+                    {Detractor(d) for d in v["detractors"]},
+                )
+            )
+
+    print("Optimal menu:")
+    for food, stars in menu.optimize_menu(
+        menu_items,
+        properties.UNLOCKED_FOOD_LEVELS,
+        properties.DEACTIVATED_FOODS,
+        properties.CURRENT_RESTAURANT_STARS,
+        menu_size=6,
+    ).items():
+        print(f"- {food.name}: ${food.get_price_at_stars(stars)}")

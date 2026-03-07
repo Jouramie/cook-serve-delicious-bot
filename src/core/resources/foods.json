@@ -428,7 +428,7 @@
       "Menu Rot",
       "Unappreciated",
       "Fatty McFats",
-      "Tasty Food"
+      "Trashy Food"
     ]
   },
   "Pancakes": {
@@ -445,6 +445,26 @@
       "Menu Rot",
       "Fatty McFats",
       "Plate Spinner"
+    ]
+  },
+  "Sushi": {
+    "prices_per_star": [
+      5,
+      8,
+      10,
+      15,
+      20
+    ],
+    "boosters": [
+      "The Big Tipper",
+      "Rainy Companion",
+      "Health Nuts",
+      "Afternoon Delight"
+    ],
+    "detractors": [
+      "Menu Rot",
+      "Trashy Food",
+      "Perfection"
     ]
   },
   "Fried Rice": {
@@ -538,7 +558,7 @@
     "detractors": [
       "Menu Rot",
       "Fatty McFats",
-      "Tasty Food",
+      "Trashy Food",
       "Plate Spinner",
       "Ah Rats"
     ]
