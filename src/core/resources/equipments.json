@@ -237,7 +237,11 @@
       "Guac",
       "Jalanacho",
       "Bowl of Chips",
-      "Scoops of Plenty"
+      "Scoops of Plenty",
+      "Chubigans Special",
+      "Mexican",
+      "Beans",
+      "Spicy Rice Special"
     ],
     "steps": [
       {
@@ -275,6 +279,12 @@
           ],
           "onions": [
             "o"
+          ],
+          "beans": [
+            "b"
+          ],
+          "rice": [
+            "r"
           ],
           "nothing": []
         }
@@ -687,14 +697,14 @@
   },
   "Sushi": {
     "title_keywords": [
-      "Standard Sampler",
-      "Roe Special",
-      "Tuna Platter",
-      "Ebi Special",
-      "Ocean Plate",
+      "Sampler",
+      "Special",
+      "Platter",
+      "Plate",
       "Sea Spirit",
-      "Mixed Delicious",
-      "Toro Special"
+      "Mixed",
+      "Fives Delight",
+      "Tray"
     ],
     "steps": [
       {
@@ -711,6 +721,9 @@
           ],
           "tuna": [
             "u"
+          ],
+          "salmon": [
+            "s"
           ]
         }
       }
@@ -739,6 +752,69 @@
           "two cups of butter": [
             "b",
             "b"
+          ]
+        }
+      }
+    ]
+  },
+  "Stacked Enchiladas": {
+    "title_keywords": [
+      "Stack",
+      "Triple w/",
+      "Junior w/",
+      "Triple Works"
+    ],
+    "steps": [
+      {
+        "keys": {
+          "single stack": [
+            "down",
+            "up",
+            "t"
+          ],
+          "two stacks": [
+            "down",
+            "up",
+            "t",
+            "down",
+            "up",
+            "t"
+          ],
+          "three stacks": [
+            "down",
+            "up",
+            "t",
+            "down",
+            "up",
+            "t",
+            "down",
+            "up",
+            "t"
+          ],
+          "triple stack": [
+            "down",
+            "up",
+            "t",
+            "down",
+            "up",
+            "t",
+            "down",
+            "up",
+            "t"
+          ],
+          "chives": [
+            "c"
+          ],
+          "egg": [
+            "e"
+          ],
+          "onions": [
+            "o"
+          ],
+          "everything": [
+            "c",
+            "e",
+            "o"
           ]
         }
       }

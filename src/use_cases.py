@@ -88,9 +88,10 @@ def run_bot() -> None:
         task_execution = None
         execution_retry = 0
         while task_execution is None:
+            last_frame = None
 
             statement_retry = 0
-            while last_frame.current_statement is None:
+            while last_frame is None or last_frame.current_statement is None:
                 last_frame = sensor.Frame(capture())
                 sensor.analyse_waiting_tasks(last_frame)
                 sensor.read_task_statement(last_frame)

@@ -9,7 +9,7 @@ from ortools.linear_solver.python.model_builder_helper import LinearExpr, Variab
 
 BUZZ_HOURS_WEIGHT = 0.333
 PRICE_WEIGHT = 1.0
-TIP_WEIGHT = 5.0
+TIP_WEIGHT = 2.0
 
 UTILITY_SCORE_WEIGHT = 6
 PRICE_DIFF_WEIGHT = 1.5
@@ -507,10 +507,11 @@ def choose_best_menu(
         print("Could not find an optimal menu, but will return something anyway.")
 
     print(
-        f"Optimal menu has a score of {solver.objective_value}.\n"
-        f"Price score = {solver.value(menu_price)} * {PRICE_WEIGHT} = {solver.value(menu_price)*PRICE_WEIGHT}\n"
-        f"Buzz hours score = {solver.value(buzz_hours)} * {BUZZ_HOURS_WEIGHT} = {solver.value(buzz_hours)*BUZZ_HOURS_WEIGHT}\n"
-        f"Tip score = {solver.value(tip_bonus)} * {TIP_WEIGHT} = {solver.value(tip_bonus)*TIP_WEIGHT}\n"
+        f"Optimal menu has a score of {solver.objective_value:.02f}.\n"
+        f"Price score = {solver.value(menu_price)} * {PRICE_WEIGHT} = {solver.value(menu_price)*PRICE_WEIGHT:.02f}\n"
+        f"Buzz hours score = {solver.value(buzz_hours)} * {BUZZ_HOURS_WEIGHT} = {solver.value(buzz_hours)*BUZZ_HOURS_WEIGHT:.02f}\n"
+        f"Tip score = {solver.value(tip_bonus)} * {TIP_WEIGHT} = {solver.value(tip_bonus)*TIP_WEIGHT:.02f}\n"
+        f"Expected revenues = ${(solver.value(buzz_hours)/3) * (solver.value(menu_price) / 6):.02f}\n"
     )
 
     return OptimizedMenu(

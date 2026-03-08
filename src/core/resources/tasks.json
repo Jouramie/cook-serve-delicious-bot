@@ -29,6 +29,16 @@
     "keys": "p,s,m,c,r,p,s,m,c,r,p,s,c,r,enter",
     "cooking_seconds": 8
   },
+  "Vegetable Lasagna": {
+    "type": "COOKING",
+    "keys": "p,s,v,c,r,p,s,v,c,r,p,s,c,r,enter",
+    "cooking_seconds": 8
+  },
+  "Stuffed Piza Lasagna": {
+    "type": "COOKING",
+    "keys": "p,s,m,c,r,p,s,v,c,r,p,s,c,r,enter",
+    "cooking_seconds": 8
+  },
   "Grey Tail Fish": {
     "type": "COOKING",
     "keys": "left,down,right,s,enter",
@@ -138,6 +148,16 @@
   "Spicy Baconesque": {
     "type": "COOKING",
     "keys": "s,j,p,p,b,b,enter",
+    "cooking_seconds": 17.5
+  },
+  "Spicy Smokey Steak": {
+    "type": "COOKING",
+    "keys": "s,s,d,p,p,p,j,j,enter",
+    "cooking_seconds": 17.5
+  },
+  "Smokey Orange Steak": {
+    "type": "COOKING",
+    "keys": "s,d,j,c,c,enter",
     "cooking_seconds": 17.5
   },
   "The Brewsky": {

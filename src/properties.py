@@ -29,50 +29,51 @@ UNLOCKED_FOOD_LEVELS = {
     "Salad": 3,
     "Ice Cream": 3,
     "Baked Potato": 3,
-    "Nachos": 1,
-    "Lasagna": 2,
+    "Nachos": 2,
+    "Lasagna": 4,
     "Fresh Fish": 4,
     "Chicken Breast": 4,
     "Pasta": 4,
     "Wine": 1,
     "Pizza": 4,
     "Burger": 3,
-    "Steak": 3,
+    "Steak": 4,
     "Soups": 3,
     "Coffee": 2,
     "Hash Browns": 0,
     "Breakfast Sandwich": 0,
     "Pancakes": 0,
-    "Sushi": 1,
+    "Sushi": 2,
     "Fried Rice": 0,
     "Lobster": 1,
     "Banana Foster": 0,
     "Shish Kabob": 0,
-    "Stacked Enchiladas": 0,
+    "Stacked Enchiladas": 2,
 }
 
-MENU_ROT = ["Steak", "Fresh Fish"]
-MANDATORY_FOOD = ["Lasagna"]
+MENU_ROT = []
+MANDATORY_FOOD = ["Nachos", "Chicken Breast", "Pizza", "Soup"]
 
 # Use 0 if no rain, 4 if rain is announced (it seems to be from 10 am to 3 pm, not counting rush hour)
-RAINING_HOURS = 4
+RAINING_HOURS = 0
 
 AVAILABLE_PURCHASES = {
+    # Speciality unlock
     "Hash Browns": 750,
     "Breakfast Sandwich": 1000,
     "Pancakes": 900,
     "Fried Rice": 1200,
     "Banana Foster": 1400,
     "Shish Kabob": 1900,
-    "Stacked Enchiladas": 1100,
+    # Standard upgrade
     "Cold Beer": 600,
     "French Fries": 600,
     "Baked Potato": 1000,
-    "Nachos": 600,
-    "Lasagna": 600,
+    "Nachos": 900,
     "Wine": 1800,
-    "Sushi": 1000,
+    "Burger": 1500,
+    # Speciality upgrade
     "Lobster": 2000,
 }
 
-UPGRADE_BUDGET = 308
+UPGRADE_BUDGET = 451
