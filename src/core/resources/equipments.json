@@ -632,6 +632,12 @@
           ],
           "pineapple": [
             "i"
+          ],
+          "everything but diced tomatoes": [
+            "p"
+          ],
+          "tomato": [
+            "o"
           ]
         }
       }
@@ -705,6 +711,34 @@
           ],
           "tuna": [
             "u"
+          ]
+        }
+      }
+    ]
+  },
+  "Lobster": {
+    "title_keywords": [
+      "Lobster"
+    ],
+    "steps": [
+      {
+        "type": "COOKING",
+        "cooking_seconds": 10.65,
+        "keys": {
+          "boil chilled lobster": [
+            "l"
+          ]
+        }
+      },
+      {
+        "keys": {
+          "no sauce": [],
+          "one cup of butter": [
+            "b"
+          ],
+          "two cups of butter": [
+            "b",
+            "b"
           ]
         }
       }
