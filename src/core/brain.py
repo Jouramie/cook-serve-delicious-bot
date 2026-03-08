@@ -118,10 +118,13 @@ class TaskInstructions:
 
 @dataclass
 class EquipmentStep:
-    SPECIAL_KEYWORDS: ClassVar[list[str]] = ["(2x)", "(3x)"]
+    QUANTITY_PREFIXES: ClassVar[dict[str, int]] = {"(1)": 1, "(2)": 2, "(3)": 3, "(4)": 4, "(5)": 5}
+    QUANTITY_SUFFIXES: ClassVar[dict[str, int]] = {"(2x)": 2, "(3x)": 3}
 
     type: TaskType
     keys: dict[str, list[str]]
+    use_quantity_prefixes: bool = False
+    use_quantity_suffixes: bool = False
     step_format: Pattern[str] | None = None
     step_keywords: list[str] | None = None
     cooking_seconds: int | None = None
@@ -129,13 +132,21 @@ class EquipmentStep:
 
     def __post_init__(self):
         if self.step_keywords is None:
-            self.step_keywords = list(self.keys.keys()) + self.SPECIAL_KEYWORDS
+            self.step_keywords = list(self.keys.keys())
+
+        if self.use_quantity_prefixes:
+            self.step_keywords += list(self.QUANTITY_PREFIXES.keys())
+
+        if self.use_quantity_suffixes:
+            self.step_keywords += list(self.QUANTITY_SUFFIXES.keys())
 
     @staticmethod
     def from_dict(d: dict[str, Any]):
         return EquipmentStep(
             TaskType[d.get("type", TaskType.SIMPLE.name)],
             d["keys"],
+            d["use_quantity_prefixes"] if "use_quantity_prefixes" in d else False,
+            d["use_quantity_suffixes"] if "use_quantity_suffixes" in d else False,
             re.compile(d["step_format"]) if "step_format" in d else None,
             d["step_keywords"] if "step_keywords" in d else None,
             d["cooking_seconds"] if "cooking_seconds" in d else None,
@@ -143,7 +154,12 @@ class EquipmentStep:
 
     @cached_property
     def autocorrect_dictionary(self) -> set[str]:
-        return create_dictionary_from_text(self.keys.keys()) | set(self.SPECIAL_KEYWORDS)
+        dictionary = create_dictionary_from_text(self.keys.keys())
+        if self.use_quantity_prefixes:
+            dictionary |= set(self.QUANTITY_PREFIXES)
+        if self.use_quantity_suffixes:
+            dictionary |= set(self.QUANTITY_SUFFIXES)
+        return dictionary
 
     def find_instructions(self, description: str) -> TaskInstructions | None:
         description = autocorrect(description, self.autocorrect_dictionary)
@@ -157,17 +173,24 @@ class EquipmentStep:
             return None
 
         logger.info(f"Found {task_elements} elements.")
-        keys = []
-        for task_element, next_element in zip(task_elements, task_elements[1:] + [None]):
-            if task_element in self.SPECIAL_KEYWORDS:
-                continue
 
-            if next_element == "(3x)":
-                n = 3
-            elif next_element == "(2x)":
-                n = 2
+        keys = []
+        read_window = 2 if self.use_quantity_prefixes or self.use_quantity_suffixes else 1
+        i = 0
+        while i < len(task_elements):
+            read: list[str] = task_elements[i : i + read_window]
+            if self.use_quantity_prefixes and read[0] in self.QUANTITY_PREFIXES:
+                n = self.QUANTITY_PREFIXES[read[0]]
+                task_element = read[1]
+                i += 2
+            elif self.use_quantity_suffixes and read[-1] in self.QUANTITY_SUFFIXES:
+                n = self.QUANTITY_SUFFIXES[read[-1]]
+                task_element = read[0]
+                i += 2
             else:
                 n = 1
+                task_element = read[0]
+                i += 1
 
             keys += [key for key in self.keys[task_element]] * n
 

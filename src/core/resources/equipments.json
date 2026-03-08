@@ -326,6 +326,7 @@
         }
       },
       {
+        "use_quantity_suffixes": true,
         "keys": {
           "meat": [
             "m"
@@ -468,7 +469,8 @@
       "Carbonara",
       "Alfredo",
       "Cheesy Tomato",
-      "Dry Tomato"
+      "Dry Tomato",
+      "Pesto"
     ],
     "steps": [
       {
@@ -490,6 +492,9 @@
           ],
           "white sauce": [
             "w"
+          ],
+          "green sauce": [
+            "g"
           ],
           "meatballs": [
             "m"
@@ -516,6 +521,16 @@
             "i"
           ],
           "tomatoes": [
+            "t"
+          ],
+          "all toppings": [
+            "m",
+            "k",
+            "b",
+            "p",
+            "u",
+            "s",
+            "o",
             "t"
           ]
         }
@@ -660,6 +675,37 @@
             "q"
           ],
           "nothing": []
+        }
+      }
+    ]
+  },
+  "Sushi": {
+    "title_keywords": [
+      "Standard Sampler",
+      "Roe Special",
+      "Tuna Platter",
+      "Ebi Special",
+      "Ocean Plate",
+      "Sea Spirit",
+      "Mixed Delicious",
+      "Toro Special"
+    ],
+    "steps": [
+      {
+        "use_quantity_prefixes": true,
+        "keys": {
+          "ebi": [
+            "e"
+          ],
+          "roe": [
+            "r"
+          ],
+          "toro": [
+            "t"
+          ],
+          "tuna": [
+            "u"
+          ]
         }
       }
     ]

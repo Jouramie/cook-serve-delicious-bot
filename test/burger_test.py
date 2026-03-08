@@ -80,7 +80,7 @@ def test_the_triple():
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
 
 
-def test_the_hearhstopper():
+def test_the_heartstopper():
     keyboard = MagicMock()
     statement = TaskStatement("The HEARTSTOPPER", "Two meat patties...")
     expected_recipe = ["m", "m", "enter"]

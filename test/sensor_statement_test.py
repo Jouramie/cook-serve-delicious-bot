@@ -243,7 +243,7 @@ def test_red_deluxe_pasta():
         img = cv2.cvtColor(cv2.imread(r"resources/red_deluxe_pasta.tiff"), cv2.COLOR_BGR2RGB)
         frame = sensor.Frame(img)
 
-        sensor.read_task_statement(frame, log_steps="red_deluxe_pasta")
+        sensor.read_task_statement(frame)
 
         assert frame.current_statement.title == "Red Deluxe Pasta"
         assert (
@@ -260,7 +260,7 @@ def test_robbery():
         img = cv2.cvtColor(cv2.imread(r"resources/robbery.tiff"), cv2.COLOR_BGR2RGB)
         frame = sensor.Frame(img)
 
-        sensor.read_task_statement(frame, log_steps="robbery")
+        sensor.read_task_statement(frame)
 
         assert frame.current_statement.title == "Robbery (Witness Criminal Description)"
         assert (

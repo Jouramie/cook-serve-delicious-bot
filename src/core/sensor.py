@@ -59,7 +59,7 @@ CURRENT_STATEMENT_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
 CURRENT_STATEMENT_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 171]))
 
 TITLE_PATTERN = re.compile(r"(\w[\w\s()/\-.&]+)")
-DESCRIPTION_PATTERN = re.compile(r"\w.+")
+DESCRIPTION_PATTERN = re.compile(r".+")
 
 
 class NoStatementFoundException(Exception):

@@ -53,7 +53,7 @@ UNLOCKED_FOOD_LEVELS = {
 
 MENU_ROT = ["Fresh Fish", "Chicken Breast", "Steak"]
 MANDATORY_FOOD = []
-RAINING_HOURS = 5
+RAINING_HOURS = 4
 
 AVAILABLE_PURCHASES = {
     "Hash Browns": 750,

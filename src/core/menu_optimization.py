@@ -415,7 +415,7 @@ class OptimizedMenu:
 
     @property
     def rain_buzz(self) -> float:
-        return sum(Booster.RAINY_COMPANION in food.boosters for food in self.all_food) * 2.5
+        return sum(Booster.RAINY_COMPANION in food.boosters for food in self.all_food) * 5
 
     @property
     def total_price(self) -> int:
@@ -473,14 +473,8 @@ def choose_best_menu(
 
             model.add_linear_constraint(is_using_food, lb=0, ub=1)
 
-            if name in mandatory_food:
-                model.add_linear_constraint(is_using_food, lb=1, ub=1)
-
         except KeyError:
             is_using_foods[name] = is_using_unlocked_food
-
-            if name in mandatory_food:
-                model.add_linear_constraint(is_using_unlocked_food, lb=1, ub=1)
 
     for name, is_using_purchasable_food in is_using_purchasable_foods.items():
         if name in is_using_foods:
@@ -488,8 +482,9 @@ def choose_best_menu(
 
         is_using_foods[name] = is_using_purchasable_food
 
+    for name, is_using_food in is_using_foods.items():
         if name in mandatory_food:
-            model.add_linear_constraint(is_using_purchasable_food, lb=1, ub=1)
+            model.add_linear_constraint(is_using_food, lb=1, ub=1)
 
     menu_price = sum(
         is_using_unlocked_food * unlocked_food[name].price
@@ -532,22 +527,6 @@ def choose_best_menu(
     )
 
 
-def _create_purchasable_food(
-    available_purchases: dict[str, int],
-    menu_items: dict[str, MenuOption],
-    unlocked_food_levels: dict[str, int],
-    current_stars: int = 0,
-    menu_rot: list[str] | None = None,
-) -> dict[str, PurchaseOption]:
-    unlocked_items_by_name = _create_unlocked_food(
-        menu_items, unlocked_food_levels, current_stars, menu_rot, filter_unpurchased=False
-    )
-    return {
-        purchase: PurchaseOption(unlocked_items_by_name[purchase], price)
-        for purchase, price in available_purchases.items()
-    }
-
-
 def _create_unlocked_food(
     menu_items: dict[str, MenuOption],
     unlocked_food_levels: dict[str, int],
@@ -570,6 +549,22 @@ def _create_unlocked_food(
         unlocked_food[name] = UnlockedMenuOption(food, unlocked_stars, is_menu_rot=(name in menu_rot))
 
     return unlocked_food
+
+
+def _create_purchasable_food(
+    available_purchases: dict[str, int],
+    menu_items: dict[str, MenuOption],
+    unlocked_food_levels: dict[str, int],
+    current_stars: int = 0,
+    menu_rot: list[str] | None = None,
+) -> dict[str, PurchaseOption]:
+    unlocked_items_by_name = _create_unlocked_food(
+        menu_items, unlocked_food_levels, current_stars, menu_rot, filter_unpurchased=False
+    )
+    return {
+        purchase: PurchaseOption(unlocked_items_by_name[purchase], price)
+        for purchase, price in available_purchases.items()
+    }
 
 
 def _build_buzz_equation(
@@ -624,10 +619,13 @@ def _build_buzz_equation(
 
     day_long_buzz = healthy_buzz + fatty_buzz + to_go_buzz + liquor_buzz + menu_rot_buzz
 
-    raining_buzz = sum(
-        is_using_food
-        for name, is_using_food in is_using_foods.items()
-        if Booster.RAINY_COMPANION in menu_items[name].boosters
+    raining_buzz = (
+        sum(
+            is_using_food
+            for name, is_using_food in is_using_foods.items()
+            if Booster.RAINY_COMPANION in menu_items[name].boosters
+        )
+        * 5.0
     )
 
     # Restaurant is opened from 9 am to 10 pm.
