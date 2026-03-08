@@ -138,17 +138,15 @@ def run_bot() -> None:
 
 
 def optimize_menu() -> None:
-    menu_items: list[MenuOption] = []
+    menu_items: dict[str, MenuOption] = {}
 
     with files(resources).joinpath("foods.json").open() as foods_file:
         for k, v in json.load(foods_file).items():
-            menu_items.append(
-                MenuOption(
-                    k,
-                    v["prices_per_star"],
-                    {Booster(b) for b in v["boosters"]},
-                    {Detractor(d) for d in v["detractors"]},
-                )
+            menu_items[k] = MenuOption(
+                k,
+                v["prices_per_star"],
+                {Booster(b) for b in v["boosters"]},
+                {Detractor(d) for d in v["detractors"]},
             )
 
     best_menu = menu_optimization.choose_best_menu(
@@ -157,6 +155,9 @@ def optimize_menu() -> None:
         properties.CURRENT_RESTAURANT_STARS,
         properties.MENU_ROT,
         properties.MANDATORY_FOOD,
+        properties.RAINING_HOURS,
+        properties.AVAILABLE_PURCHASES,
+        properties.UPGRADE_BUDGET,
     )
 
     print(best_menu)
@@ -178,7 +179,7 @@ def advise_purchases() -> None:
 
     advised_purchases = menu_optimization.advise_purchases(
         menu_items,
-        properties.BUDGET,
+        properties.UPGRADE_BUDGET,
         properties.AVAILABLE_PURCHASES,
         properties.UNLOCKED_FOOD_LEVELS,
     )

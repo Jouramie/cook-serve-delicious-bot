@@ -20,7 +20,6 @@ if __name__ == "__main__":
     choice.add_argument("--autoplay", action="store_true", help="Whether to autoplay the game;")
     choice.add_argument("--capture", action="store_true", help="to capture a game session;")
     choice.add_argument("--optimize-menu", action="store_true", help="to optimize the menu,")
-    choice.add_argument("--advise-purchases", action="store_true", help="or to advise on next purchases.")
 
     args = parser.parse_args()
 
@@ -31,8 +30,6 @@ if __name__ == "__main__":
             use_cases.run_capture()
         elif args.optimize_menu:
             use_cases.optimize_menu()
-        elif args.advise_purchases:
-            use_cases.advise_purchases()
         else:
             parser.print_help()
             exit(0)
