@@ -52,8 +52,10 @@ UNLOCKED_FOOD_LEVELS = {
 }
 
 MENU_ROT = ["Steak", "Fresh Fish"]
-MANDATORY_FOOD = []
-RAINING_HOURS = 5  # Use 0 if no rain, 4-5 if rain depending on how you feel about it
+MANDATORY_FOOD = ["Lasagna"]
+
+# Use 0 if no rain, 4 if rain is announced (it seems to be from 10 am to 3 pm, not counting rush hour)
+RAINING_HOURS = 4
 
 AVAILABLE_PURCHASES = {
     "Hash Browns": 750,

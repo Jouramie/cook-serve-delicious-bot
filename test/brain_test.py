@@ -73,7 +73,7 @@ def test_grey_tail_fish():
 
 def test_cooked_grey_tail_fish():
     keyboard = MagicMock()
-    instructions = brain.TASKS_INSTRUCTIONS["Grey Tail Fish"]
+    instructions = brain.TASKS_INSTRUCTIONS["grey tail fish"]
     cooked_task = Task(
         1,
         datetime.now(),

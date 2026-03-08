@@ -600,6 +600,9 @@
           "tomato sauce": [
             "t"
           ],
+          "everything but diced tomatoes": [
+            "c", "p", "m", "b", "a", "h", "u", "v", "n", "i"
+          ],
           "everything": [
             "c", "p", "m", "b", "a", "h", "u", "v", "n", "i"
           ],
@@ -632,9 +635,6 @@
           ],
           "pineapple": [
             "i"
-          ],
-          "everything but diced tomatoes": [
-            "p"
           ],
           "tomato": [
             "o"

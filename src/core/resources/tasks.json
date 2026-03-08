@@ -18,10 +18,15 @@
   "Greasy Fried Chicken": {
     "keys": "hold:down:3.2,p,enter",
     "input_delay_seconds": 0.1
-},
+  },
   "Classic Italian Lasagna": {
     "type": "COOKING",
     "keys": "p,s,c,r,p,s,c,r,p,s,c,r,enter",
+    "cooking_seconds": 8
+  },
+  "Meaty Rome Lasagna": {
+    "type": "COOKING",
+    "keys": "p,s,m,c,r,p,s,m,c,r,p,s,c,r,enter",
     "cooking_seconds": 8
   },
   "Grey Tail Fish": {

@@ -242,6 +242,7 @@ class Equipment:
                 instructions.has_next_step = True
 
             return instructions
+        return None
 
 
 @runtime_checkable
@@ -358,7 +359,7 @@ class Task:
     ) -> TaskExecutionCallback:
         _synchronize_tasks(visible_tasks)
 
-        instructions = TASKS_INSTRUCTIONS.get(statement.title)
+        instructions = TASKS_INSTRUCTIONS.get(statement.title.lower())
         if instructions is not None:
             return self.get_executions(statement, instructions)
 
@@ -392,7 +393,7 @@ class Keyboard(ABC):
 
 with files(resources).joinpath("tasks.json").open() as recipes_file:
     TASKS_INSTRUCTIONS: dict[str, TaskInstructions] = {
-        k: TaskInstructions.from_dict(v) for k, v in json.load(recipes_file).items()
+        k.lower(): TaskInstructions.from_dict(v) for k, v in json.load(recipes_file).items()
     }
 
 with files(resources).joinpath("equipments.json").open() as equipments_file:
