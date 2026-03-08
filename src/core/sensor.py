@@ -56,7 +56,8 @@ STATUS_TASK_REGIONS = [
 STATUS_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 25]), np.array([255, 100, 160]))
 
 CURRENT_STATEMENT_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
-CURRENT_STATEMENT_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 171]))
+CURRENT_STATEMENT_MASK_1 = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 20]))
+CURRENT_STATEMENT_MASK_2 = sensor_util.HsvColorBoundary(np.array([80, 20, 0]), np.array([90, 40, 94]))
 
 TITLE_PATTERN = re.compile(r"(\w[\w\s()/\-.&]+)")
 DESCRIPTION_PATTERN = re.compile(r".+")
@@ -159,8 +160,16 @@ def find_task_status(frame: Frame, i: int, log_steps="") -> TaskStatus:
 @timeit(name="read_task_statement", print_each_call=True)
 def read_task_statement(frame: Frame, log_steps="") -> None:
     cropped = sensor_util.crop(frame.img, CURRENT_STATEMENT_REGION)
-    masked = sensor_util.mask(cropped, CURRENT_STATEMENT_MASK)
+    cropped = frame.fix_rush_overlay_greyscale(cropped)
+
     if log_steps:
+        img_logger.log_now(cropped, log_steps + "_cropped.png")
+    masked_1 = sensor_util.mask(cropped, CURRENT_STATEMENT_MASK_1)
+    masked_2 = sensor_util.mask(cropped, CURRENT_STATEMENT_MASK_2)
+    masked = np.logical_or(masked_1, masked_2)
+    if log_steps:
+        img_logger.log_now(masked_1, log_steps + "_masked1.png")
+        img_logger.log_now(masked_2, log_steps + "_masked2.png")
         img_logger.log_now(masked, log_steps + "_masked.png")
 
     # Statement mask finds white text on a black background, so if there is too much white, we assume

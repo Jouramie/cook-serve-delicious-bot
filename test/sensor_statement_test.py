@@ -173,7 +173,7 @@ def test_nutty_chocolate():
         img = cv2.cvtColor(cv2.imread(r"resources/ice_cream/nutty_chocolate.tiff"), cv2.COLOR_BGR2RGB)
         frame = sensor.Frame(img)
 
-        sensor.read_task_statement(frame)
+        sensor.read_task_statement(frame, log_steps="choco")
 
         assert frame.current_statement.title == "Nutty Chocolate"
         assert frame.current_statement.description == "Two Chocolate Scoops and Nuts"
@@ -267,6 +267,20 @@ def test_robbery():
             "He looked crazy! Crazy eyes, but bald and normal ears/nose, long lips and a beard."
             in frame.current_statement.description
         )
+
+    finally:
+        img_logger.finalize()
+
+
+def test_tons():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/tons.tiff"), cv2.COLOR_BGR2RGB)
+        frame = sensor.Frame(img)
+
+        sensor.read_task_statement(frame, log_steps="tons")
+
+        assert frame.current_statement.title == "Mixed Delicious"
+        assert frame.current_statement.description == "(2) €bi, (3) Roe, (2) Toro, (1) Tuna"
 
     finally:
         img_logger.finalize()
