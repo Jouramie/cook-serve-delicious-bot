@@ -1,5 +1,15 @@
 import enum
+import math
 from dataclasses import dataclass
+
+from ortools.linear_solver.python import model_builder
+from ortools.linear_solver.python.model_builder import Model
+from ortools.linear_solver.python.model_builder_helper import LinearExpr, Variable
+
+BUZZ_HOURS_WEIGHT = 1.0
+PRICE_WEIGHT = 1.5
+
+TIP_WEIGHT = 3.0
 
 
 class Booster(enum.Enum):
@@ -55,6 +65,26 @@ class Booster(enum.Enum):
     stars or higher, is a hit with customers, adding 5% total
     buzz! (It has no buzz effect for three star restaurants
     and below.)"""
+
+    @staticmethod
+    def meaningful_boosters() -> set["Booster"]:
+        return {
+            Booster.BREAKFAST,
+            Booster.AFTERNOON_DELIGHT,
+            Booster.LATE_NIGHT_CHOW,
+            Booster.HEALTH_NUTS,
+            Booster.TO_GO,
+            Booster.THE_BIG_TIPPER,
+            Booster.RAINY_COMPANION,
+        }
+
+    def __lt__(self, other):
+        if not isinstance(other, Booster):
+            return NotImplemented
+        return self.value < other.value
+
+    def __str__(self):
+        return self.value
 
 
 class Detractor(enum.Enum):
@@ -112,9 +142,27 @@ class Detractor(enum.Enum):
     generally frowned upon for some reason, and results in
     -5% buzz when on the active menu."""
 
+    @staticmethod
+    def meaningful_detractors() -> set["Detractor"]:
+        return {
+            Detractor.MORNING_AROMA,
+            Detractor.FATTY_MCFATS,
+            Detractor.WORK_LIQUOR,
+            Detractor.UNAPPRECIATED,
+            Detractor.MUNCHIES,
+        }
+
+    def __lt__(self, other):
+        if not isinstance(other, Booster):
+            return NotImplemented
+        return self.value < other.value
+
+    def __str__(self):
+        return self.value
+
 
 @dataclass
-class MenuItem:
+class MenuOption:
     name: str
     prices_per_star: list[int]
     boosters: set[Booster]
@@ -126,8 +174,37 @@ class MenuItem:
     def get_price_at_stars(self, stars: int) -> int:
         return self.prices_per_star[stars - 1]
 
+    @property
+    def morning_buzz(self) -> float:
+        if Booster.BREAKFAST in self.boosters:
+            return 5.0
+        elif Detractor.MORNING_AROMA in self.detractors:
+            return -5.0
+
+        return 0.0
+
+    @property
+    def afternoon_buzz(self) -> float:
+        if Booster.AFTERNOON_DELIGHT in self.boosters:
+            return 2.5
+        return 0.0
+
+    @property
+    def evening_buzz(self) -> float:
+        if Booster.LATE_NIGHT_CHOW in self.boosters:
+            return 5.0
+        return 0.0
+
+    @property
+    def buzz_boosters(self) -> list[Booster]:
+        return sorted(b for b in self.boosters if b in Booster.meaningful_boosters())
+
+    @property
+    def buzz_detractors(self) -> list[Detractor]:
+        return sorted(d for d in self.detractors if d in Detractor.meaningful_detractors())
+
     def __eq__(self, other):
-        if not isinstance(other, MenuItem):
+        if not isinstance(other, MenuOption):
             return False
         return self.name == other.name
 
@@ -135,28 +212,213 @@ class MenuItem:
         return hash(self.name)
 
 
+@dataclass
+class UnlockedMenuOption:
+    menu_option: MenuOption
+    stars: int
+    is_menu_rot: bool = False
+
+    @property
+    def name(self):
+        return self.menu_option.name
+
+    @property
+    def price(self):
+        return self.menu_option.get_price_at_stars(self.stars)
+
+    @property
+    def morning_buzz(self) -> float:
+        return self.menu_option.morning_buzz
+
+    @property
+    def afternoon_buzz(self) -> float:
+        return self.menu_option.afternoon_buzz
+
+    @property
+    def evening_buzz(self) -> float:
+        return self.menu_option.evening_buzz
+
+    def is_healthy(self) -> bool:
+        return Booster.HEALTH_NUTS in self.menu_option.boosters
+
+    def is_fatty(self) -> bool:
+        return Detractor.FATTY_MCFATS in self.menu_option.detractors
+
+    def __str__(self):
+        boosters = ", ".join(str(b) for b in self.menu_option.buzz_boosters)
+        detractors = ", ".join(str(b) for b in self.menu_option.buzz_detractors)
+        return (
+            f"{self.menu_option.name}: ${self.price} [{boosters}]"
+            + (f" [{detractors}]" if detractors else "")
+            + (" !MENU ROT!" if self.is_menu_rot else "")
+        )
+
+
+@dataclass
+class OptimizedMenu:
+    menu_options: list[UnlockedMenuOption]
+
+    @property
+    def healthy_buzz(self) -> float:
+        return sum(5.0 for option in self.menu_options if option.is_healthy())
+
+    @property
+    def fatty_buzz(self) -> float:
+        return sum(-5.0 for option in self.menu_options if option.is_fatty())
+
+    @property
+    def all_day_buzz(self) -> float:
+        return self.healthy_buzz + self.fatty_buzz
+
+    @property
+    def morning_buzz(self) -> float:
+        return sum(option.morning_buzz for option in self.menu_options) + self.all_day_buzz
+
+    @property
+    def afternoon_buzz(self) -> float:
+        return sum(option.afternoon_buzz for option in self.menu_options) + self.all_day_buzz
+
+    @property
+    def evening_buzz(self) -> float:
+        return sum(option.evening_buzz for option in self.menu_options) + self.all_day_buzz
+
+    @property
+    def total_price(self) -> int:
+        return sum(option.price for option in self.menu_options)
+
+    def __str__(self):
+        return f"""
+Chosen menu:
+  - {(chr(10)+'  - ').join(str(option) for option in self.menu_options)}
+Total price: ${self.total_price}
+Morning buzz: {self.morning_buzz}%
+Afternoon buzz: {self.afternoon_buzz}%
+Evening buzz: {self.evening_buzz}%
+"""
+
+
 def optimize_menu(
-    menu_items: list[MenuItem],
+    menu_items: list[MenuOption],
     unlocked_food_levels: dict[str, int],
-    deactivated_foods: set[str],
     current_stars: int,
-    menu_size: int,
-) -> dict[MenuItem, int]:
+    menu_rot: list[str],
+    mandatory_food: list[str],
+) -> OptimizedMenu:
     """Returns a list of the best foods to have on the menu based on the current restaurant stars, deactivated foods, and unlocked food levels."""
-    food_choice_and_price: dict[MenuItem, int] = {}
-    for item in menu_items:
-        if item.name in deactivated_foods:
+    unlocked_food: list[UnlockedMenuOption] = []
+    for menu_option in menu_items:
+        if current_stars >= 2 and Detractor.PEASANT_FOOD in menu_option.detractors:
             continue
 
-        unlocked_stars = unlocked_food_levels[item.name]
+        unlocked_stars = unlocked_food_levels[menu_option.name]
         if unlocked_stars == 0:
             continue
 
-        food_choice_and_price[item] = unlocked_stars
+        unlocked_food.append(
+            UnlockedMenuOption(menu_option, unlocked_stars, is_menu_rot=(menu_option.name in menu_rot))
+        )
 
-    selected_food = sorted(
-        food_choice_and_price.items(),
-        key=(lambda item_and_stars: item_and_stars[0].get_price_at_stars(item_and_stars[1])),
-        reverse=True,
-    )[:menu_size]
-    return dict(selected_food)
+    model = model_builder.Model()
+
+    food_enabled = _build_food_variables(model, unlocked_food, mandatory_food)
+
+    menu_price = sum(food_enabled[i] * food.price for i, food in enumerate(unlocked_food))
+    buzz_hours = _build_buzz_equation(model, food_enabled, unlocked_food)
+    tip_bonus = _build_tip_equation(food_enabled, unlocked_food)
+
+    model.maximize(buzz_hours * BUZZ_HOURS_WEIGHT + menu_price * PRICE_WEIGHT + tip_bonus * TIP_WEIGHT)
+
+    solver = model_builder.ModelSolver("glop")
+    status = solver.solve(model)
+
+    if status != model_builder.SolveStatus.OPTIMAL:
+        print("Could not find an optimal menu, but will return something anyway.")
+
+    print(
+        f"Optimal menu has a score of {solver.objective_value}.\n"
+        f"Price score = {solver.value(menu_price)} * {PRICE_WEIGHT} = {solver.value(menu_price)*PRICE_WEIGHT}\n"
+        f"Buzz hours score = {solver.value(buzz_hours)} * {BUZZ_HOURS_WEIGHT} = {solver.value(buzz_hours)*BUZZ_HOURS_WEIGHT}\n"
+        f"Tip score = {solver.value(tip_bonus)} * {TIP_WEIGHT} = {solver.value(tip_bonus)*TIP_WEIGHT}\n"
+    )
+
+    return OptimizedMenu([food for i, food in enumerate(unlocked_food) if solver.value(food_enabled[i]) == 1])
+
+
+def _build_buzz_equation(
+    model: Model, food_enabled: list[Variable], unlocked_food: list[UnlockedMenuOption]
+) -> LinearExpr | Variable:
+    morning_buzz = sum(
+        food_enabled[i] * item.morning_buzz for i, item in enumerate(unlocked_food) if item.morning_buzz != 0
+    )
+
+    afternoon_buzz = sum(
+        food_enabled[i] * item.afternoon_buzz for i, item in enumerate(unlocked_food) if item.afternoon_buzz != 0
+    )
+
+    evening_buzz = sum(
+        food_enabled[i] * item.evening_buzz for i, item in enumerate(unlocked_food) if item.evening_buzz != 0
+    )
+
+    # The model does not allow less than 1 healthy food. That's probably fine since it tries to maximize the amount of
+    # healthy food anyway.
+    sum_healthy = sum(food_enabled[i] for i, item in enumerate(unlocked_food) if item.is_healthy())
+    healthy_bonus = model.new_num_var(lb=0, ub=math.inf, name="healthy_bonus")
+    model.add_linear_constraint(healthy_bonus - sum_healthy + 1, ub=0)
+    healthy_buzz = healthy_bonus * 5.0
+
+    sum_fatty = sum(food_enabled[i] for i, item in enumerate(unlocked_food) if item.is_fatty())
+    fatty_bonus = model.new_num_var(lb=0, ub=math.inf, name="fatty_bonus")
+    model.add_linear_constraint(fatty_bonus - sum_fatty + 2, lb=0)
+    fatty_buzz = fatty_bonus * -5.0
+
+    to_go_buzz = (
+        sum(food_enabled[i] for i, item in enumerate(unlocked_food) if Booster.TO_GO in item.menu_option.boosters) * 2.5
+    )
+
+    liquor_buzz = (
+        sum(
+            food_enabled[i]
+            for i, item in enumerate(unlocked_food)
+            if Detractor.WORK_LIQUOR in item.menu_option.detractors
+        )
+        * -5.0
+    )
+
+    menu_rot_buzz = sum(food_enabled[i] for i, item in enumerate(unlocked_food) if item.is_menu_rot) * -5.0
+
+    day_long_buzz = healthy_buzz + fatty_buzz + to_go_buzz + liquor_buzz + menu_rot_buzz
+
+    # Restaurant is opened from 9 am to 10 pm.
+    # Rush hours are from 12 pm to 1 pm and from 6 pm to 7 pm.
+    # Morning buzz is 3 hours long, from 9 am to 12 pm.
+    # Afternoon buzz is 6 hours long, from 1 pm to 7 pm.
+    # Evening buzz is 3 hours long, from 7 pm to 10 pm.
+
+    buzz_hours = morning_buzz + afternoon_buzz * 2 + evening_buzz + day_long_buzz * 4
+    return buzz_hours
+
+
+def _build_tip_equation(food_enabled: list[Variable], unlocked_food: list[UnlockedMenuOption]) -> LinearExpr | int:
+    tip_boosted = sum(
+        food_enabled[i] for i, item in enumerate(unlocked_food) if Booster.THE_BIG_TIPPER in item.menu_option.boosters
+    )
+
+    tip_detracted = sum(
+        food_enabled[i]
+        for i, item in enumerate(unlocked_food)
+        if Detractor.UNAPPRECIATED in item.menu_option.detractors
+    )
+
+    tip_bonus = tip_boosted + tip_detracted
+    return tip_bonus
+
+
+def _build_food_variables(
+    model: Model, unlocked_food: list[UnlockedMenuOption], mandatory_food: list[str]
+) -> list[Variable]:
+    food_enabled = [model.new_bool_var(name=food.name) for food in unlocked_food]
+    model.add_linear_constraint(sum(food_enabled), lb=3, ub=6)
+    for i, food in enumerate(unlocked_food):
+        if food.name in mandatory_food:
+            model.add_linear_constraint(food_enabled[i], lb=1, ub=1)
+    return food_enabled

@@ -10,7 +10,7 @@ from botkit import img_logger, sensor_util
 from botkit.profiling import timeit
 from botkit.sensor_util import create_camera
 from core import motor, sensor, brain, resources, menu
-from core.menu import MenuItem, Booster, Detractor
+from core.menu import MenuOption, Booster, Detractor
 
 logger = logging.getLogger(__name__)
 
@@ -138,12 +138,12 @@ def run_bot() -> None:
 
 
 def optimize_menu() -> None:
-    menu_items: list[MenuItem] = []
+    menu_items: list[MenuOption] = []
 
     with files(resources).joinpath("foods.json").open() as foods_file:
         for k, v in json.load(foods_file).items():
             menu_items.append(
-                MenuItem(
+                MenuOption(
                     k,
                     v["prices_per_star"],
                     {Booster(b) for b in v["boosters"]},
@@ -151,12 +151,12 @@ def optimize_menu() -> None:
                 )
             )
 
-    print("Optimal menu:")
-    for food, stars in menu.optimize_menu(
+    optimized_menu = menu.optimize_menu(
         menu_items,
         properties.UNLOCKED_FOOD_LEVELS,
-        properties.DEACTIVATED_FOODS,
         properties.CURRENT_RESTAURANT_STARS,
-        menu_size=6,
-    ).items():
-        print(f"- {food.name}: ${food.get_price_at_stars(stars)}")
+        properties.MENU_ROT,
+        properties.MANDATORY_FOOD,
+    )
+
+    print(optimized_menu)

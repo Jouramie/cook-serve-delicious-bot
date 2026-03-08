@@ -15,9 +15,9 @@ SCREENSHOT_LOGGER_IMAGE_NAME: None | str = None
 SCREENSHOT_LOGGER_ROLLING_IMAGE_AMOUNT = 100
 SCREENSHOT_LOGGER_EDIT_ENABLED = True
 
+
 # Restaurant
 CURRENT_RESTAURANT_STARS = 2
-DEACTIVATED_FOODS = {"Corn Dog", "Pretzel"}
 UNLOCKED_FOOD_LEVELS = {
     "Sopapillas": 1,
     "Corn Dog": 1,
@@ -50,3 +50,6 @@ UNLOCKED_FOOD_LEVELS = {
     "Shish Kabob": 0,
     "Stacked Enchiladas": 0,
 }
+
+MENU_ROT = ["Baked Potato"]
+MANDATORY_FOOD = ["Baked Potato", "Fresh Fish", "Wine", "Steak"]
