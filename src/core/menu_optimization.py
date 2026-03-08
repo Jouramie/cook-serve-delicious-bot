@@ -9,7 +9,7 @@ from ortools.linear_solver.python.model_builder_helper import LinearExpr, Variab
 
 BUZZ_HOURS_WEIGHT = 0.333
 PRICE_WEIGHT = 1.0
-TIP_WEIGHT = 3.0
+TIP_WEIGHT = 5.0
 
 UTILITY_SCORE_WEIGHT = 6
 PRICE_DIFF_WEIGHT = 1.5
@@ -29,7 +29,7 @@ class Booster(enum.Enum):
     RAINY_COMPANION = "Rainy Companion"
     """Makes for a great rainy-day dish! Have this food on
     your active menu during a rainy day for an immediate
-    +5% buzz boost (per "Rainy Companon" food)!"""
+    +5% buzz boost (per "Rainy Companion" food)!"""
     LATE_NIGHT_CHOW = "Late Night Chow"
     """Makes for a great late night meal. Have this food on
     your active menu for an immediate +5% buzz boost (per 

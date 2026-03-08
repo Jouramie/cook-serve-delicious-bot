@@ -31,7 +31,7 @@ UNLOCKED_FOOD_LEVELS = {
     "Baked Potato": 3,
     "Nachos": 1,
     "Lasagna": 2,
-    "Fresh Fish": 3,
+    "Fresh Fish": 4,
     "Chicken Breast": 4,
     "Pasta": 4,
     "Wine": 1,
@@ -51,9 +51,9 @@ UNLOCKED_FOOD_LEVELS = {
     "Stacked Enchiladas": 0,
 }
 
-MENU_ROT = ["Fresh Fish", "Chicken Breast", "Steak"]
+MENU_ROT = ["Chicken Breast", "Pizza"]
 MANDATORY_FOOD = []
-RAINING_HOURS = 4
+RAINING_HOURS = 0  # Use 0 if no rain, 4-5 if rain depending on how you feel about it
 
 AVAILABLE_PURCHASES = {
     "Hash Browns": 750,
@@ -69,8 +69,8 @@ AVAILABLE_PURCHASES = {
     "Baked Potato": 1000,
     "Nachos": 600,
     "Lasagna": 600,
-    "Fresh Fish": 2000,
     "Wine": 1800,
+    "Pizza": 1500,
 }
 
-UPGRADE_BUDGET = 907
+UPGRADE_BUDGET = 323

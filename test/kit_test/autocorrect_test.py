@@ -17,7 +17,7 @@ def test_tombo_jumbo():
 def test_cherry_vanilla():
     text = "Two Vanilla Scoops with a Cherry, please."
     dictionary = set(brain.EQUIPMENTS["Ice Cream"].steps[0].autocorrect_dictionary)
-    expected = "two vanilla scoops with a cherry please"
+    expected = "two vanilla scoops with cherry please"
 
     corrected = autocorrect(text, dictionary)
 

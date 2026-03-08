@@ -1,5 +1,4 @@
 import logging
-import sys
 
 import cv2
 import pytest
@@ -7,9 +6,9 @@ import pytest
 from botkit import img_logger
 from core import sensor
 from core.brain import TaskStatus, VisibleTask
+from suite_utils import enable_stdout_logs
 
-logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-logging.getLogger().setLevel(logging.INFO)
+enable_stdout_logs(logging.INFO)
 
 
 def test_medium_grape_w_flavor_blast():
@@ -146,7 +145,7 @@ def test_5_tasks():
 
 def test_tasks_3_waiting_under_cola_machine():
     try:
-        img = cv2.cvtColor(cv2.imread(r"resources/jumbo_cola_extra_onions.tiff"), cv2.COLOR_BGR2RGB)
+        img = cv2.cvtColor(cv2.imread(r"resources/correction/jumbo_cola_extra_onions.tiff"), cv2.COLOR_BGR2RGB)
         frame = sensor.Frame(img)
 
         sensor.analyse_waiting_tasks(frame)

@@ -185,7 +185,7 @@
     ],
     "steps": [
       {
-        "step_format": "a (\\w+) (\\w+)(?: with )(ice)?(?:no ice)?(?: and )?(flavor blast)?",
+        "step_format": "(?:a )?(\\w+) (\\w+)(?: with )(ice)?(?:no ice)? ?(?:and )?(flavor blast)?",
         "keys": {
           "small": [],
           "medium": [

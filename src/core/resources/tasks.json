@@ -39,6 +39,16 @@
     "keys": "left,down,right,s,l,enter",
     "cooking_seconds": 8
   },
+  "Rainbow Gruza": {
+    "type": "COOKING",
+    "keys": "left,down,right,s,enter",
+    "cooking_seconds": 8
+  },
+  "Rainbow Gruza w/Lemon": {
+    "type": "COOKING",
+    "keys": "left,down,right,s,l,enter",
+    "cooking_seconds": 8
+  },
   "Chicken Noodle Soup": {
     "type": "COOKING",
     "keys": "k,w,u,y,down,down,down,enter",
