@@ -1,6 +1,6 @@
 import logging
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import cv2
 import numpy as np
@@ -57,7 +57,7 @@ STATUS_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 25]), np.array([
 
 CURRENT_STATEMENT_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
 CURRENT_STATEMENT_MASK_1 = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 20]))
-CURRENT_STATEMENT_MASK_2 = sensor_util.HsvColorBoundary(np.array([80, 20, 0]), np.array([90, 40, 94]))
+CURRENT_STATEMENT_MASK_2 = sensor_util.HsvColorBoundary(np.array([0, 20, 0]), np.array([255, 40, 94]))
 
 TITLE_PATTERN = re.compile(r"(\w[\w\s()/\-.&]+)")
 DESCRIPTION_PATTERN = re.compile(r".+")
@@ -69,7 +69,7 @@ class NoStatementFoundException(Exception):
 
 @dataclass
 class Frame:
-    img: np.ndarray
+    img: np.ndarray = field(repr=False)
 
     tasks: list[VisibleTask | None] | None = None
     current_statement: TaskStatement | None = None
