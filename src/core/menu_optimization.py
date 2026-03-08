@@ -8,8 +8,11 @@ from ortools.linear_solver.python.model_builder_helper import LinearExpr, Variab
 
 BUZZ_HOURS_WEIGHT = 1.0
 PRICE_WEIGHT = 1.5
-
 TIP_WEIGHT = 3.0
+
+UTILITY_SCORE_WEIGHT = 6
+PRICE_DIFF_WEIGHT = 1.5
+MONEY_LEFT_WEIGHT = 0.01
 
 
 class Booster(enum.Enum):
@@ -153,7 +156,7 @@ class Detractor(enum.Enum):
         }
 
     def __lt__(self, other):
-        if not isinstance(other, Booster):
+        if not isinstance(other, Detractor):
             return NotImplemented
         return self.value < other.value
 
@@ -196,12 +199,16 @@ class MenuOption:
         return 0.0
 
     @property
-    def buzz_boosters(self) -> list[Booster]:
+    def meaningful_boosters(self) -> list[Booster]:
         return sorted(b for b in self.boosters if b in Booster.meaningful_boosters())
 
     @property
-    def buzz_detractors(self) -> list[Detractor]:
+    def meaningful_distractors(self) -> list[Detractor]:
         return sorted(d for d in self.detractors if d in Detractor.meaningful_detractors())
+
+    @property
+    def utility_score(self) -> float:
+        return len(self.meaningful_boosters) - len(self.meaningful_distractors)
 
     def __eq__(self, other):
         if not isinstance(other, MenuOption):
@@ -224,7 +231,14 @@ class UnlockedMenuOption:
 
     @property
     def price(self):
+        if self.stars == 0:
+            return 0
+
         return self.menu_option.get_price_at_stars(self.stars)
+
+    @property
+    def next_star_price(self):
+        return self.menu_option.get_price_at_stars(self.stars + 1)
 
     @property
     def morning_buzz(self) -> float:
@@ -238,15 +252,21 @@ class UnlockedMenuOption:
     def evening_buzz(self) -> float:
         return self.menu_option.evening_buzz
 
+    @property
     def is_healthy(self) -> bool:
         return Booster.HEALTH_NUTS in self.menu_option.boosters
 
+    @property
+    def is_to_go(self) -> bool:
+        return Booster.TO_GO in self.menu_option.boosters
+
+    @property
     def is_fatty(self) -> bool:
         return Detractor.FATTY_MCFATS in self.menu_option.detractors
 
     def __str__(self):
-        boosters = ", ".join(str(b) for b in self.menu_option.buzz_boosters)
-        detractors = ", ".join(str(b) for b in self.menu_option.buzz_detractors)
+        boosters = ", ".join(str(b) for b in self.menu_option.meaningful_boosters)
+        detractors = ", ".join(str(b) for b in self.menu_option.meaningful_distractors)
         return (
             f"{self.menu_option.name}: ${self.price} [{boosters}]"
             + (f" [{detractors}]" if detractors else "")
@@ -260,11 +280,15 @@ class OptimizedMenu:
 
     @property
     def healthy_buzz(self) -> float:
-        return sum(5.0 for option in self.menu_options if option.is_healthy())
+        return sum(5.0 for option in self.menu_options if option.is_healthy)
+
+    @property
+    def to_go_buzz(self) -> float:
+        return sum(2.5 for option in self.menu_options if option.is_to_go)
 
     @property
     def fatty_buzz(self) -> float:
-        return sum(-5.0 for option in self.menu_options if option.is_fatty())
+        return sum(-5.0 for option in self.menu_options if option.is_fatty)
 
     @property
     def all_day_buzz(self) -> float:
@@ -294,29 +318,18 @@ Total price: ${self.total_price}
 Morning buzz: {self.morning_buzz}%
 Afternoon buzz: {self.afternoon_buzz}%
 Evening buzz: {self.evening_buzz}%
+Permanent buzz: {self.healthy_buzz + self.to_go_buzz}%
 """
 
 
-def optimize_menu(
+def choose_best_menu(
     menu_items: list[MenuOption],
     unlocked_food_levels: dict[str, int],
     current_stars: int,
     menu_rot: list[str],
     mandatory_food: list[str],
 ) -> OptimizedMenu:
-    """Returns a list of the best foods to have on the menu based on the current restaurant stars, deactivated foods, and unlocked food levels."""
-    unlocked_food: list[UnlockedMenuOption] = []
-    for menu_option in menu_items:
-        if current_stars >= 2 and Detractor.PEASANT_FOOD in menu_option.detractors:
-            continue
-
-        unlocked_stars = unlocked_food_levels[menu_option.name]
-        if unlocked_stars == 0:
-            continue
-
-        unlocked_food.append(
-            UnlockedMenuOption(menu_option, unlocked_stars, is_menu_rot=(menu_option.name in menu_rot))
-        )
+    unlocked_food = _create_unlocked_food(menu_items, unlocked_food_levels, current_stars, menu_rot)
 
     model = model_builder.Model()
 
@@ -328,7 +341,7 @@ def optimize_menu(
 
     model.maximize(buzz_hours * BUZZ_HOURS_WEIGHT + menu_price * PRICE_WEIGHT + tip_bonus * TIP_WEIGHT)
 
-    solver = model_builder.ModelSolver("glop")
+    solver = model_builder.ModelSolver("sat")
     status = solver.solve(model)
 
     if status != model_builder.SolveStatus.OPTIMAL:
@@ -342,6 +355,125 @@ def optimize_menu(
     )
 
     return OptimizedMenu([food for i, food in enumerate(unlocked_food) if solver.value(food_enabled[i]) == 1])
+
+
+@dataclass
+class PurchaseOption:
+    unlocked_menu_option: UnlockedMenuOption
+    purchase_price: int
+
+    @property
+    def name(self):
+        return self.unlocked_menu_option.name
+
+    @property
+    def utility_score(self):
+        return self.unlocked_menu_option.menu_option.utility_score
+
+    @property
+    def food_price(self):
+        return self.unlocked_menu_option.price
+
+    @property
+    def next_food_price(self):
+        return self.unlocked_menu_option.next_star_price
+
+    @property
+    def food_price_difference(self):
+        return self.unlocked_menu_option.next_star_price - self.unlocked_menu_option.price
+
+    @property
+    def value_per_dollar(self):
+        if self.purchase_price == 0:
+            return math.inf
+        return (
+            self.utility_score * UTILITY_SCORE_WEIGHT + self.food_price_difference * PRICE_DIFF_WEIGHT
+        ) / self.purchase_price
+
+    def __str__(self):
+        return f"{self.name}: ${self.purchase_price}, Utility: {self.utility_score}, ${self.food_price} -> ${self.next_food_price} ({self.value_per_dollar:.4f})"
+
+
+def advise_purchases(
+    menu_items: list[MenuOption], budget: int, available_purchases: dict[str, int], unlocked_food_levels: dict[str, int]
+) -> list[str]:
+
+    unlocked_items = _create_unlocked_food(menu_items, unlocked_food_levels, filter_unpurchased=False)
+    unlocked_items_by_name = {item.name: item for item in unlocked_items}
+    purchase_options = [
+        PurchaseOption(unlocked_items_by_name[purchase], price) for purchase, price in available_purchases.items()
+    ]
+
+    model = model_builder.Model()
+
+    is_purchased = [model.new_bool_var(name=purchase.name) for purchase in purchase_options]
+    model.add_linear_constraint(
+        sum(purchase.purchase_price * is_purchased[i] for i, purchase in enumerate(purchase_options)),
+        ub=budget,
+    )
+
+    purchase_utility_score = sum(
+        is_purchased[i] * purchase.utility_score for i, purchase in enumerate(purchase_options)
+    )
+
+    price_increase = sum(
+        is_purchased[i] * purchase.food_price_difference for i, purchase in enumerate(purchase_options)
+    )
+
+    money_left = budget - sum(is_purchased[i] * purchase.purchase_price for i, purchase in enumerate(purchase_options))
+
+    model.maximize(
+        purchase_utility_score * UTILITY_SCORE_WEIGHT
+        + price_increase * PRICE_DIFF_WEIGHT
+        + money_left * MONEY_LEFT_WEIGHT
+    )
+
+    solver = model_builder.ModelSolver("sat")
+    status = solver.solve(model)
+
+    if status != model_builder.SolveStatus.OPTIMAL:
+        print("Could not find an optimal solution, but will return something anyway.")
+
+    print(
+        f"Optimal purchases has a score of {solver.objective_value}.\n"
+        f"Utility score = {solver.value(purchase_utility_score)} * {UTILITY_SCORE_WEIGHT} = {solver.value(purchase_utility_score) * UTILITY_SCORE_WEIGHT}\n"
+        f"Price increase score = {solver.value(price_increase)} * {PRICE_DIFF_WEIGHT} = {solver.value(price_increase) * PRICE_DIFF_WEIGHT}\n"
+        f"Money left score = {solver.value(money_left)} * {MONEY_LEFT_WEIGHT} = {solver.value(money_left) * MONEY_LEFT_WEIGHT}\n"
+    )
+
+    optimal_purchases = []
+    for i, purchase in enumerate(purchase_options):
+        if solver.value(is_purchased[i]) == 1:
+            print(purchase)
+            optimal_purchases.append(purchase)
+
+    print(f"Total spent: ${sum(purchase.purchase_price for purchase in optimal_purchases)}\n")
+    return [purchase.name for purchase in optimal_purchases]
+
+
+def _create_unlocked_food(
+    menu_items: list[MenuOption],
+    unlocked_food_levels: dict[str, int],
+    current_stars: int = 0,
+    menu_rot: list[str] | None = None,
+    filter_unpurchased: bool = True,
+) -> list[UnlockedMenuOption]:
+    if menu_rot is None:
+        menu_rot = []
+
+    unlocked_food: list[UnlockedMenuOption] = []
+    for menu_option in menu_items:
+        if current_stars >= 2 and Detractor.PEASANT_FOOD in menu_option.detractors:
+            continue
+
+        unlocked_stars = unlocked_food_levels[menu_option.name]
+        if filter_unpurchased and unlocked_stars == 0:
+            continue
+
+        unlocked_food.append(
+            UnlockedMenuOption(menu_option, unlocked_stars, is_menu_rot=(menu_option.name in menu_rot))
+        )
+    return unlocked_food
 
 
 def _build_buzz_equation(
@@ -361,12 +493,12 @@ def _build_buzz_equation(
 
     # The model does not allow less than 1 healthy food. That's probably fine since it tries to maximize the amount of
     # healthy food anyway.
-    sum_healthy = sum(food_enabled[i] for i, item in enumerate(unlocked_food) if item.is_healthy())
+    sum_healthy = sum(food_enabled[i] for i, item in enumerate(unlocked_food) if item.is_healthy)
     healthy_bonus = model.new_num_var(lb=0, ub=math.inf, name="healthy_bonus")
     model.add_linear_constraint(healthy_bonus - sum_healthy + 1, ub=0)
     healthy_buzz = healthy_bonus * 5.0
 
-    sum_fatty = sum(food_enabled[i] for i, item in enumerate(unlocked_food) if item.is_fatty())
+    sum_fatty = sum(food_enabled[i] for i, item in enumerate(unlocked_food) if item.is_fatty)
     fatty_bonus = model.new_num_var(lb=0, ub=math.inf, name="fatty_bonus")
     model.add_linear_constraint(fatty_bonus - sum_fatty + 2, lb=0)
     fatty_buzz = fatty_bonus * -5.0

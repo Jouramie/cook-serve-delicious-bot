@@ -23,14 +23,14 @@ UNLOCKED_FOOD_LEVELS = {
     "Corn Dog": 1,
     "Pretzel": 1,
     "Cold Beer": 1,
-    "Fried Chicken": 1,
+    "Fried Chicken": 2,
     "Soda Fountain": 2,
     "French Fries": 1,
     "Salad": 3,
     "Ice Cream": 3,
     "Baked Potato": 3,
     "Nachos": 1,
-    "Lasagna": 1,
+    "Lasagna": 2,
     "Fresh Fish": 3,
     "Chicken Breast": 4,
     "Pasta": 3,
@@ -39,7 +39,7 @@ UNLOCKED_FOOD_LEVELS = {
     "Burger": 3,
     "Steak": 3,
     "Soups": 3,
-    "Coffee": 0,
+    "Coffee": 2,
     "Hash Browns": 0,
     "Breakfast Sandwich": 0,
     "Pancakes": 0,
@@ -52,4 +52,25 @@ UNLOCKED_FOOD_LEVELS = {
 }
 
 MENU_ROT = ["Baked Potato"]
-MANDATORY_FOOD = ["Baked Potato", "Fresh Fish", "Wine", "Steak"]
+MANDATORY_FOOD = []
+
+AVAILABLE_PURCHASES = {
+    "Hash Browns": 750,
+    "Breakfast Sandwich": 1000,
+    "Pancakes": 900,
+    "Fried Rice": 1200,
+    "Lobster": 2500,
+    "Banana Foster": 1400,
+    "Shish Kabob": 1900,
+    "Stacked Enchiladas": 1100,
+    "Cold Beer": 600,
+    "French Fries": 600,
+    "Baked Potato": 1000,
+    "Nachos": 600,
+    "Lasagna": 600,
+    "Fresh Fish": 2000,
+    "Pasta": 1200,
+    "Wine": 1800,
+}
+
+BUDGET = 325
