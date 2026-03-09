@@ -105,6 +105,18 @@
     "keys": "t,t,t,t,t,t,s,enter",
     "cooking_seconds": 15
   },
+  "Hearty Meat Soup": {
+    "type": "COOKING",
+    "keys": "k,m,i,h,p,c,y,down,down,down,g,enter",
+    "input_delay_seconds": 0.1,
+    "cooking_seconds": 10.65
+  },
+  "One Bean Soup": {
+    "type": "COOKING",
+    "keys": "i,s,p,y,down,down,down,e,enter",
+    "input_delay_seconds": 0.1,
+    "cooking_seconds": 10.65
+  },
   "Plump Chicken Breast": {
     "type": "COOKING",
     "keys": "t,t,t,t,t,t,s,enter",
@@ -159,6 +171,56 @@
     "type": "COOKING",
     "keys": "s,d,j,c,c,enter",
     "cooking_seconds": 17.5
+  },
+  "Classic Kabob": {
+    "type": "COOKING",
+    "keys": "t,g,m,r,t,k,g,r,enter",
+    "cooking_seconds": 6
+  },
+  "Meaty Kabob": {
+    "type": "COOKING",
+    "keys": "m,k,t,m,k,g,m,k,enter",
+    "cooking_seconds": 6
+  },
+  "Pepper Kabob": {
+    "type": "COOKING",
+    "keys": "g,r,t,g,r,m,g,r,enter",
+    "cooking_seconds": 6
+  },
+  "Red Kabob": {
+    "type": "COOKING",
+    "keys": "r,t,m,r,t,g,r,t,enter",
+    "cooking_seconds": 6
+  },
+  "Kabobber": {
+    "type": "COOKING",
+    "keys": "k,m,t,g,k,m,t,r,enter",
+    "cooking_seconds": 6
+  },
+  "Chicken Kabob": {
+    "type": "COOKING",
+    "keys": "k,g,k,t,k,r,k,t,enter",
+    "cooking_seconds": 6
+  },
+  "Onion Kabob": {
+    "type": "COOKING",
+    "keys": "o,r,o,k,o,t,o,g,enter",
+    "cooking_seconds": 6
+  },
+  "Tower Kabob": {
+    "type": "COOKING",
+    "keys": "o,r,k,g,o,m,r,g,enter",
+    "cooking_seconds": 6
+  },
+  "Tangy Kabob": {
+    "type": "COOKING",
+    "keys": "o,r,o,g,t,o,r,g,enter",
+    "cooking_seconds": 6
+  },
+  "Juicy Kabob": {
+    "type": "COOKING",
+    "keys": "o,m,g,o,k,m,o,k,enter",
+    "cooking_seconds": 6
   },
   "The Brewsky": {
     "keys": "hold:down:1.4,enter"

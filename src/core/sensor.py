@@ -57,7 +57,7 @@ STATUS_TASK_MASK = sensor_util.HsvColorBoundary(np.array([0, 0, 25]), np.array([
 
 CURRENT_STATEMENT_REGION = sensor_util.Region.of_corners(270, 562, 1035, 677)
 CURRENT_STATEMENT_MASK_1 = sensor_util.HsvColorBoundary(np.array([0, 0, 0]), np.array([255, 255, 20]))
-CURRENT_STATEMENT_MASK_2 = sensor_util.HsvColorBoundary(np.array([0, 20, 0]), np.array([255, 40, 94]))
+CURRENT_STATEMENT_MASK_2 = sensor_util.HsvColorBoundary(np.array([0, 20, 0]), np.array([255, 40, 111]))
 
 TITLE_PATTERN = re.compile(r"(\w[\w\s()/\-.&]+)")
 DESCRIPTION_PATTERN = re.compile(r".+")
@@ -99,7 +99,7 @@ class Frame:
         actual_waiting_task_background_darkness = np.array([255], dtype=np.uint8) - waiting_task_background_color
         self._rush_overlay_ratio = actual_waiting_task_background_darkness / EXPECTED_WAITING_TASK_BACKGROUND_DARKNESS
 
-        if self._rush_overlay_ratio > 0.1:
+        if self._rush_overlay_ratio[0] > 0.1:
             logger.info(f"Rush hour detected. Overlay strength: {1 - self._rush_overlay_ratio}")
 
 

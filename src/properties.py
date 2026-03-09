@@ -17,7 +17,7 @@ SCREENSHOT_LOGGER_EDIT_ENABLED = True
 
 
 # Restaurant
-CURRENT_RESTAURANT_STARS = 2
+CURRENT_RESTAURANT_STARS = 3
 UNLOCKED_FOOD_LEVELS = {
     "Sopapillas": 1,
     "Corn Dog": 1,
@@ -45,17 +45,17 @@ UNLOCKED_FOOD_LEVELS = {
     "Pancakes": 0,
     "Sushi": 2,
     "Fried Rice": 0,
-    "Lobster": 1,
+    "Lobster": 2,
     "Banana Foster": 0,
-    "Shish Kabob": 0,
+    "Shish Kabob": 2,
     "Stacked Enchiladas": 2,
 }
 
-MENU_ROT = ["Sushi"]
-MANDATORY_FOOD = []
+MENU_ROT = ["Steak", "Fresh Fish"]
+MANDATORY_FOOD = ["Pizza", "Sushi", "Breakfast Sandwich", "Shish Kabob"]
 
 # Use 0 if no rain, 4 if rain is announced (it seems to be from 10 am to 3 pm, not counting rush hour)
-RAINING_HOURS = 0
+RAINING_HOURS = 4
 
 AVAILABLE_PURCHASES = {
     # Speciality unlock
@@ -63,7 +63,6 @@ AVAILABLE_PURCHASES = {
     "Pancakes": 900,
     "Fried Rice": 1200,
     "Banana Foster": 1400,
-    "Shish Kabob": 1900,
     # Standard upgrade
     "Cold Beer": 600,
     "French Fries": 600,
@@ -72,7 +71,10 @@ AVAILABLE_PURCHASES = {
     "Wine": 1800,
     "Burger": 1500,
     # Speciality upgrade
-    "Lobster": 2000,
+    "Sushi": 1100,
+    "Lobster": 2500,
+    "Shish Kabob": 2500,
+    "Stacked Enchiladas": 700,
 }
 
-UPGRADE_BUDGET = 949
+UPGRADE_BUDGET = 1231

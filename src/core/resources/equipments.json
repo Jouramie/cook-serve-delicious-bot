@@ -716,7 +716,8 @@
       "Sea Spirit",
       "Mixed",
       "Fives Delight",
-      "Tray"
+      "Tray",
+      "The Mix"
     ],
     "steps": [
       {
@@ -736,6 +737,9 @@
           ],
           "salmon": [
             "s"
+          ],
+          "mackerel": [
+            "m"
           ]
         }
       }
@@ -743,7 +747,8 @@
   },
   "Lobster": {
     "title_keywords": [
-      "Lobster"
+      "Lobster",
+      "Cocktail"
     ],
     "steps": [
       {
@@ -764,6 +769,17 @@
           "two cups of butter": [
             "b",
             "b"
+          ],
+          "one cup of cocktail": [
+            "c"
+          ],
+          "one cup of butter and cocktail": [
+            "b",
+            "c"
+          ],
+          "two cocktail cups": [
+            "c",
+            "c"
           ]
         }
       }

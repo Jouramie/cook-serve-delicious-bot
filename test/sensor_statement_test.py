@@ -312,3 +312,18 @@ def test_the_dishes():
 
     finally:
         img_logger.finalize()
+
+
+def test_chomper_plate():
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/chomper-plate.tiff"), cv2.COLOR_BGR2RGB)
+        frame = sensor.Frame(img)
+
+        sensor.read_task_statement(frame, log_steps="chomper_plate")
+
+        assert frame.current_statement.title == "Chomper Plate"
+        expected_statement = "(1) Ebi, (3) Roe, (2) Tuna, (1) Salman, (1) Mackerel"
+        assert nld(frame.current_statement.description, expected_statement) > OCR_ERROR_TOLERANCE
+
+    finally:
+        img_logger.finalize()
