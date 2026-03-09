@@ -93,3 +93,30 @@ def test_sushi():
 
     expected_recipe = ["e", "e", "r", "r", "r", "t", "t", "u", "enter"]
     keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])
+
+
+def test_breakfast_sandwich_with_egg():
+    visible_tasks = [
+        VisibleTask(1, TaskStatus.READY),
+        None,
+        None,
+        None,
+    ]
+    task, statement_callback = brain.choose_task_to_execute(visible_tasks)
+
+    try:
+        img = cv2.cvtColor(cv2.imread(r"resources/where-is-egg.tiff"), cv2.COLOR_BGR2RGB)
+        frame = sensor.Frame(img)
+
+        sensor.read_task_statement(frame)
+
+        assert frame.current_statement.title == "Cheesy Deluxe"
+    finally:
+        img_logger.finalize()
+
+    keyboard = MagicMock()
+    execution_callback = statement_callback(visible_tasks, frame.current_statement)
+    execution_callback(keyboard)
+
+    expected_recipe = ["e", "s", "c", "enter"]
+    keyboard.send.assert_has_calls([mock.call(key) for key in expected_recipe])

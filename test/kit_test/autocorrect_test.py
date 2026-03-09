@@ -48,3 +48,14 @@ def test_bacon_extra_brocoli_salad():
     corrected = autocorrect(text, dictionary)
 
     assert corrected == expected
+
+
+def test_e99_and_sausage():
+    text = "One �99, Sausage and Cheese"
+    dictionary = set(brain.EQUIPMENTS["Breakfast Sandwich"].steps[0].autocorrect_dictionary)
+    print(dictionary)
+    expected = "one egg sausage cheese"
+
+    corrected = autocorrect(text, dictionary)
+
+    assert corrected == expected

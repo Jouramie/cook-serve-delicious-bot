@@ -38,10 +38,10 @@ UNLOCKED_FOOD_LEVELS = {
     "Pizza": 4,
     "Burger": 3,
     "Steak": 4,
-    "Soups": 3,
+    "Soups": 4,
     "Coffee": 2,
     "Hash Browns": 0,
-    "Breakfast Sandwich": 0,
+    "Breakfast Sandwich": 3,
     "Pancakes": 0,
     "Sushi": 2,
     "Fried Rice": 0,
@@ -51,8 +51,8 @@ UNLOCKED_FOOD_LEVELS = {
     "Stacked Enchiladas": 2,
 }
 
-MENU_ROT = []
-MANDATORY_FOOD = ["Nachos", "Chicken Breast", "Pizza", "Soup"]
+MENU_ROT = ["Sushi"]
+MANDATORY_FOOD = []
 
 # Use 0 if no rain, 4 if rain is announced (it seems to be from 10 am to 3 pm, not counting rush hour)
 RAINING_HOURS = 0
@@ -60,7 +60,6 @@ RAINING_HOURS = 0
 AVAILABLE_PURCHASES = {
     # Speciality unlock
     "Hash Browns": 750,
-    "Breakfast Sandwich": 1000,
     "Pancakes": 900,
     "Fried Rice": 1200,
     "Banana Foster": 1400,
@@ -76,4 +75,4 @@ AVAILABLE_PURCHASES = {
     "Lobster": 2000,
 }
 
-UPGRADE_BUDGET = 451
+UPGRADE_BUDGET = 949

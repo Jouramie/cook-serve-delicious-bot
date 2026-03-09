@@ -99,7 +99,7 @@ class Frame:
         actual_waiting_task_background_darkness = np.array([255], dtype=np.uint8) - waiting_task_background_color
         self._rush_overlay_ratio = actual_waiting_task_background_darkness / EXPECTED_WAITING_TASK_BACKGROUND_DARKNESS
 
-        if self._rush_overlay_ratio > 0:
+        if self._rush_overlay_ratio > 0.1:
             logger.info(f"Rush hour detected. Overlay strength: {1 - self._rush_overlay_ratio}")
 
 
